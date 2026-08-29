@@ -4,147 +4,407 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>刘老师的个人主页</title>
-    <link rel="stylesheet" href="css/style.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4ecf5 100%);
+            color: #2c3e50; line-height: 1.7; min-height: 100vh;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+
+        /* 头部 */
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6278 100%);
+            color: #fff; padding: 50px 20px; text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        header .avatar {
+            width: 90px; height: 90px; border-radius: 50%;
+            background: rgba(255,255,255,0.15); margin: 0 auto 18px;
+            display: flex; align-items: center; justify-content: center; font-size: 42px;
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+        header h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+        header p { opacity: 0.85; font-size: 15px; }
+
+        /* 导航 */
+        nav {
+            background: #fff; padding: 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 100;
+        }
+        nav ul { list-style: none; display: flex; justify-content: center; flex-wrap: wrap; }
+        nav li { margin: 0; }
+        nav a {
+            display: block; padding: 16px 22px; color: #555; text-decoration: none;
+            font-size: 15px; transition: all 0.25s; border-bottom: 3px solid transparent;
+        }
+        nav a:hover { color: #2c3e50; background: #f8f9fa; border-bottom-color: #4a6278; }
+
+        /* 栏目通用 */
+        section { padding: 45px 0; }
+        .section-header { text-align: center; margin-bottom: 32px; }
+        .section-header h2 { font-size: 24px; color: #2c3e50; margin-bottom: 6px; }
+        .section-header .subtitle { color: #888; font-size: 14px; letter-spacing: 1px; }
+
+        /* 访问计数器卡片 */
+        .counter-box {
+            background: #fff; border-radius: 14px; padding: 28px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06); text-align: center;
+            max-width: 420px; margin: 0 auto;
+        }
+        .counter-box .label { color: #888; font-size: 14px; margin-bottom: 12px; }
+        .counter-value {
+            font-size: 44px; font-weight: 700; color: #2c3e50;
+            font-variant-numeric: tabular-nums; line-height: 1.1;
+        }
+        .counter-box .hint { color: #aaa; font-size: 12px; margin-top: 10px; }
+        .gc-powered { font-size: 11px; color: #bbb; margin-top: 14px; }
+        .gc-powered a { color: #999; text-decoration: none; }
+        .gc-powered a:hover { color: #4a6278; }
+
+        /* 卡片 */
+        .card {
+            background: #fff; border-radius: 14px; padding: 30px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06); margin-bottom: 24px;
+        }
+        .card h3 { color: #2c3e50; margin-bottom: 14px; font-size: 19px; }
+        .info-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px; margin: 20px 0;
+        }
+        .info-item {
+            background: #f8f9fa; padding: 14px 16px; border-radius: 10px;
+            border-left: 4px solid #4a6278;
+        }
+        .info-item .k { color: #888; font-size: 12px; margin-bottom: 4px; }
+        .info-item .v { color: #2c3e50; font-weight: 600; font-size: 15px; }
+
+        .news-item { padding: 18px 0; border-bottom: 1px solid #eee; }
+        .news-item:last-child { border-bottom: none; }
+        .news-date { color: #4a6278; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+        .news-title { font-weight: 600; color: #2c3e50; margin-bottom: 4px; }
+        .tip { color: #e67e22; font-size: 14px; }
+
+        /* 工具 / 测评卡片网格 */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+        .tool-card {
+            background: #fff; border-radius: 14px; padding: 26px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06); transition: transform 0.25s, box-shadow 0.25s;
+            cursor: pointer; border: 1px solid transparent;
+        }
+        .tool-card:hover { transform: translateY(-4px); box-shadow: 0 10px 26px rgba(0,0,0,0.1); border-color: #4a6278; }
+        .tool-card .icon { font-size: 38px; margin-bottom: 14px; }
+        .tool-card h4 { color: #2c3e50; margin-bottom: 8px; font-size: 17px; }
+        .tool-card p { color: #777; font-size: 14px; margin-bottom: 12px; }
+        .tool-card .tag { color: #4a6278; font-size: 13px; font-weight: 600; }
+
+        /* 拓展阅读 */
+        .reading-list { text-align: left; }
+        .reading-item {
+            display: flex; gap: 18px; padding: 20px 0;
+            border-bottom: 1px solid #eee; align-items: flex-start;
+        }
+        .reading-item:last-child { border-bottom: none; }
+        .reading-num {
+            flex-shrink: 0; width: 38px; height: 38px; border-radius: 50%;
+            background: #4a6278; color: #fff; display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 16px;
+        }
+        .reading-body h4 { color: #2c3e50; font-size: 17px; margin-bottom: 4px; }
+        .reading-body .meta { color: #4a6278; font-size: 13px; margin-bottom: 8px; font-weight: 600; }
+        .reading-body p { color: #666; font-size: 14px; }
+        .reading-body .tags { margin-top: 10px; }
+        .reading-body .tag {
+            display: inline-block; background: #eef2f7; color: #4a6278;
+            padding: 3px 12px; border-radius: 20px; font-size: 12px; margin-right: 6px; margin-bottom: 4px;
+        }
+
+        footer {
+            background: #2c3e50; color: rgba(255,255,255,0.7); text-align: center;
+            padding: 30px 20px; font-size: 14px; margin-top: 40px;
+        }
+        footer .visitor-badge { margin-top: 12px; font-size: 13px; }
+    </style>
 </head>
 <body>
-    <!-- 侧边导航 -->
-    <aside class="sidebar">
-        <div class="profile">
-            <div class="avatar">👤</div>
-            <h1 class="site-title">BEN的个人主页</h1>
-            <p class="site-subtitle">欢迎来访</p>
+
+<header>
+    <div class="avatar">👤</div>
+    <h1>BEN的个人主页</h1>
+    <p>欢迎来访</p>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="#about">🙋 自我介绍</a></li>
+        <li><a href="#news">📢 学科动态</a></li>
+        <li><a href="#calc">🧮 计算</a></li>
+        <li><a href="#assess">📝 测评</a></li>
+        <li><a href="#reading">📚 拓展阅读</a></li>
+    </ul>
+</nav>
+
+<!-- ===== 访问计数器 ===== -->
+<section id="counter">
+    <div class="counter-box">
+        <div class="label">📊 本站总访问量</div>
+        <div class="counter-value" id="gc-pageviews">读取中…</div>
+        <div class="hint">基于 GoatCounter 统计（免费 · 开源 · 无 Cookie）</div>
+        <div class="gc-powered">
+            统计服务由 <a href="https://www.goatcounter.com/" target="_blank" rel="noopener">GoatCounter</a> 提供
+            · <a href="#" id="gc-dashboard-link" target="_blank" rel="noopener">查看详情</a>
         </div>
-        <nav>
-            <ul class="nav-list">
-                <li><a href="#intro" class="nav-link active" data-section="intro">🙋 自我介绍</a></li>
-                <li><a href="#news" class="nav-link" data-section="news">📢 学科动态</a></li>
-                <li><a href="#tools" class="nav-link" data-section="tools">🧮 计算</a></li>
-                <li><a href="#assess" class="nav-link" data-section="assess">📝 测评</a></li>
-            </ul>
-        </nav>
-        <div class="sidebar-footer">
-            <div class="stat-mini">
-                <span class="stat-label">访问量</span>
-                <span class="stat-value" id="visit-count">--</span>
-            </div>
-        </div>
-    </aside>
-
-    <!-- 主内容区 -->
-    <main class="content">
-        <!-- 自我介绍 -->
-        <section id="intro" class="section active">
-            <div class="section-header">
-                <h2>🙋 自我介绍</h2>
-                <span class="section-tag">About Me</span>
-            </div>
-            <div class="card">
-                <p class="lead">你好，欢迎来到我的个人主页！</p>
-                <p>这里是<strong>自我介绍</strong>栏目。一个关注人力资源管理、劳动经济学，热爱金融强国、运动强身、娱乐防呆等多种业余兴趣的普通教师。</p>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <span class="info-label">姓名</span>
-                        <span class="info-value">Ben Lau</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">研究方向</span>
-                        <span class="info-value">组织管理</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">邮箱</span>
-                        <span class="info-value">594383133@QQ.com</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">单位</span>
-                        <span class="info-value">商学院</span>
-                    </div>
-                </div>
-                <h3>个人简介</h3>
-                <p>资深80后，先后毕业于华南师范大学人力资源管理本科（2005）、湖南师范大学行政管理硕士（2008）、福建农林大学涉农企业经营与管理博士（2016），现从事人力资源管理、劳动经济学、管理学等课程教学研究。获人力资源管理师（经济师）专业技术职称，兼任中国人力资源开发研究会适度劳动与职业健康分会理事、福建省人才研究会会员。</p>
-                <p>后期内容添加中......</p>
-            </div>
-        </section>
-
-        <!-- 学科动态 -->
-        <section id="news" class="section">
-            <div class="section-header">
-                <h2>📢 学科动态</h2>
-                <span class="section-tag">News & Updates</span>
-            </div>
-            <div class="card">
-                <p>这里是<strong>学科动态</strong>栏目，用于发布学科前沿、学术会议、研究成果等资讯。</p>
-                <p class="hint">💡正在建设中， 后期添加动态。</p>
-            </div>
-
-            <div class="news-list" id="news-list">
-                <article class="news-item">
-                    <div class="news-date">2026-08-20</div>
-                    <div class="news-body">
-                        <h3>动态信息</h3>
-                        <p>这是一条示例动态，展示个人动态，有空会更新，但我一般很懒。</p>
-                    </div>
-                </article>
-                <article class="news-item">
-                    <div class="news-date">2026-08-15</div>
-                    <div class="news-body">
-                        <h3>欢迎使用个人主页</h3>
-                        <p>本栏目用于教学活动，提供最新资讯、会议通知、论文发表等信息。</p>
-                    </div>
-                </article>
-            </div>
-        </section>
-
-        <!-- 计算 -->
-        <section id="tools" class="section">
-            <div class="section-header">
-                <h2>🧮 计算</h2>
-                <span class="section-tag">Calculators</span>
-            </div>
-            <div class="card">
-                <p>这里是<strong>计算</strong>栏目。点击下方工具卡片即可进入对应的计算页面，各工具独立成页、功能完整。</p>
-                <p class="hint">💡 后期添加新工具，敬请期待。</p>
-            </div>
-
-            <!-- 工具入口卡片 -->
-            <a href="capital.html" class="tool-card tool-entry">
-                <div class="tool-entry-icon">📊</div>
-                <div class="tool-entry-body">
-                    <h3>人力资本投资决策工具</h3>
-                    <p>通过比较"直接工作"与"读大学"两条路径的<b>净现值（NPV）</b>，为升学 / 就业决策提供参考。</p>
-                    <span class="tool-entry-tag">NPV 决策 · 参数可调 · 即时对比 →</span>
-                </div>
-            </a>
-        </section>
-
-        <!-- 测评 -->
-        <section id="assess" class="section">
-            <div class="section-header">
-                <h2>📝 测评</h2>
-                <span class="section-tag">Assessments</span>
-            </div>
-            <div class="card">
-                <p>这里是<strong>测评</strong>栏目。点击下方卡片进入对应的测评页面，作答后可得到结果与职业匹配建议。</p>
-                <p class="hint">💡 正在建设中，后期加入其他测评</p>
-            </div>
-
-            <!-- 测评入口卡片 -->
-            <a href="holland.html" class="tool-card tool-entry">
-                <div class="tool-entry-icon">🧭</div>
-                <div class="tool-entry-body">
-                    <h3>霍兰德职业兴趣测评（60题）</h3>
-                    <p>基于霍兰德 RIASEC 理论，通过 <b>60 道题目</b>评估你在 <b>R 现实 / I 研究 / A 艺术 / S 社会 / E 企业 / C 常规</b> 六个维度的兴趣倾向，并给出霍兰德代码与职业匹配建议。</p>
-                    <span class="tool-entry-tag">RIASEC · 60题 · 三位代码 · 职业匹配 →</span>
-                </div>
-            </a>
-        </section>
-    </main>
-
-    <!-- 访问统计浮动提示 -->
-    <div class="stat-toast" id="stat-toast">
-        👁️ 第 <strong id="toast-count">--</strong> 位访客
     </div>
+</section>
 
-    <script src="js/visits.js"></script>
-    <script src="js/main.js"></script>
+<!-- ===== 自我介绍 ===== -->
+<section id="about">
+    <div class="section-header">
+        <h2>🙋 自我介绍</h2>
+        <div class="subtitle">About Me</div>
+    </div>
+    <div class="container">
+        <div class="card">
+            <h3>你好，欢迎来到我的个人主页！</h3>
+            <p>这里是自我介绍栏目。一个关注人力资源管理、劳动经济学，热爱金融强国、运动强身、娱乐防呆等多种业余兴趣的普通教师。</p>
+            <div class="info-grid">
+                <div class="info-item"><div class="k">姓名</div><div class="v">Ben Lau</div></div>
+                <div class="info-item"><div class="k">研究方向</div><div class="v">组织管理</div></div>
+                <div class="info-item"><div class="k">邮箱</div><div class="v">594383133@QQ.com</div></div>
+                <div class="info-item"><div class="k">单位</div><div class="v">商学院</div></div>
+            </div>
+            <h3>个人简介</h3>
+            <p>资深80后，先后毕业于华南师范大学人力资源管理本科（2005）、湖南师范大学行政管理硕士（2008）、福建农林大学涉农企业经营与管理博士（2016），现从事人力资源管理、劳动经济学、管理学等课程教学研究。获人力资源管理师（经济师）专业技术职称，兼任中国人力资源开发研究会适度劳动与职业健康分会理事、福建省人才研究会会员。</p>
+            <p class="tip">后期内容添加中......</p>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 学科动态 ===== -->
+<section id="news">
+    <div class="section-header">
+        <h2>📢 学科动态</h2>
+        <div class="subtitle">News & Updates</div>
+    </div>
+    <div class="container">
+        <div class="card">
+            <p>这里是学科动态栏目，用于发布学科前沿、学术会议、研究成果等资讯。</p>
+            <p class="tip">💡正在建设中， 后期添加动态。</p>
+            <div style="margin-top:24px;">
+                <div class="news-item">
+                    <div class="news-date">2026-08-20</div>
+                    <div class="news-title">动态信息</div>
+                    <div>这是一条示例动态，展示个人动态，有空会更新，但我一般很懒。</div>
+                </div>
+                <div class="news-item">
+                    <div class="news-date">2026-08-15</div>
+                    <div class="news-title">欢迎使用个人主页</div>
+                    <div>本栏目用于教学活动，提供最新资讯、会议通知、论文发表等信息。</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 计算 ===== -->
+<section id="calc">
+    <div class="section-header">
+        <h2>🧮 计算</h2>
+        <div class="subtitle">Calculators</div>
+    </div>
+    <div class="container">
+        <div class="card">
+            <p>这里是计算栏目。点击下方工具卡片即可进入对应的计算页面，各工具独立成页、功能完整。</p>
+            <p class="tip">💡 后期添加新工具，敬请期待。</p>
+            <div class="grid" style="margin-top:20px;">
+                <div class="tool-card">
+                    <div class="icon">📊</div>
+                    <h4>人力资本投资决策工具</h4>
+                    <p>通过比较"直接工作"与"读大学"两条路径的净现值（NPV），为升学 / 就业决策提供参考。</p>
+                    <div class="tag">NPV 决策 · 参数可调 · 即时对比 →</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 测评 ===== -->
+<section id="assess">
+    <div class="section-header">
+        <h2>📝 测评</h2>
+        <div class="subtitle">Assessments</div>
+    </div>
+    <div class="container">
+        <div class="card">
+            <p>这里是测评栏目。点击下方卡片进入对应的测评页面，作答后可得到结果与职业匹配建议。</p>
+            <p class="tip">💡 正在建设中，后期加入其他测评</p>
+            <div class="grid" style="margin-top:20px;">
+                <div class="tool-card">
+                    <div class="icon">🧭</div>
+                    <h4>霍兰德职业兴趣测评（60题）</h4>
+                    <p>基于霍兰德 RIASEC 理论，通过 60 道题目评估你在 R 现实 / I 研究 / A 艺术 / S 社会 / E 企业 / C 常规 六个维度的兴趣倾向，并给出霍兰德代码与职业匹配建议。</p>
+                    <div class="tag">RIASEC · 60题 · 三位代码 · 职业匹配 →</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 拓展阅读（新增栏目） ===== -->
+<section id="reading">
+    <div class="section-header">
+        <h2>📚 拓展阅读</h2>
+        <div class="subtitle">Further Reading</div>
+    </div>
+    <div class="container">
+        <div class="card">
+            <p>精选人力资源管理、劳动经济学、组织行为学与职业发展的经典读物，供教学与自学参考。持续补充中……</p>
+            <div class="reading-list" style="margin-top:20px;">
+
+                <div class="reading-item">
+                    <div class="reading-num">1</div>
+                    <div class="reading-body">
+                        <h4>《人力资源管理》（第16版）</h4>
+                        <div class="meta">加里·德斯勒 著 · 中国人民大学出版社</div>
+                        <p>全面阐述人力资源管理六大模块，涵盖规划、招聘、培训、绩效、薪酬、劳动关系，理论结合案例，是构建完整知识体系的经典教材。</p>
+                        <div class="tags"><span class="tag">人力资源</span><span class="tag">教材</span></div>
+                    </div>
+                </div>
+
+                <div class="reading-item">
+                    <div class="reading-num">2</div>
+                    <div class="reading-body">
+                        <h4>《组织行为学》（第18版）</h4>
+                        <div class="meta">斯蒂芬·P·罗宾斯、蒂莫西·A·贾奇 著 · 中国人民大学出版社</div>
+                        <p>剖析组织中个体、群体行为及组织结构的影响，探讨激励、领导、冲突管理等问题，为理解员工行为规律提供理论支撑。</p>
+                        <div class="tags"><span class="tag">组织行为</span><span class="tag">管理</span></div>
+                    </div>
+                </div>
+
+                <div class="reading-item">
+                    <div class="reading-num">3</div>
+                    <div class="reading-body">
+                        <h4>《劳动经济学》（第6版）</h4>
+                        <div class="meta">杨河清、张琪 主编 · 中国人民大学出版社 · 2024</div>
+                        <p>系统阐述劳动力需求与供给、市场均衡、工资生成、收入分配、就业失业、人力资本投资等核心理论，国家级规划教材。</p>
+                        <div class="tags"><span class="tag">劳动经济学</span><span class="tag">教材</span></div>
+                    </div>
+                </div>
+
+                <div class="reading-item">
+                    <div class="reading-num">4</div>
+                    <div class="reading-body">
+                        <h4>《人力资本》（原书第3版）</h4>
+                        <div class="meta">加里·S·贝克尔 著 · 机械工业出版社 · 诺贝尔经济学奖经典文库</div>
+                        <p>人力资本理论奠基之作，构建教育成本与收益的经济分析框架，为升学、培训等人力资本投资决策提供经典分析视角。</p>
+                        <div class="tags"><span class="tag">人力资本</span><span class="tag">经济学</span></div>
+                    </div>
+                </div>
+
+                <div class="reading-item">
+                    <div class="reading-num">5</div>
+                    <div class="reading-body">
+                        <h4>《人力资源管理概论》（第六版）</h4>
+                        <div class="meta">董克用、叶向峰 著 · 中国人民大学出版社</div>
+                        <p>系统介绍人力资源管理知识体系及主要职能，融入华为、阿里等国内企业案例，理论与实践结合，适合教学与从业者参考。</p>
+                        <div class="tags"><span class="tag">人力资源</span><span class="tag">入门</span></div>
+                    </div>
+                </div>
+
+                <div class="reading-item">
+                    <div class="reading-num">6</div>
+                    <div class="reading-body">
+                        <h4>《HR的未来简史》</h4>
+                        <div class="meta">戴维·尤里奇 等著 · 机械工业出版社</div>
+                        <p>探讨人力资源管理未来趋势与数字化转型、新角色定位，引导 HR 思考如何为组织创造更大价值，开阔专业视野。</p>
+                        <div class="tags"><span class="tag">HR趋势</span><span class="tag">数字化转型</span></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div>👁️ 第 <span id="gc-visitors">1</span> 位访客</div>
+    <div class="visitor-badge">
+        <!-- GoatCounter 公开访问徽章（可选显示） -->
+        <img id="gc-badge" src="" alt="访问计数" style="display:none;" referrerpolicy="no-referrer" />
+    </div>
+</footer>
+
+<!-- ============================================================
+     GoatCounter 访问统计（GitHub 官方推荐的开源、免费、无 Cookie 方案）
+     使用方式：
+       1. 前往 https://www.goatcounter.com/ 免费注册（非商业用途免费）
+       2. 创建站点，得到你的站点代码（如 myblog），替换下方 YOUR-CODE
+       3. 将 data-goatcounter 改为 https://YOUR-CODE.goatcounter.com/count
+       4. 页面即可自动统计，并在上方「访问量」卡片与页脚显示数字
+     ============================================================ -->
+<script>
+    // >>> 仅需修改这一行：把 YOUR-CODE 换成你在 GoatCounter 注册的站点代码 <<<
+    window.goatcounter = {
+        endpoint: 'https://YOUR-CODE.goatcounter.com/count',
+        allow_local: true,          // 本地调试时也计数；正式上线后可设为 false
+        no_onload: true,            // 我们先手动计数，以便读取数据回填页面
+    };
+</script>
+<script async src="https://gc.zgo.at/count.js"></script>
+
+<!-- 读取 GoatCounter 统计数据并回填到页面 -->
+<script>
+    // 替换为你自己的 GoatCounter 站点代码（需与上方一致）
+    var GC_CODE = 'YOUR-CODE';
+
+    // 如果还没注册，设置为 null 可让页面显示占位数字而不报错
+    function getDashboardURL() {
+        return GC_CODE && GC_CODE !== 'YOUR-CODE'
+            ? 'https://' + GC_CODE + '.goatcounter.com/'
+            : 'https://www.goatcounter.com/';
+    }
+
+    document.getElementById('gc-dashboard-link').href = getDashboardURL();
+
+    // 尝试从 GoatCounter 的 count.json 接口读取页面浏览量
+    // 接口返回按 path 汇总的访问数据，用于回填首页「访问量」卡片
+    function fetchAndFillCount() {
+        if (!GC_CODE || GC_CODE === 'YOUR-CODE') {
+            // 尚未配置：显示占位，不影响页面
+            document.getElementById('gc-pageviews').textContent = '—';
+            return;
+        }
+        var api = 'https://' + GC_CODE + '.goatcounter.com/count.json?path='
+                  + encodeURIComponent(location.pathname);
+        fetch(api, { headers: { 'Accept': 'application/json' } })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                // count.json 返回数组，每个元素含 path / count
+                var total = 0;
+                if (Array.isArray(data)) {
+                    data.forEach(function (item) { total += (item.count || 0); });
+                } else if (data && data.count) {
+                    total = data.count;
+                }
+                document.getElementById('gc-pageviews').textContent = total.toLocaleString();
+                document.getElementById('gc-visitors').textContent = total.toLocaleString();
+            })
+            .catch(function () {
+                // 读取失败（如隐私浏览器、广告拦截）时静默降级
+                document.getElementById('gc-pageviews').textContent = '—';
+            });
+    }
+
+    // 等 GoatCounter 脚本加载完成后再读取
+    window.addEventListener('load', function () {
+        // 上报一次页面访问
+        if (window.goatcounter && window.goatcounter.count) {
+            window.goatcounter.count({ path: location.pathname + location.search + location.hash });
+        }
+        fetchAndFillCount();
+    });
+</script>
+
 </body>
 </html>
