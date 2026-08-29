@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人主页</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 侧边导航 -->
+    <aside class="sidebar">
+        <div class="profile">
+            <div class="avatar">👤</div>
+            <h1 class="site-title">BEN的个人主页</h1>
+            <p class="site-subtitle">欢迎来访</p>
+        </div>
+        <nav>
+            <ul class="nav-list">
+                <li><a href="#intro" class="nav-link active" data-section="intro">🙋 自我介绍</a></li>
+                <li><a href="#news" class="nav-link" data-section="news">📢 学科动态</a></li>
+                <li><a href="#tools" class="nav-link" data-section="tools">🧮 计算</a></li>
+                <li><a href="#assess" class="nav-link" data-section="assess">📝 测评</a></li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="stat-mini">
+                <span class="stat-label">访问量</span>
+                <span class="stat-value" id="visit-count">--</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="content">
+        <!-- 自我介绍 -->
+        <section id="intro" class="section active">
+            <div class="section-header">
+                <h2>🙋 自我介绍</h2>
+                <span class="section-tag">About Me</span>
+            </div>
+            <div class="card">
+                <p class="lead">你好，欢迎来到我的个人主页！</p>
+                <p>这里是<strong>自我介绍</strong>栏目。一个关注人力资源管理、劳动经济学，热爱金融强国、文体强身等多种业余兴趣的普通教师。</p>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">姓名</span>
+                        <span class="info-value">Ben Lau</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">研究方向</span>
+                        <span class="info-value">组织管理</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">邮箱</span>
+                        <span class="info-value">594383133@QQ.com</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">单位</span>
+                        <span class="info-value">商学院</span>
+                    </div>
+                </div>
+                <h3>个人简介</h3>
+                <p>资深80后，先后毕业于华南师范大学人力资源管理本科（2005）、湖南师范大学行政管理硕士（2008）、福建农林大学涉农企业经营与管理博士（2016），现从事人力资源管理、劳动经济学、管理学等课程教学研究。获人力资源管理师（经济师）专业技术职称，兼任中国人力资源开发研究会适度劳动与职业健康分会理事、福建省人才研究会会员。</p>
+                <p>后期内容添加中......</p>
+            </div>
+        </section>
+
+        <!-- 学科动态 -->
+        <section id="news" class="section">
+            <div class="section-header">
+                <h2>📢 学科动态</h2>
+                <span class="section-tag">News & Updates</span>
+            </div>
+            <div class="card">
+                <p>这里是<strong>学科动态</strong>栏目，用于发布学科前沿、学术会议、研究成果等资讯。</p>
+                <p class="hint">💡正在建设中， 后期添加动态。</p>
+            </div>
+
+            <div class="news-list" id="news-list">
+                <article class="news-item">
+                    <div class="news-date">2026-08-20</div>
+                    <div class="news-body">
+                        <h3>动态信息</h3>
+                        <p>这是一条示例动态，展示个人动态，有空会更新，但我一般很懒。</p>
+                    </div>
+                </article>
+                <article class="news-item">
+                    <div class="news-date">2026-08-15</div>
+                    <div class="news-body">
+                        <h3>欢迎使用个人主页</h3>
+                        <p>本栏目用于教学活动，提供最新资讯、会议通知、论文发表等信息。</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- 计算 -->
+        <section id="tools" class="section">
+            <div class="section-header">
+                <h2>🧮 计算</h2>
+                <span class="section-tag">Calculators</span>
+            </div>
+            <div class="card">
+                <p>这里是<strong>计算</strong>栏目。点击下方工具卡片即可进入对应的计算页面，各工具独立成页、功能完整。</p>
+                <p class="hint">💡 后期添加新工具，敬请期待。</p>
+            </div>
+
+            <!-- 工具入口卡片 -->
+            <a href="capital.html" class="tool-card tool-entry">
+                <div class="tool-entry-icon">📊</div>
+                <div class="tool-entry-body">
+                    <h3>人力资本投资决策工具</h3>
+                    <p>通过比较"直接工作"与"读大学"两条路径的<b>净现值（NPV）</b>，为升学 / 就业决策提供参考。</p>
+                    <span class="tool-entry-tag">NPV 决策 · 参数可调 · 即时对比 →</span>
+                </div>
+            </a>
+        </section>
+
+        <!-- 测评 -->
+        <section id="assess" class="section">
+            <div class="section-header">
+                <h2>📝 测评</h2>
+                <span class="section-tag">Assessments</span>
+            </div>
+            <div class="card">
+                <p>这里是<strong>测评</strong>栏目。点击下方卡片进入对应的测评页面，作答后可得到结果与职业匹配建议。</p>
+                <p class="hint">💡 正在建设中，后期加入其他测评</p>
+            </div>
+
+            <!-- 测评入口卡片 -->
+            <a href="holland.html" class="tool-card tool-entry">
+                <div class="tool-entry-icon">🧭</div>
+                <div class="tool-entry-body">
+                    <h3>霍兰德职业兴趣测评（60题）</h3>
+                    <p>基于霍兰德 RIASEC 理论，通过 <b>60 道题目</b>评估你在 <b>R 现实 / I 研究 / A 艺术 / S 社会 / E 企业 / C 常规</b> 六个维度的兴趣倾向，并给出霍兰德代码与职业匹配建议。</p>
+                    <span class="tool-entry-tag">RIASEC · 60题 · 三位代码 · 职业匹配 →</span>
+                </div>
+            </a>
+        </section>
+    </main>
+
+    <!-- 访问统计浮动提示 -->
+    <div class="stat-toast" id="stat-toast">
+        👁️ 第 <strong id="toast-count">--</strong> 位访客
+    </div>
+
+    <script src="js/visits.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

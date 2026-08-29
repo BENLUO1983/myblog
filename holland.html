@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>霍兰德职业兴趣测评</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .hl-wrap{max-width:860px;margin:0 auto;}
+  :root{
+    --primary:#2c6fbb; --primary-light:#eaf2fb; --accent:#f4a63b;
+    --R:#e74c3c; --I:#8e44ad; --A:#e67e22; --S:#27ae60; --E:#d35400; --C:#2980b9;
+    --bg:#f5f7fa; --card:#ffffff; --text:#2c3e50; --muted:#7f8c8d; --border:#e1e8ef;
+  }
+  .hl-steps{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:16px 0;}
+  .hl-step{padding:6px 14px;border-radius:20px;background:#eef2f6;color:var(--muted);font-size:.85rem;}
+  .hl-step.on{background:var(--primary);color:#fff;font-weight:bold;}
+  .hl-group-title{font-size:1.1rem;color:var(--primary);border-left:4px solid var(--accent);
+    padding-left:10px;margin:6px 0 18px;font-weight:bold;}
+  .hl-prog{height:8px;background:#eef2f6;border-radius:4px;overflow:hidden;margin:14px 0 4px;}
+  .hl-prog>div{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));width:0%;transition:.3s;}
+  .hl-prog-label{text-align:right;font-size:.82rem;color:var(--muted);}
+  .hl-nav{display:flex;justify-content:space-between;margin-top:18px;}
+  .hl-code-big{text-align:center;margin:10px 0 6px;}
+  .hl-code-letters{font-size:2.6rem;font-weight:bold;letter-spacing:6px;}
+  .hl-code-scores{font-size:1rem;color:var(--muted);margin-top:6px;}
+  .hl-barrow{display:flex;align-items:flex-end;justify-content:center;gap:10px;height:180px;margin:20px 0;}
+  .baritem{text-align:center;font-size:.8rem;}
+  .bar{width:52px;background:var(--primary);border-radius:6px 6px 0 0;transition:height .5s;margin:auto;}
+  .barlabel{margin-top:6px;font-weight:bold;}
+  .hl-score-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px;}
+  .score-cell{padding:12px;border-radius:8px;color:#fff;text-align:center;}
+  .score-cell .sn{font-size:1.6rem;font-weight:bold;}
+  .hl-result-box{background:var(--primary-light);border-radius:10px;padding:18px;margin-top:14px;}
+  .hl-result-box h4{color:var(--primary);margin-bottom:8px;font-size:1rem;}
+  .hl-legend{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:12px;font-size:.82rem;}
+  .hl-dot{width:12px;height:12px;border-radius:50%;display:inline-block;}
+  @media(max-width:600px){.hl-score-grid{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="profile">
+            <div class="avatar">👤</div>
+            <h1 class="site-title">个人主页</h1>
+            <p class="site-subtitle">欢迎来访</p>
+        </div>
+        <nav>
+            <ul class="nav-list">
+                <li><a href="index.html#intro">🙋 自我介绍</a></li>
+                <li><a href="index.html#news">📢 学科动态</a></li>
+                <li><a href="index.html#tools">🧮 计算</a></li>
+                <li><a href="index.html#assess" class="active">📝 测评</a></li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="stat-mini">
+                <span class="stat-label">访问量</span>
+                <span class="stat-value" id="visit-count">--</span>
+            </div>
+        </div>
+    </aside>
+
+    <main class="content">
+        <section class="section active">
+            <div class="section-header">
+                <h2>📝 测评 · 霍兰德职业兴趣测评</h2>
+                <span class="section-tag">Holland Test · 60题</span>
+            </div>
+            <div class="card hl-wrap">
+                <div id="hl-app">
+                    <!-- 欢迎页 -->
+                    <div id="page-intro">
+                        <h3>霍兰德职业兴趣测评</h3>
+                        <p class="lead">Holland Vocational Interest Test · 课堂教学版</p>
+                        <div class="hl-steps">
+                            <span class="hl-step on">① 作答</span>
+                            <span class="hl-step">② 计分</span>
+                            <span class="hl-step">③ 结果</span>
+                        </div>
+                        <p>本测评基于霍兰德（John Holland）RIASEC 理论，通过 <b>60 道题目</b>评估你在
+                            <b>R 现实型 / I 研究型 / A 艺术型 / S 社会型 / E 企业型 / C 常规型</b> 六个维度的兴趣倾向。</p>
+                        <div class="hint" style="margin-top:14px;">📌 <b>作答说明：</b>请根据第一印象作答，不必仔细推敲，答案没有好坏对错之分。每题选择「是」或「否」即可。</div>
+                        <div style="text-align:center;margin-top:18px;">
+                            <button class="btn" onclick="Holland.startTest()">开始测评 →</button>
+                        </div>
+                    </div>
+
+                    <!-- 答题页 -->
+                    <div id="page-test" style="display:none;">
+                        <h4 class="hl-group-title" id="groupTitle"></h4>
+                        <div class="hl-prog"><div id="progBar"></div></div>
+                        <div class="hl-prog-label" id="progLabel"></div>
+                        <div id="questions"></div>
+                        <div class="hl-nav">
+                            <button class="btn btn-secondary" id="btnPrev" onclick="Holland.prevPage()">← 上一页</button>
+                            <button class="btn" id="btnNext" onclick="Holland.nextPage()">下一页 →</button>
+                        </div>
+                    </div>
+
+                    <!-- 结果页 -->
+                    <div id="page-result" style="display:none;">
+                        <h3 style="text-align:center;">你的测评结果</h3>
+                        <div class="hl-code-big">
+                            <div class="hl-code-letters" id="codeLetters">RIA</div>
+                            <div class="hl-code-scores" id="codeScores"></div>
+                        </div>
+                        <div class="hl-barrow" id="barChart"></div>
+                        <div class="hl-legend">
+                            <span><span class="hl-dot" style="background:#e74c3c"></span>R 现实</span>
+                            <span><span class="hl-dot" style="background:#8e44ad"></span>I 研究</span>
+                            <span><span class="hl-dot" style="background:#e67e22"></span>A 艺术</span>
+                            <span><span class="hl-dot" style="background:#27ae60"></span>S 社会</span>
+                            <span><span class="hl-dot" style="background:#d35400"></span>E 企业</span>
+                            <span><span class="hl-dot" style="background:#2980b9"></span>C 常规</span>
+                        </div>
+                        <div class="hl-score-grid" id="scoreGrid"></div>
+                        <div class="hl-result-box">
+                            <h4>🎯 人格倾向解读</h4>
+                            <div id="typeDesc"></div>
+                        </div>
+                        <div class="hl-result-box">
+                            <h4>💼 匹配职业参考</h4>
+                            <div id="jobList"></div>
+                        </div>
+                        <div class="hint" style="margin-top:14px;">💡 <b>课堂提示：</b>霍兰德代码前两位（尤其第一位）最具参考价值。职业选择还需结合能力、价值观与外部环境综合判断，本结果仅供参考。</div>
+                        <div style="text-align:center;margin-top:18px;">
+                            <button class="btn btn-secondary" onclick="Holland.restart()">重新测评</button>
+                            <a href="index.html#assess" class="btn btn-secondary" style="margin-left:10px;">← 返回主页</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/visits.js"></script>
+    <script src="js/holland.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

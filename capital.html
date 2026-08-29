@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人力资本投资决策工具</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .hc-wrap{max-width:860px;margin:0 auto;}
+        .hc-group-title{font-size:1.05rem;color:var(--primary);border-left:4px solid var(--accent);
+            padding-left:10px;margin:22px 0 12px;font-weight:bold;}
+        .hc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+        @media(max-width:600px){.hc-grid{grid-template-columns:1fr;}}
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="profile">
+            <div class="avatar">👤</div>
+            <h1 class="site-title">个人主页</h1>
+            <p class="site-subtitle">欢迎来访</p>
+        </div>
+        <nav>
+            <ul class="nav-list">
+                <li><a href="index.html#intro">🙋 自我介绍</a></li>
+                <li><a href="index.html#news">📢 学科动态</a></li>
+                <li><a href="index.html#tools" class="active">🧮 计算</a></li>
+                <li><a href="index.html#assess">📝 测评</a></li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="stat-mini">
+                <span class="stat-label">访问量</span>
+                <span class="stat-value" id="visit-count">--</span>
+            </div>
+        </div>
+    </aside>
+
+    <main class="content">
+        <section class="section active">
+            <div class="section-header">
+                <h2>🧮 计算 · 人力资本投资决策工具</h2>
+                <span class="section-tag">Human Capital Investment</span>
+            </div>
+            <div class="card hc-wrap">
+                <p class="lead">通过比较"直接工作"与"读大学"两条路径的<b>净现值（NPV）</b>，为升学 / 就业决策提供参考。</p>
+                <div class="hint">💡 调整下方参数后点击"立即计算并决策"即可。数据仅供参考，结果因参数不同可能出现较大差异。</div>
+
+                <h4 class="hc-group-title">1. 基本信息</h4>
+                <div class="hc-grid">
+                    <div class="form-row"><label>当前年龄（岁）</label><input type="number" id="hc-currentAge" value="18" min="16" max="30"></div>
+                    <div class="form-row"><label>大学学制（年）</label><input type="number" id="hc-collegeYears" value="4" min="2" max="6"></div>
+                    <div class="form-row"><label>折现率（1% 填 0.01）</label><input type="number" id="hc-discountRate" value="0.01" step="0.01" min="0.01" max="0.2"></div>
+                    <div class="form-row"><label>计划退休年龄（55-70）</label><input type="number" id="hc-retirementAge" value="60" min="50" max="70"></div>
+                </div>
+
+                <h4 class="hc-group-title">2. 大学直接成本（每年）</h4>
+                <div class="hc-grid">
+                    <div class="form-row"><label>学费（元）</label><input type="number" id="hc-tuition" value="12000"></div>
+                    <div class="form-row"><label>住宿费（元）</label><input type="number" id="hc-accommodation" value="1500"></div>
+                    <div class="form-row"><label>生活费（元）</label><input type="number" id="hc-living" value="2000"></div>
+                    <div class="form-row"><label>其他学杂费（元）</label><input type="number" id="hc-other" value="1000"></div>
+                </div>
+
+                <h4 class="hc-group-title">3. 大学期间收入（每年）</h4>
+                <div class="hc-grid">
+                    <div class="form-row"><label>奖学金（元/年）</label><input type="number" id="hc-collegeScholarship" value="5000"></div>
+                    <div class="form-row"><label>兼职收入（元/月）</label><input type="number" id="hc-collegeParttime" value="500"></div>
+                </div>
+
+                <h4 class="hc-group-title">4. 直接工作（高中毕业起点）</h4>
+                <div class="hc-grid">
+                    <div class="form-row"><label>起薪（元/月）</label><input type="number" id="hc-directStartSalary" value="3000"></div>
+                    <div class="form-row"><label>年增长工资（元/年）</label><input type="number" id="hc-directAnnualGrowth" value="100"></div>
+                    <div class="form-row"><label>工资封顶（元/月）</label><input type="number" id="hc-directCap" value="7000"></div>
+                </div>
+
+                <h4 class="hc-group-title">5. 大学毕业工作</h4>
+                <div class="hc-grid">
+                    <div class="form-row"><label>起薪（元/月）</label><input type="number" id="hc-collegeStartSalary" value="6500"></div>
+                    <div class="form-row"><label>年增长工资（元/年）</label><input type="number" id="hc-collegeAnnualGrowth" value="300"></div>
+                    <div class="form-row"><label>工资封顶（元/月）</label><input type="number" id="hc-collegeCap" value="30000"></div>
+                </div>
+
+                <button class="btn" style="margin-top:22px;" onclick="HumanCapital.calculate()">立即计算并决策</button>
+
+                <div class="calc-result" id="hc-result" style="display:none;">
+                    <h4 style="color:#856404;margin-bottom:10px;">决策结果</h4>
+                    <p>直接工作总净现值（NPV）：<span class="highlight" id="hc-directNpv"></span> 元</p>
+                    <p>读大学总净现值（NPV）：<span class="highlight" id="hc-collegeNpv"></span> 元</p>
+                    <div id="hc-recommendation"></div>
+                </div>
+
+                <div style="text-align:center;margin-top:24px;">
+                    <a href="index.html#tools" class="btn btn-secondary">← 返回主页</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/visits.js"></script>
+    <script src="js/capital.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
