@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人时间价值计算器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+            background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+            color: #fff;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        .content {
+            padding: 30px;
+        }
+        .intro {
+            background: #f0f9ff;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 25px;
+            line-height: 1.8;
+            color: #555;
+            font-size: 14px;
+        }
+        .intro strong {
+            color: #0ea5e9;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+        .input-wrapper:focus-within {
+            border-color: #0ea5e9;
+        }
+        .input-wrapper input {
+            flex: 1;
+            padding: 14px 16px;
+            border: none;
+            outline: none;
+            font-size: 18px;
+            color: #333;
+        }
+        .input-wrapper .unit {
+            padding: 14px 16px;
+            background: #f3f4f6;
+            color: #666;
+            font-size: 15px;
+            font-weight: bold;
+            border-left: 1px solid #e5e7eb;
+        }
+        .formula-box {
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.8;
+        }
+        .formula-box strong {
+            color: #0ea5e9;
+        }
+        .btn-calc {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-calc:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(14,165,233,0.4);
+        }
+        .btn-back {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: #f3f4f6;
+            color: #0ea5e9;
+            border: 2px solid #0ea5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 12px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-back:hover {
+            background: #0ea5e9;
+            color: #fff;
+        }
+        .result-card {
+            display: none;
+            background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+            color: #fff;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .result-card h2 {
+            margin-bottom: 10px;
+            font-size: 18px;
+            opacity: 0.95;
+        }
+        .result-value {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .result-unit {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .result-detail {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        .result-detail div {
+            display: flex;
+            justify-content: space-between;
+        }
+        .error-msg {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+            text-align: center;
+            font-size: 14px;
+        }
+        .fun-facts {
+            margin-top: 20px;
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 15px 20px;
+            border-radius: 0 12px 12px 0;
+            font-size: 13px;
+            color: #555;
+            line-height: 1.8;
+            display: none;
+        }
+        .fun-facts strong {
+            color: #f59e0b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⏰ 你的时间值多少钱？</h1>
+            <p>个人时间价值计算器</p>
+        </div>
+        <div class="content">
+            <div class="intro">
+                <p><strong>计算逻辑：</strong>根据人力资源标准计算方法，全年平均月计薪工作天数为 <strong>21.75天</strong>（即除去法定节假日的月平均数），每日工作 <strong>8小时</strong>。</p>
+                <p style="margin-top:6px;">公式：<strong>时薪 = 月薪 ÷ 21.75 ÷ 8</strong></p>
+            </div>
+
+            <div class="input-group">
+                <label for="salary">请输入您目前的月薪</label>
+                <div class="input-wrapper">
+                    <input type="number" id="salary" placeholder="例如：8000" min="0" step="100">
+                    <span class="unit">元</span>
+                </div>
+            </div>
+
+            <div class="formula-box">
+                <strong>计算过程说明：</strong><br>
+                • 月计薪天数 = 21.75 天（国家标准：年计薪日 261 天 ÷ 12 个月）<br>
+                • 日工作小时 = 8 小时<br>
+                • 时薪 = 月薪 ÷ 21.75 ÷ 8<br>
+                • 分钟价值 = 时薪 ÷ 60
+            </div>
+
+            <button class="btn-calc" onclick="calculate()">开始计算</button>
+            <a href="index.html" class="btn-back">← 返回主页</a>
+
+            <div class="error-msg" id="errorMsg">请输入有效的月薪金额！</div>
+
+            <div class="result-card" id="resultCard">
+                <h2>🎯 你的时间价值</h2>
+                <div class="result-value" id="hourlyRate">--</div>
+                <div class="result-unit">元 / 小时</div>
+                <div class="result-detail">
+                    <div><span>日薪：</span><span id="dailyRate">--</span></div>
+                    <div><span>分钟价值：</span><span id="minuteRate">--</span></div>
+                    <div><span>月薪基数：</span><span id="baseSalary">--</span></div>
+                </div>
+            </div>
+
+            <div class="fun-facts" id="funFacts"></div>
+        </div>
+    </div>
+
+    <script>
+        function calculate() {
+            const salaryInput = document.getElementById("salary").value;
+            const errorMsg = document.getElementById("errorMsg");
+            const resultCard = document.getElementById("resultCard");
+            const funFacts = document.getElementById("funFacts");
+
+            errorMsg.style.display = "none";
+            resultCard.style.display = "none";
+            funFacts.style.display = "none";
+
+            const salary = parseFloat(salaryInput);
+
+            if (isNaN(salary) || salary <= 0) {
+                errorMsg.style.display = "block";
+                return;
+            }
+
+            // 计算
+            const WORK_DAYS = 21.75;
+            const WORK_HOURS = 8;
+            const hourlyRate = salary / WORK_DAYS / WORK_HOURS;
+            const dailyRate = salary / WORK_DAYS;
+            const minuteRate = hourlyRate / 60;
+
+            // 显示结果
+            document.getElementById("hourlyRate").textContent = hourlyRate.toFixed(2);
+            document.getElementById("dailyRate").textContent = "¥ " + dailyRate.toFixed(2) + " 元/天";
+            document.getElementById("minuteRate").textContent = "¥ " + minuteRate.toFixed(4) + " 元/分钟";
+            document.getElementById("baseSalary").textContent = "¥ " + salary.toFixed(0) + " 元/月";
+
+            resultCard.style.display = "block";
+
+            // 趣味对比
+            let factsHtml = "<strong>💡 换个角度想想：</strong><br>";
+            if (hourlyRate < 10) {
+                factsHtml += "• 你每小时的时间价值约等于一杯白开水 ☕<br>• 刷半小时短视频 ≈ 花掉 " + (minuteRate * 30).toFixed(2) + " 元";
+            } else if (hourlyRate < 30) {
+                factsHtml += "• 你每小时的时间价值约等于一顿快餐 🍱<br>• 刷半小时短视频 ≈ 花掉 " + (minuteRate * 30).toFixed(2) + " 元<br>• 通勤1小时 ≈ 花掉 " + hourlyRate.toFixed(2) + " 元";
+            } else if (hourlyRate < 80) {
+                factsHtml += "• 你每小时的时间价值约等于一张电影票 🎬<br>• 刷半小时短视频 ≈ 花掉 " + (minuteRate * 30).toFixed(2) + " 元<br>• 午休2小时 ≈ 花掉 " + (hourlyRate * 2).toFixed(2) + " 元";
+            } else {
+                factsHtml += "• 你每小时的时间价值相当可观！💰<br>• 刷半小时短视频 ≈ 花掉 " + (minuteRate * 30).toFixed(2) + " 元<br>• 时间就是金钱，请善用它！";
+            }
+            funFacts.innerHTML = factsHtml;
+            funFacts.style.display = "block";
+
+            resultCard.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+
+        // 回车键触发计算
+        document.getElementById("salary").addEventListener("keypress", function(e) {
+            if (e.key === "Enter") calculate();
+        });
+    </script>
+</body>
+</html>
