@@ -174,18 +174,22 @@
         </section>
     </main>
 
-    <!-- GoatCounter 计数脚本：负责上报每次访问 -->
+    <!--
+        GoatCounter 访问统计（关键：必须引入 count.js 才会真正上报浏览数据）
+        站点码 laobanban 需替换为你自己的 GoatCounter 站点码；
+        后台 Settings → Privacy 需勾选 "Allow adding visitor counts on your website"，
+        否则计数图片不会显示数字。
+    -->
     <script data-goatcounter="https://laobanban.goatcounter.com/count"
-            async src="//gc.zgo.at/count.js"></script>
-    <!-- 计数器图片防缓存：每次加载追加时间戳，确保显示最新数字 -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var img = document.getElementById('gc-counter');
-            if (img) {
-                img.src = img.src.split('?')[0] + '?t=' + new Date().getTime();
-            }
-        });
-    </script>
+            data-goatcounter-settings='{"allow_local":true}'
+            async src="https://gc.zgo.at/count.js"></script>
+
+    <!-- 主交互脚本（含计数器防缓存 + 栏目切换上报） -->
     <script src="js/main.js"></script>
+
+    <!-- 兜底：JS 被禁用时仍能上报并展示计数图片 -->
+    <noscript>
+        <img src="https://laobanban.goatcounter.com/count?p=/&amp;script=no" alt="" style="display:none">
+    </noscript>
 </body>
 </html>
