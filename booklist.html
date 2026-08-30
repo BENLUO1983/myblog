@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>商学院经典阅读书单</title>
+<style>
+:root{
+  --primary:#4a6fa5; --primary-dark:#3a5a8a; --accent:#e8f0fe;
+  --text:#2c3e50; --text-light:#6b7a8d; --border:#e4e9f0;
+  --bg:#f7f9fc; --card:#ffffff; --radius:14px;
+  --shadow:0 2px 12px rgba(0,0,0,0.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;
+  color:var(--text);background:var(--bg);line-height:1.75;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:720px;margin:0 auto;padding:0 0 60px;}
+
+/* 顶部封面 */
+.hero{
+  background:linear-gradient(135deg,#4a6fa5 0%,#3a5a8a 100%);
+  color:#fff;padding:36px 24px 30px;text-align:center;
+}
+.hero .badge{font-size:13px;opacity:.9;letter-spacing:2px;}
+.hero h1{font-size:26px;margin:10px 0 8px;font-weight:700;}
+.hero p{font-size:14px;opacity:.9;}
+.hero .meta{display:inline-flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:14px;}
+.hero .meta span{background:rgba(255,255,255,.18);padding:4px 12px;border-radius:20px;font-size:12px;}
+
+/* 说明条 */
+.intro{padding:18px 20px;font-size:14px;color:var(--text-light);text-align:center;background:var(--bg);}
+
+/* 分组 */
+.group{margin:8px 14px 18px;}
+.group-title{
+  display:flex;align-items:center;gap:10px;
+  font-size:17px;font-weight:700;color:var(--primary-dark);
+  padding:14px 4px;position:sticky;top:0;background:var(--bg);z-index:5;
+}
+.group-title .num{
+  width:30px;height:30px;border-radius:50%;flex-shrink:0;
+  background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:700;
+}
+.group-title small{font-size:12px;color:var(--text-light);font-weight:400;margin-left:auto;}
+
+/* 书籍卡片 */
+.book{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow);
+  transition:transform .2s,border-color .2s;
+}
+.book:active{transform:scale(.995);border-color:var(--primary);}
+.book .idx{font-size:12px;color:var(--primary);font-weight:700;letter-spacing:1px;}
+.book h3{font-size:16px;color:var(--text);margin:3px 0 8px;line-height:1.5;}
+.book .info{font-size:13px;color:var(--text-light);}
+.book .info .author{color:var(--text);font-weight:600;}
+.book .tag{
+  display:inline-block;margin-top:9px;font-size:11px;color:var(--primary);
+  background:var(--accent);padding:3px 10px;border-radius:12px;font-weight:600;
+}
+
+/* 底部提示 */
+.footer{padding:24px 24px 0;text-align:center;font-size:13px;color:var(--text-light);}
+.footer .tip{
+  background:#fffbe6;border:1px dashed #ffe58f;border-radius:10px;
+  padding:12px 16px;font-size:13px;color:#8a6d3b;text-align:left;line-height:1.8;
+}
+.footer .qrcode-note{margin-top:16px;font-size:12px;color:#9aa7b5;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="badge"> 拓 展 阅 读</div>
+    <h1>经典管理·经济书单</h1>
+    <p>50 多本经典 + 案例，构建你的管理知识图谱</p>
+    <div class="meta">
+      <span>📚 50 本书</span>
+      <span>🎯 4 大模块</span>
+     </div>
+  </div>
+
+  <div class="intro">适合商学院大学生的阅读清单，分「理论基石」与「案例专题」两部分。</div>
+
+  <!-- ===== 第一部分：理论基石 ===== -->
+  <div class="group">
+    <div class="group-title"><span class="num">一</span>管理学基石<small>1-8</small></div>
+
+    <div class="book"><div class="idx">01</div><h3>《卓有成效的管理者》</h3>
+      <div class="info"><span class="author">彼得·德鲁克</span> · 机械工业出版社 · 2020</div>
+      <span class="tag">管理学入门必读</span></div>
+
+    <div class="book"><div class="idx">02</div><h3>《管理的实践》</h3>
+      <div class="info"><span class="author">彼得·德鲁克</span> · 机械工业出版社 · 2006</div>
+      <span class="tag">管理学科奠基</span></div>
+
+    <div class="book"><div class="idx">03</div><h3>《管理：任务、责任、实践》</h3>
+      <div class="info"><span class="author">彼得·德鲁克</span> · 华夏出版社 · 2008</div>
+      <span class="tag">管理学"圣经"</span></div>
+
+    <div class="book"><div class="idx">04</div><h3>《管理学》（第13版）</h3>
+      <div class="info"><span class="author">斯蒂芬·P·罗宾斯、玛丽·库尔特</span> · 中国人民大学出版社 · 2017</div>
+      <span class="tag">经典教材</span></div>
+
+    <div class="book"><div class="idx">05</div><h3>《科学管理原理》</h3>
+      <div class="info"><span class="author">弗雷德里克·泰勒</span> · 北京理工大学出版社 · 2012</div>
+      <span class="tag">古典管理起点</span></div>
+
+    <div class="book"><div class="idx">06</div><h3>《工业管理与一般管理》</h3>
+      <div class="info"><span class="author">亨利·法约尔</span> · 机械工业出版社 · 2007</div>
+      <span class="tag">管理五要素</span></div>
+
+    <div class="book"><div class="idx">07</div><h3>《管理工作的本质》</h3>
+      <div class="info"><span class="author">亨利·明茨伯格</span> · 中国人民大学出版社 · 2012</div>
+      <span class="tag">管理者角色</span></div>
+
+    <div class="book"><div class="idx">08</div><h3>《现代决策理论的基石》</h3>
+      <div class="info"><span class="author">赫伯特·西蒙</span> · 北京经济学院出版社 · 1989</div>
+      <span class="tag">有限理性</span></div>
+  </div>
+
+  <div class="group">
+    <div class="group-title"><span class="num">二</span>战略、营销与组织<small>9-15</small></div>
+
+    <div class="book"><div class="idx">09</div><h3>《竞争战略》</h3>
+      <div class="info"><span class="author">迈克尔·波特</span> · 华夏出版社 · 2005</div>
+      <span class="tag">五力模型</span></div>
+
+    <div class="book"><div class="idx">10</div><h3>《战略历程》</h3>
+      <div class="info"><span class="author">亨利·明茨伯格</span> · 机械工业出版社 · 2007</div>
+      <span class="tag">战略流派全景</span></div>
+
+    <div class="book"><div class="idx">11</div><h3>《第五项修炼》</h3>
+      <div class="info"><span class="author">彼得·圣吉</span> · 上海三联书店 · 2004</div>
+      <span class="tag">学习型组织</span></div>
+
+    <div class="book"><div class="idx">12</div><h3>《从优秀到卓越》</h3>
+      <div class="info"><span class="author">吉姆·柯林斯</span> · 中信出版社 · 2009</div>
+      <span class="tag">企业长青</span></div>
+
+    <div class="book"><div class="idx">13</div><h3>《基业长青》</h3>
+      <div class="info"><span class="author">吉姆·柯林斯、杰里·波拉斯</span> · 中信出版社 · 2002</div>
+      <span class="tag">高瞻远瞩公司</span></div>
+
+    <div class="book"><div class="idx">14</div><h3>《蓝海战略》</h3>
+      <div class="info"><span class="author">W.钱·金、勒妮·莫博涅</span> · 商务印书馆 · 2010</div>
+      <span class="tag">价值创新</span></div>
+
+    <div class="book"><div class="idx">15</div><h3>《营销管理》</h3>
+      <div class="info"><span class="author">菲利普·科特勒</span> · 格致出版社 · 2016</div>
+      <span class="tag">营销圣经</span></div>
+  </div>
+
+  <div class="group">
+    <div class="group-title"><span class="num">三</span>经济学经典<small>16-23</small></div>
+
+    <div class="book"><div class="idx">16</div><h3>《国民财富的性质和原因的研究》（国富论）</h3>
+      <div class="info"><span class="author">亚当·斯密</span> · 商务印书馆 · 1974</div>
+      <span class="tag">经济学源头</span></div>
+
+    <div class="book"><div class="idx">17</div><h3>《就业、利息与货币通论》</h3>
+      <div class="info"><span class="author">约翰·M·凯恩斯</span> · 商务印书馆 · 2005</div>
+      <span class="tag">宏观经济学基石</span></div>
+
+    <div class="book"><div class="idx">18</div><h3>《经济学原理》</h3>
+      <div class="info"><span class="author">马歇尔</span> · 湖南文艺出版社 · 2012</div>
+      <span class="tag">新古典综合</span></div>
+
+    <div class="book"><div class="idx">19</div><h3>《经济学》</h3>
+      <div class="info"><span class="author">保罗·萨缪尔森</span> · 商务印书馆 · 2013</div>
+      <span class="tag">主流经济学教材</span></div>
+
+    <div class="book"><div class="idx">20</div><h3>《经济学原理》</h3>
+      <div class="info"><span class="author">曼昆</span> · 北京大学出版社</div>
+      <span class="tag">入门首选</span></div>
+
+    <div class="book"><div class="idx">21</div><h3>《经济发展理论》</h3>
+      <div class="info"><span class="author">约瑟夫·熊彼特</span> · 商务印书馆 · 1990</div>
+      <span class="tag">创新与企业家精神</span></div>
+
+    <div class="book"><div class="idx">22</div><h3>《经济史中的结构与变迁》</h3>
+      <div class="info"><span class="author">道格拉斯·诺斯</span> · 上海人民出版社 · 1997</div>
+      <span class="tag">制度经济学</span></div>
+
+    <div class="book"><div class="idx">23</div><h3>《通往奴役之路》</h3>
+      <div class="info"><span class="author">哈耶克</span> · 中国社会科学出版社 · 1997</div>
+      <span class="tag">自由与计划</span></div>
+  </div>
+
+  <div class="group">
+    <div class="group-title"><span class="num">四</span>人力资源与组织行为<small>24-30</small></div>
+
+    <div class="book"><div class="idx">24</div><h3>《人力资源管理》（第14版）</h3>
+      <div class="info"><span class="author">加里·德斯勒</span> · 中国人民大学出版社 · 2017</div>
+      <span class="tag">HR 权威教材</span></div>
+
+    <div class="book"><div class="idx">25</div><h3>《组织行为学》（第16版）</h3>
+      <div class="info"><span class="author">斯蒂芬·罗宾斯</span> · 中国人民大学出版社 · 2016</div>
+      <span class="tag">组织行为经典</span></div>
+
+    <div class="book"><div class="idx">26</div><h3>《国际人力资源管理》</h3>
+      <div class="info"><span class="author">林新奇</span> · 复旦大学出版社 · 2017</div>
+      <span class="tag">全球化视角</span></div>
+
+    <div class="book"><div class="idx">27</div><h3>《人力资源管理研究》</h3>
+      <div class="info"><span class="author">赵曙明</span> · 中国人民大学出版社</div>
+      <span class="tag">国内 HR 权威</span></div>
+
+    <div class="book"><div class="idx">28</div><h3>《人力资源管理概论》（第3版）</h3>
+      <div class="info"><span class="author">彭剑锋</span> · 复旦大学出版社 · 2019</div>
+      <span class="tag">主流教材</span></div>
+
+    <div class="book"><div class="idx">29</div><h3>《人力资源转型：为组织创造价值和成果》</h3>
+      <div class="info"><span class="author">戴夫·乌尔里克</span> · 电子工业出版社 · 2018</div>
+      <span class="tag">HR 职能转型</span></div>
+
+    <div class="book"><div class="idx">30</div><h3>《平衡计分卡：化战略为行动》</h3>
+      <div class="info"><span class="author">罗伯特·卡普兰</span> · 广东经济出版社 · 2004</div>
+      <span class="tag">战略执行工具</span></div>
+  </div>
+
+  <!-- ===== 第二部分：案例专题 ===== -->
+  <div class="group">
+    <div class="group-title"><span class="num">五</span>科技产业史与企业兴衰<small>31-35</small></div>
+
+    <div class="book"><div class="idx">31</div><h3>《浪潮之巅》（第三版·全2册）</h3>
+      <div class="info"><span class="author">吴军</span> · 人民邮电出版社 · 2016</div>
+      <span class="tag">IT 产业兴衰史</span></div>
+
+    <div class="book"><div class="idx">32</div><h3>《硅谷百年史》</h3>
+      <div class="info"><span class="author">阿伦·拉奥、皮埃罗·斯加鲁菲</span> · 人民邮电出版社 · 2016</div>
+      <span class="tag">硅谷全景</span></div>
+
+    <div class="book"><div class="idx">33</div><h3>《腾讯传》</h3>
+      <div class="info"><span class="author">吴晓波</span> · 浙江大学出版社 · 2017</div>
+      <span class="tag">本土互联网样本</span></div>
+
+    <div class="book"><div class="idx">34</div><h3>《阿里巴巴正传》</h3>
+      <div class="info"><span class="author">方兴东、刘伟</span> · 红旗出版社 · 2015</div>
+      <span class="tag">电商巨头成长</span></div>
+  
+ <div class="book"><div class="idx">35</div><h3>《Managing in the Gray》</h3>
+      <div class="info"><span class="author">Joseph L. Badaracco Jr.</span> · Harvard Business Review Press · 2016</div>
+      <span class="tag">英文原版·灰色地带决策</span></div>
+
+<div class="book"><div class="idx">36</div><h3>《史蒂夫·乔布斯传》</h3>
+      <div class="info"><span class="author">沃尔特·艾萨克森（Walter Isaacson）</span> · 中信出版社 · 2011</div>
+      <span class="tag">科技发展与创新传奇</span></div>
+
+<div class="book"><div class="idx">37</div><h3>《谁说大象不能跳舞？》</h3>
+      <div class="info"><span class="author">[美] 路易斯·郭士纳著 ，张秀琴、音正权 等译</span> · 中信出版社 · 2003</div>
+      <span class="tag">大企业转型的危与机</span></div>
+
+</div>
+
+    <div class="group">
+    <div class="group-title"><span class="num">六</span>华为案例专题<small>38-45</small></div>
+
+    <div class="book"><div class="idx">38</div><h3>《华为管理变革》</h3>
+      <div class="info"><span class="author">吴晓波 等</span> · 中信出版社 · 2017</div>
+      <span class="tag">学术硬核版</span></div>
+
+    <div class="book"><div class="idx">39</div><h3>《The Management Transformation of Huawei》</h3>
+      <div class="info"><span class="author">Xiaobo Wu 等</span> · Cambridge University Press · 2020</div>
+      <span class="tag">英文国际版</span></div>
+
+    <div class="book"><div class="idx">40</div><h3>《华为管理之道》</h3>
+      <div class="info"><span class="author">邓斌</span> · 人民邮电出版社 · 2019</div>
+      <span class="tag">通俗好读</span></div>
+
+    <div class="book"><div class="idx">41</div><h3>《华为管理法：任正非的企业管理心得》</h3>
+      <div class="info"><span class="author">黄志伟 编著</span> · 古吴轩出版社 · 2017</div>
+      <span class="tag">任正非管理实践</span></div>
+
+    <div class="book"><div class="idx">42</div><h3>《华为之管理模式》</h3>
+      <div class="info"><span class="author">王伟立</span> · 海天出版社 · 2018</div>
+      <span class="tag">多维系统解读</span></div>
+
+    <div class="book"><div class="idx">43</div><h3>《华为经营管理智慧》</h3>
+      <div class="info"><span class="author">程东升、刘丽丽</span> · 当代中国出版社 · 2005</div>
+      <span class="tag">早期经营思想</span></div>
+
+   <div class="book"><div class="idx">44</div><h3>《灰度管理》</h3>
+      <div class="info"><span class="author">陈智刚、博锋</span> · 科学出版社 · 2011</div>
+      <span class="tag">本土灰度框架</span></div>
+
+    <div class="book"><div class="idx">45</div><h3>《华为灰度管理法》</h3>
+      <div class="info"><span class="author">冉涛（华为前资深HR）</span> · 中信出版社 · 2019</div>
+      <span class="tag">华为灰度落地</span></div>
+  </div>
+
+  <div class="group">
+    <div class="group-title"><span class="num">七</span>延伸：标杆企业案例<small>46-52</small></div>
+
+        <div class="book"><div class="idx">46</div><h3>《尊重事实：从福耀玻璃看中国制造业的全球突围》</h3>
+      <div class="info"><span class="author">周锡冰</span> · 中国经济出版社 · 2019</div>
+      <span class="tag">中国制造出海</span></div>
+
+    <div class="book"><div class="idx">47</div><h3>《海底捞你学不会》</h3>
+      <div class="info"><span class="author">黄铁鹰</span> · 中信出版社 · 2011</div>
+      <span class="tag">服务型企业 HR 必读</span></div>
+
+    <div class="book"><div class="idx">48</div><h3>《联想并购 IBM PC：国际化之路》</h3>
+      <div class="info"><span class="author">张小平</span> · 机械工业出版社 · 2009</div>
+      <span class="tag">跨国并购复盘</span></div>
+
+    <div class="book"><div class="idx">49</div><h3>《刷新》（Hit Refresh）</h3>
+      <div class="info"><span class="author">萨提亚·纳德拉</span> · 中信出版社 · 2018</div>
+      <span class="tag">微软文化转型</span></div>
+
+    <div class="book"><div class="idx">50</div><h3>《奈飞文化手册》</h3>
+      <div class="info"><span class="author">帕蒂·麦考德</span> · 中信出版社 · 2018</div>
+      <span class="tag">自由与责任·互联网 HR</span></div>
+
+    <div class="book"><div class="idx">51</div><h3>《海尔转型：人人都是 CEO》</h3>
+      <div class="info"><span class="author">曹仰锋</span> · 中信出版社 · 2015</div>
+      <span class="tag">人单合一·组织变革</span></div>
+
+    <div class="book"><div class="idx">52</div><h3>《详谈：张一鸣》</h3>
+      <div class="info"><span class="author">李翔 整理</span> · 中信出版社 · 2021</div>
+      <span class="tag">字节跳动管理哲学</span></div>
+  </div>
+
+  <div class="footer">
+    <div class="tip">
+      <b>💡读万卷书，行万里路 。
+    </div>
+  
+  </div>
+
+</div>
+</body>
+</html>
