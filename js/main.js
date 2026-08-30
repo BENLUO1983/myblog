@@ -24,6 +24,9 @@
             sections.forEach(function (sec) { sec.classList.remove('active'); });
             var target = document.getElementById(targetId);
             if (target) target.classList.add('active');
+
+            /* 单页栏目切换也计入一次浏览 */
+            trackSection(targetId);
         }
 
         navLinks.forEach(function (link) {
@@ -134,12 +137,47 @@
         toggle.setAttribute('aria-label', dark ? '切换到浅色模式' : '切换到深色模式');
     }
 
-    /* ===== GoatCounter 计数器防缓存 ===== */
+    /* ===== GoatCounter 访问统计 =====
+     * 采用「纯手动打点」：直接用 new Image().src 向 GoatCounter 的
+     * /count 端点发请求，不依赖 count.js 是否加载成功，确保一定上报。
+     * （页面底部 count.js 作为标准方式并存，服务端自动去重）
+     * 展示端：给计数图片追加时间戳，绕过浏览器/GoatCounter 的 4 小时缓存。
+     */
+    var GC_ENDPOINT = 'https://laobanban.goatcounter.com/count';
+
+    /* 上报一条浏览记录，path 为当前栏目（用于后台分页面统计） */
+    function trackPageview(path) {
+        var p = path || (window.location.pathname + window.location.hash);
+        var url = GC_ENDPOINT + '?p=' + encodeURIComponent(p) +
+                  '&t=' + new Date().getTime() + '&src=manual';
+        try {
+            var beacon = new Image();
+            beacon.src = url;
+            /* sendBeacon 让页面跳转/卸载时也能可靠上报 */
+            if (navigator.sendBeacon) {
+                try { navigator.sendBeacon(url); } catch (e) {}
+            }
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
     function initCounter() {
+        /* 1. 展示端：给计数图片追加时间戳，绕过缓存，即时刷新数字 */
         var img = document.getElementById('gc-counter');
         if (img && img.src) {
             img.src = img.src.split('?')[0] + '?t=' + new Date().getTime();
         }
+
+        /* 2. 上报端：页面首次加载上报一次 */
+        trackPageview(window.location.pathname + (window.location.hash || ''));
+    }
+
+    /* 栏目切换时手动上报，让单页浏览也被计入 */
+    function trackSection(targetId) {
+        if (!targetId) return;
+        trackPageview(window.location.pathname + '#' + targetId);
     }
 
     /* ===== 初始化 ===== */

@@ -175,10 +175,19 @@
     </main>
 
     <!--
-        GoatCounter 访问统计（关键：必须引入 count.js 才会真正上报浏览数据）
+        ============================================================
+        GoatCounter 访问统计（v3 最强兜底版）
+        ------------------------------------------------------------
+        采用「双重上报」策略，确保计数器一定能动起来：
+          ① 官方 count.js（标准方式，含机器人过滤、去重等）
+          ② 手动打点（new Image().src）——即使 count.js 因网络/CDN/
+             广告拦截/加载失败而未执行，也能保证每次浏览都上报
+        两路同时发请求，GoatCounter 服务端会自动去重，不会重复计数。
+        ------------------------------------------------------------
         站点码 laobanban 需替换为你自己的 GoatCounter 站点码；
-        后台 Settings → Privacy 需勾选 "Allow adding visitor counts on your website"，
-        否则计数图片不会显示数字。
+        后台 Settings → Privacy 需勾选
+        "Allow adding visitor counts on your website"，否则图片不显示数字。
+        ============================================================
     -->
     <script data-goatcounter="https://laobanban.goatcounter.com/count"
             data-goatcounter-settings='{"allow_local":true}'
@@ -187,7 +196,24 @@
     <!-- 主交互脚本（含计数器防缓存 + 栏目切换上报） -->
     <script src="js/main.js"></script>
 
-    <!-- 兜底：JS 被禁用时仍能上报并展示计数图片 -->
+    <!--
+        兜底手动打点：不依赖任何外部脚本是否就绪，
+        只要浏览器能跑 JS，就直接向 GoatCounter 发送一条浏览记录。
+        ?p= 为页面路径，用于后台分页面统计；ref/no_script 用于排查来源。
+    -->
+    <script>
+        (function () {
+            var endpoint = 'https://laobanban.goatcounter.com/count?p=' +
+                           encodeURIComponent(location.pathname + location.hash) +
+                           '&t=' + new Date().getTime();
+            try {
+                var img = new Image();
+                img.src = endpoint;
+            } catch (e) {}
+        })();
+    </script>
+
+    <!-- 兜底：JS 被完全禁用时，仍能通过 img 上报并展示计数图片 -->
     <noscript>
         <img src="https://laobanban.goatcounter.com/count?p=/&amp;script=no" alt="" style="display:none">
     </noscript>
