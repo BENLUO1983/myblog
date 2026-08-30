@@ -37,8 +37,8 @@
         <div class="sidebar-footer">
             <div class="stat-mini">
                 <span class="stat-label">访问量</span>
-                <!-- 替换 [your-code] 为你的 GoatCounter 站点代码 -->
-                <img src="https://laobanban.goatcounter.com/counter/TOTAL.svg" alt="Total Views">
+                <!-- GoatCounter 计数图片：每次加载追加时间戳，避免浏览器缓存 -->
+                <img src="https://laobanban.goatcounter.com/counter/TOTAL.svg" alt="Total Views" id="gc-counter">
             </div>
         </div>
     </aside>
@@ -74,7 +74,7 @@
                 </div>
                 <h3>个人简介</h3>
                 <p>资深80后，先后毕业于华南师范大学人力资源管理本科、湖南师范大学行政管理硕士、福建农林大学涉农企业经营与管理博士，现从事人力资源管理、劳动经济学、管理学等课程教学研究。具有人力资源管理师（经济师）专业技术职称，兼任中国人力资源开发研究会适度劳动与职业健康分会理事、福建省人才研究会会员。</p>
-        <img src="11.png" alt="用户头像" class="avatar">
+                <img src="11.png" alt="用户头像" class="avatar">
                 <p>后期内容添加中......</p>
             </div>
         </section>
@@ -162,7 +162,7 @@
                 <p>这里是<strong>各类学习资料</strong>栏目</p>
                 <p class="hint">💡正在建设中</p>
             </div>
-  <!-- 测评入口卡片 -->
+            <!-- 测评入口卡片 -->
             <a href="booklist.html" class="tool-card tool-entry">
                 <div class="tool-entry-icon">🧭</div>
                 <div class="tool-entry-body">
@@ -174,6 +174,18 @@
         </section>
     </main>
 
+    <!-- GoatCounter 计数脚本：负责上报每次访问 -->
+    <script data-goatcounter="https://laobanban.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+    <!-- 计数器图片防缓存：每次加载追加时间戳，确保显示最新数字 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var img = document.getElementById('gc-counter');
+            if (img) {
+                img.src = img.src.split('?')[0] + '?t=' + new Date().getTime();
+            }
+        });
+    </script>
     <script src="js/main.js"></script>
 </body>
 </html>
