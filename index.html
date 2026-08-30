@@ -37,7 +37,6 @@
         <div class="sidebar-footer">
             <div class="stat-mini">
                 <span class="stat-label">访问量</span>
-                <!-- GoatCounter 计数图片：每次加载追加时间戳，避免浏览器缓存 -->
                 <img src="https://laobanban.goatcounter.com/counter/TOTAL.svg" alt="Total Views" id="gc-counter">
             </div>
         </div>
@@ -119,7 +118,6 @@
                 <p class="hint">💡 后期添加新工具，敬请期待。</p>
             </div>
 
-            <!-- 工具入口卡片 -->
             <a href="capital.html" class="tool-card tool-entry">
                 <div class="tool-entry-icon">📊</div>
                 <div class="tool-entry-body">
@@ -141,13 +139,23 @@
                 <p class="hint">💡 正在建设中，后期加入其他测评</p>
             </div>
 
-            <!-- 测评入口卡片 -->
+            <!-- 霍兰德测评入口 -->
             <a href="holland.html" class="tool-card tool-entry">
                 <div class="tool-entry-icon">🧭</div>
                 <div class="tool-entry-body">
                     <h3>霍兰德职业兴趣测评（60题）</h3>
                     <p>基于霍兰德 RIASEC 理论，通过 <b>60 道题目</b>评估你在 <b>R 现实 / I 研究 / A 艺术 / S 社会 / E 企业 / C 常规</b> 六个维度的兴趣倾向，并给出霍兰德代码与职业匹配建议。</p>
                     <span class="tool-entry-tag">RIASEC · 60题 · 三位代码 · 职业匹配 →</span>
+                </div>
+            </a>
+
+            <!-- IRC 测评入口（新增） -->
+            <a href="IRC.html" class="tool-card tool-entry">
+                <div class="tool-entry-icon">🧠</div>
+                <div class="tool-entry-body">
+                    <h3>人际反应指针量表（IRI-C）共情能力测评</h3>
+                    <p>基于 Davis 的 IRI 量表中文版，通过 <b>22 道题目</b>评估你在 <b>观点采择 / 想象力 / 共情性关心 / 个人痛苦</b> 四个维度的共情能力，并给出详细解读与个性化建议。</p>
+                    <span class="tool-entry-tag">IRI-C · 22题 · 多维共情 · 即时报告 →</span>
                 </div>
             </a>
         </section>
@@ -162,7 +170,6 @@
                 <p>这里是<strong>各类学习资料</strong>栏目</p>
                 <p class="hint">💡正在建设中</p>
             </div>
-            <!-- 测评入口卡片 -->
             <a href="booklist.html" class="tool-card tool-entry">
                 <div class="tool-entry-icon">🧭</div>
                 <div class="tool-entry-body">
@@ -174,33 +181,11 @@
         </section>
     </main>
 
-    <!--
-        ============================================================
-        GoatCounter 访问统计（v3 最强兜底版）
-        ------------------------------------------------------------
-        采用「双重上报」策略，确保计数器一定能动起来：
-          ① 官方 count.js（标准方式，含机器人过滤、去重等）
-          ② 手动打点（new Image().src）——即使 count.js 因网络/CDN/
-             广告拦截/加载失败而未执行，也能保证每次浏览都上报
-        两路同时发请求，GoatCounter 服务端会自动去重，不会重复计数。
-        ------------------------------------------------------------
-        站点码 laobanban 需替换为你自己的 GoatCounter 站点码；
-        后台 Settings → Privacy 需勾选
-        "Allow adding visitor counts on your website"，否则图片不显示数字。
-        ============================================================
-    -->
+    <!-- GoatCounter 访问统计 -->
     <script data-goatcounter="https://laobanban.goatcounter.com/count"
             data-goatcounter-settings='{"allow_local":true}'
             async src="https://gc.zgo.at/count.js"></script>
-
-    <!-- 主交互脚本（含计数器防缓存 + 栏目切换上报） -->
     <script src="js/main.js"></script>
-
-    <!--
-        兜底手动打点：不依赖任何外部脚本是否就绪，
-        只要浏览器能跑 JS，就直接向 GoatCounter 发送一条浏览记录。
-        ?p= 为页面路径，用于后台分页面统计；ref/no_script 用于排查来源。
-    -->
     <script>
         (function () {
             var endpoint = 'https://laobanban.goatcounter.com/count?p=' +
@@ -212,8 +197,6 @@
             } catch (e) {}
         })();
     </script>
-
-    <!-- 兜底：JS 被完全禁用时，仍能通过 img 上报并展示计数图片 -->
     <noscript>
         <img src="https://laobanban.goatcounter.com/count?p=/&amp;script=no" alt="" style="display:none">
     </noscript>

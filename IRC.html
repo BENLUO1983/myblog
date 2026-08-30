@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人际反应指针量表（IRI-C）共情能力测评</title>
+    <style>
+        :root {
+            --primary: #5b6abf;
+            --primary-dark: #3d4a8f;
+            --primary-light: #e8ecf8;
+            --accent: #7c5cbf;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
+            --text: #2d3142;
+            --text-light: #6b7280;
+            --bg: #f5f6fa;
+            --card-bg: #ffffff;
+            --border: #e0e3eb;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.1);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --font: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 820px;
+            width: 100%;
+            padding: 0 8px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 20px 30px;
+            background: linear-gradient(135deg, #5b6abf 0%, #7c5cbf 50%, #9b59b6 100%);
+            border-radius: var(--radius);
+            color: #fff;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(91, 106, 191, 0.3);
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -40%;
+            left: -20%;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 8px;
+        }
+        .header .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+        .header .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(4px);
+            letter-spacing: 0.5px;
+        }
+
+        /* Progress */
+        .progress-wrapper {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+            position: sticky;
+            top: 12px;
+            z-index: 50;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid var(--border);
+        }
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        .progress-bar-outer {
+            height: 8px;
+            background: #e8ecf1;
+            border-radius: 4px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        .progress-bar-inner {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            width: 0%;
+            position: relative;
+        }
+        .progress-bar-inner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        /* Intro */
+        .intro {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 28px 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+            border-left: 5px solid var(--primary);
+            transition: var(--transition);
+        }
+        .intro h2 {
+            font-size: 1.25rem;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .intro p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+        .intro .instructions {
+            background: var(--primary-light);
+            border-radius: var(--radius-sm);
+            padding: 16px 20px;
+            margin-top: 12px;
+            font-size: 0.88rem;
+            color: var(--primary-dark);
+        }
+        .intro .instructions strong {
+            font-weight: 600;
+        }
+        .scale-hint {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .scale-hint span {
+            background: #f0f2f7;
+            padding: 4px 12px;
+            border-radius: 14px;
+            font-size: 0.78rem;
+            color: var(--text-light);
+            letter-spacing: 0.3px;
+        }
+
+        /* Question Card */
+        .question-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 24px 26px;
+            box-shadow: var(--shadow);
+            margin-bottom: 16px;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            position: relative;
+        }
+        .question-card:hover {
+            box-shadow: var(--shadow-hover);
+            border-color: #e0e3eb;
+        }
+        .question-card.answered {
+            border-color: var(--primary);
+            background: #fafbff;
+        }
+        .question-card.answered .q-number {
+            background: var(--primary);
+            color: #fff;
+        }
+        .q-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+        .q-number {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #e8ecf1;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            margin-top: 2px;
+        }
+        .q-text {
+            font-size: 1.02rem;
+            font-weight: 500;
+            color: var(--text);
+            line-height: 1.6;
+            flex: 1;
+        }
+        .q-dimension {
+            font-size: 0.72rem;
+            color: var(--text-light);
+            background: #f0f2f7;
+            padding: 2px 10px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 6px;
+            letter-spacing: 0.5px;
+        }
+        .q-reverse {
+            font-size: 0.7rem;
+            color: #e67e22;
+            background: #fef5e7;
+            padding: 2px 8px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 6px;
+            margin-left: 6px;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding-left: 50px;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            padding: 8px 14px;
+            border-radius: 24px;
+            border: 2px solid #e0e3eb;
+            transition: var(--transition);
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-light);
+            background: #fff;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            position: relative;
+        }
+        .option-label:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-1px);
+        }
+        .option-label input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+            pointer-events: none;
+        }
+        .option-label.selected {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(91, 106, 191, 0.35);
+            transform: translateY(-1px);
+        }
+        .option-label.selected:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            color: #fff;
+        }
+        .option-value {
+            font-size: 0.72rem;
+            opacity: 0.7;
+            font-weight: 400;
+        }
+
+        /* Submit button */
+        .submit-section {
+            text-align: center;
+            padding: 28px 0 20px;
+        }
+        .btn-submit {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: #fff;
+            border: none;
+            padding: 16px 48px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 6px 24px rgba(91, 106, 191, 0.35);
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            font-family: var(--font);
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 32px rgba(91, 106, 191, 0.45);
+        }
+        .btn-submit:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 16px rgba(91, 106, 191, 0.3);
+        }
+        .btn-submit:disabled {
+            background: #c0c4d0;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+        .btn-submit::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+        .btn-submit:hover::after {
+            opacity: 1;
+        }
+        .btn-reset {
+            background: transparent;
+            color: var(--text-light);
+            border: 2px solid #d0d4dd;
+            padding: 10px 28px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 12px;
+            font-family: var(--font);
+            letter-spacing: 0.5px;
+        }
+        .btn-reset:hover {
+            border-color: var(--text-light);
+            color: var(--text);
+            background: #f8f9fb;
+        }
+
+        /* Result Section */
+        .result-section {
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .result-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 32px 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+        .result-card.main-result {
+            background: linear-gradient(135deg, #fafbff 0%, #f5f0ff 100%);
+            border: 2px solid #e0d9f0;
+            text-align: center;
+            padding: 36px 30px;
+        }
+        .result-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+        .result-subtitle {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 18px;
+        }
+        .total-score {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+        .total-score-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+        .total-badge {
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-top: 12px;
+            letter-spacing: 0.5px;
+        }
+        .badge-high {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .badge-medium {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        .badge-low {
+            background: #fce4ec;
+            color: #c62828;
+        }
+
+        /* Dimension bars */
+        .dimension-results {
+            display: grid;
+            gap: 18px;
+            margin-top: 20px;
+        }
+        .dimension-item {
+            text-align: left;
+        }
+        .dimension-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .dimension-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+        .dimension-score {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--primary);
+        }
+        .dimension-max {
+            font-size: 0.78rem;
+            color: var(--text-light);
+            font-weight: 400;
+        }
+        .dimension-bar-outer {
+            height: 10px;
+            background: #e8ecf1;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        .dimension-bar-inner {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 1s ease;
+            position: relative;
+        }
+        .dimension-bar-inner.pt-bar {
+            background: linear-gradient(90deg, #5b6abf, #7c9bdf);
+        }
+        .dimension-bar-inner.fs-bar {
+            background: linear-gradient(90deg, #7c5cbf, #9b7cdb);
+        }
+        .dimension-bar-inner.ec-bar {
+            background: linear-gradient(90deg, #e07b9c, #f0a0b8);
+        }
+        .dimension-bar-inner.pd-bar {
+            background: linear-gradient(90deg, #e8a04c, #f0c078);
+        }
+        .dimension-level {
+            font-size: 0.78rem;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        .level-high {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .level-medium {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        .level-low {
+            background: #fce4ec;
+            color: #c62828;
+        }
+
+        /* Radar chart */
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        canvas#radarChart {
+            max-width: 100%;
+            width: 300px;
+            height: 300px;
+        }
+
+        /* Interpretation */
+        .interpretation-section {
+            margin-top: 20px;
+        }
+        .interpretation-item {
+            padding: 18px 20px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+            background: #fafbfc;
+            border-left: 4px solid var(--primary);
+            transition: var(--transition);
+        }
+        .interpretation-item:hover {
+            background: #f5f6fa;
+        }
+        .interpretation-item h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .interpretation-item p {
+            font-size: 0.88rem;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+        .interpretation-item.strength {
+            border-left-color: var(--success);
+        }
+        .interpretation-item.attention {
+            border-left-color: var(--warning);
+        }
+        .interpretation-item.suggestion {
+            border-left-color: var(--accent);
+        }
+
+        /* Suggestions */
+        .suggestions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+            margin-top: 16px;
+        }
+        .suggestion-card {
+            background: #fafbfc;
+            border-radius: var(--radius-sm);
+            padding: 16px 18px;
+            border: 1px solid #e8ecf1;
+            transition: var(--transition);
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        .suggestion-card:hover {
+            background: #fff;
+            box-shadow: var(--shadow);
+            border-color: #d0d4dd;
+        }
+        .suggestion-card strong {
+            color: var(--text);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.88rem;
+        }
+
+        /* Buttons row in result */
+        .result-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+        .btn-secondary {
+            background: #fff;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 10px 28px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: var(--font);
+            letter-spacing: 0.5px;
+        }
+        .btn-secondary:hover {
+            background: var(--primary-light);
+            border-color: var(--primary-dark);
+            color: var(--primary-dark);
+        }
+        .btn-print {
+            background: #fff;
+            color: var(--text);
+            border: 2px solid #d0d4dd;
+            padding: 10px 28px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: var(--font);
+        }
+        .btn-print:hover {
+            border-color: var(--text-light);
+            background: #f8f9fb;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 24px 0 12px;
+            font-size: 0.78rem;
+            color: #b0b4c0;
+            letter-spacing: 0.3px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            body {
+                padding: 8px;
+            }
+            .header {
+                padding: 28px 16px 22px;
+                border-radius: 14px;
+            }
+            .header h1 {
+                font-size: 1.4rem;
+            }
+            .header .subtitle {
+                font-size: 0.85rem;
+            }
+            .intro {
+                padding: 20px 18px;
+            }
+            .question-card {
+                padding: 18px 16px;
+                border-radius: 12px;
+            }
+            .options {
+                padding-left: 0;
+                gap: 6px;
+            }
+            .option-label {
+                padding: 6px 10px;
+                font-size: 0.78rem;
+                border-radius: 18px;
+                flex: 1 1 calc(50% - 6px);
+                justify-content: center;
+                text-align: center;
+            }
+            .option-label .option-value {
+                display: none;
+            }
+            .q-text {
+                font-size: 0.92rem;
+            }
+            .q-number {
+                width: 30px;
+                height: 30px;
+                font-size: 0.8rem;
+            }
+            .progress-wrapper {
+                padding: 14px 16px;
+                top: 6px;
+                border-radius: 12px;
+            }
+            .btn-submit {
+                padding: 14px 32px;
+                font-size: 1rem;
+                width: 100%;
+                max-width: 360px;
+            }
+            .result-card {
+                padding: 22px 16px;
+            }
+            .total-score {
+                font-size: 2.8rem;
+            }
+            .suggestions-grid {
+                grid-template-columns: 1fr;
+            }
+            .result-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            .btn-secondary,
+            .btn-print {
+                width: 100%;
+                max-width: 280px;
+                text-align: center;
+            }
+            .chart-container canvas#radarChart {
+                width: 240px;
+                height: 240px;
+            }
+        }
+        @media (max-width: 380px) {
+            .option-label {
+                flex: 1 1 100%;
+                justify-content: flex-start;
+                text-align: left;
+            }
+            .option-label .option-value {
+                display: inline;
+                font-size: 0.68rem;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: #fff;
+                padding: 0;
+            }
+            .header,
+            .progress-wrapper,
+            .intro,
+            .submit-section,
+            .result-actions,
+            .footer,
+            .btn-reset {
+                display: none !important;
+            }
+            .result-section {
+                display: block !important;
+            }
+            .result-card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+            .question-card {
+                display: none !important;
+            }
+            .container {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🧠 人际反应指针量表</h1>
+            <div class="subtitle">中文版 Interpersonal Reactivity Index (IRI-C)</div>
+            <div class="badge">共情能力多维测评 · 22题 · 约5分钟</div>
+        </div>
+
+        <!-- Progress -->
+        <div class="progress-wrapper" id="progressWrapper">
+            <div class="progress-info">
+                <span id="progressText">已完成 0 / 22 题</span>
+                <span id="progressPercent">0%</span>
+            </div>
+            <div class="progress-bar-outer">
+                <div class="progress-bar-inner" id="progressBar"></div>
+            </div>
+        </div>
+
+        <!-- Intro -->
+        <div class="intro" id="introSection">
+            <h2>📋 测评说明</h2>
+            <p>请仔细阅读以下每一道题目，根据<strong>你自己的真实感受</strong>，选择最符合你实际情况的选项。答案没有对错之分，请凭第一感觉作答。</p>
+            <div class="instructions">
+                <strong>评分标准：</strong>每题从0到4分，代表该描述与你的符合程度。
+                <div class="scale-hint">
+                    <span>0 = 不恰当</span>
+                    <span>1 = 有一点恰当</span>
+                    <span>2 = 还算恰当</span>
+                    <span>3 = 恰当</span>
+                    <span>4 = 很恰当</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Questions -->
+        <div id="questionsContainer"></div>
+
+        <!-- Submit -->
+        <div class="submit-section" id="submitSection">
+            <button class="btn-submit" id="btnSubmit" disabled>提交测评</button>
+            <br>
+            <button class="btn-reset" id="btnReset" style="display:none;">重新作答</button>
+        </div>
+
+        <!-- Result -->
+        <div class="result-section" id="resultSection">
+            <!-- Main result -->
+            <div class="result-card main-result">
+                <div class="result-title">📊 测评结果</div>
+                <div class="result-subtitle">您的共情能力综合评估</div>
+                <div class="total-score" id="totalScoreDisplay">0</div>
+                <div class="total-score-label">共情总分（满分88分）</div>
+                <div id="totalBadge"></div>
+            </div>
+
+            <!-- Dimension bars -->
+            <div class="result-card">
+                <h3 style="font-size:1.15rem;font-weight:600;margin-bottom:16px;color:var(--text);">📈 各维度得分</h3>
+                <div class="dimension-results" id="dimensionResults"></div>
+            </div>
+
+            <!-- Radar chart -->
+            <div class="result-card">
+                <h3 style="font-size:1.15rem;font-weight:600;margin-bottom:10px;color:var(--text);">🕸️ 维度可视化</h3>
+                <div class="chart-container">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Interpretation -->
+            <div class="result-card">
+                <h3 style="font-size:1.15rem;font-weight:600;margin-bottom:14px;color:var(--text);">🔍 详细解读</h3>
+                <div class="interpretation-section" id="interpretationSection"></div>
+            </div>
+
+            <!-- Suggestions -->
+            <div class="result-card">
+                <h3 style="font-size:1.15rem;font-weight:600;margin-bottom:14px;color:var(--text);">💡 个性化建议</h3>
+                <div id="suggestionsContainer"></div>
+            </div>
+
+            <!-- Actions -->
+            <div class="result-actions">
+                <button class="btn-secondary" id="btnRetake">🔄 重新测评</button>
+                <button class="btn-print" id="btnPrint">🖨️ 打印结果</button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>本测评仅供参考，不构成任何医疗或心理诊断建议。如有需要，请咨询专业心理工作者。</p>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ===== 量表数据 =====
+            const questions = [
+                // 观点采择 PT (1-5)
+                { id: 1, text: "在做决定前，我试着从每个人的角度去看待问题。", dimension: "PT", dimensionName: "观点采择",
+                    reverse: false },
+                { id: 2, text: "当我确定自己是对的时候，我不会浪费时间去听别人的意见。", dimension: "PT",
+                    dimensionName: "观点采择", reverse: true },
+                { id: 3, text: "我有时候会尝试从朋友的角度去看事情，以便更好地理解他们。", dimension: "PT",
+                    dimensionName: "观点采择", reverse: false },
+                { id: 4, text: "我相信每个问题都有两面性，所以我试着从不同的角度去看问题。", dimension: "PT",
+                    dimensionName: "观点采择", reverse: false },
+                { id: 5, text: "当我对某人生气时，我通常会试着站在他的立场上考虑一下。", dimension: "PT",
+                    dimensionName: "观点采择", reverse: false },
+                // 想象力 FS (6-11)
+                { id: 6, text: "我会投入到小说中人物的情感中。", dimension: "FS", dimensionName: "想象力", reverse: false },
+                { id: 7, text: "在看电影或戏剧时，我通常会保持客观，不会完全投入。", dimension: "FS", dimensionName: "想象力",
+                    reverse: true },
+                { id: 8, text: "我经常会幻想或设想事情可能发生的各种情况。", dimension: "FS", dimensionName: "想象力",
+                    reverse: false },
+                { id: 9, text: "在阅读一个故事时，我会想象如果故事中的事件发生在我身上，我会有什么感受。", dimension: "FS",
+                    dimensionName: "想象力", reverse: false },
+                { id: 10, text: "当我看到有人受到伤害时，我能够想象他们的感受。", dimension: "FS", dimensionName: "想象力",
+                    reverse: false },
+                { id: 11, text: "我经常会想象如果我是别人，生活会是什么样子。", dimension: "FS", dimensionName: "想象力",
+                    reverse: false },
+                // 共情性关心 EC (12-17)
+                { id: 12, text: "我经常对不幸的人产生关心和同情。", dimension: "EC", dimensionName: "共情性关心",
+                    reverse: false },
+                { id: 13, text: "当看到有人被利用时，我会感到想要保护他们。", dimension: "EC", dimensionName: "共情性关心",
+                    reverse: false },
+                { id: 14, text: "他人的不幸通常不会让我感到非常不安。", dimension: "EC", dimensionName: "共情性关心",
+                    reverse: true },
+                { id: 15, text: "当我看到有人受到不公平对待时，我不会感到非常同情他们。", dimension: "EC",
+                    dimensionName: "共情性关心", reverse: true },
+                { id: 16, text: "我常常被身边发生的事情所感动。", dimension: "EC", dimensionName: "共情性关心",
+                    reverse: false },
+                { id: 17, text: "我会把自己描述为一个心肠很软的人。", dimension: "EC", dimensionName: "共情性关心",
+                    reverse: false },
+                // 个人痛苦 PD (18-22)
+                { id: 18, text: "在紧急情况下，我会感到担忧和不安。", dimension: "PD", dimensionName: "个人痛苦",
+                    reverse: false },
+                { id: 19, text: "我通常会冷静地处理紧急情况。", dimension: "PD", dimensionName: "个人痛苦", reverse: true },
+                { id: 20, text: "在紧张的情况下，我会感到害怕。", dimension: "PD", dimensionName: "个人痛苦", reverse: false },
+                { id: 21, text: "当我看到有人受伤时，我会保持冷静。", dimension: "PD", dimensionName: "个人痛苦",
+                    reverse: true },
+                { id: 22, text: "我往往会受到周围人情绪的影响。", dimension: "PD", dimensionName: "个人痛苦",
+                reverse: false }
+            ];
+
+            const dimensions = {
+                PT: { name: "观点采择", max: 20, fullMark: 20, color: "#5b6abf", description: "从他人角度看待问题的能力" },
+                FS: { name: "想象力", max: 24, fullMark: 24, color: "#7c5cbf", description: "投入虚构情境和他人情感世界的能力" },
+                EC: { name: "共情性关心", max: 24, fullMark: 24, color: "#e07b9c",
+                description: "对他人产生温暖、关怀和同情的能力" },
+                PD: { name: "个人痛苦", max: 20, fullMark: 20, color: "#e8a04c", description: "面对他人痛苦时自身的情绪反应强度" }
+            };
+
+            const optionLabels = [
+                { value: 0, label: "不恰当", short: "0" },
+                { value: 1, label: "有一点恰当", short: "1" },
+                { value: 2, label: "还算恰当", short: "2" },
+                { value: 3, label: "恰当", short: "3" },
+                { value: 4, label: "很恰当", short: "4" }
+            ];
+
+            // ===== 状态管理 =====
+            let answers = {};
+            let isSubmitted = false;
+
+            // ===== DOM元素 =====
+            const questionsContainer = document.getElementById('questionsContainer');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            const progressPercent = document.getElementById('progressPercent');
+            const btnSubmit = document.getElementById('btnSubmit');
+            const btnReset = document.getElementById('btnReset');
+            const submitSection = document.getElementById('submitSection');
+            const resultSection = document.getElementById('resultSection');
+            const introSection = document.getElementById('introSection');
+            const progressWrapper = document.getElementById('progressWrapper');
+
+            // ===== 渲染题目 =====
+            function renderQuestions() {
+                questionsContainer.innerHTML = '';
+                questions.forEach(q => {
+                    const card = document.createElement('div');
+                    card.className = 'question-card';
+                    card.id = `question-card-${q.id}`;
+                    card.dataset.questionId = q.id;
+
+                    const reverseBadge = q.reverse ? '<span class="q-reverse">反向计分</span>' : '';
+
+                    card.innerHTML = `
+                        <div class="q-header">
+                            <div class="q-number">${q.id}</div>
+                            <div class="q-text">
+                                ${q.text}
+                                <br>
+                                <span class="q-dimension">${q.dimensionName}</span>
+                                ${reverseBadge}
+                            </div>
+                        </div>
+                        <div class="options" role="radiogroup" aria-label="题目${q.id}的选项">
+                            ${optionLabels.map(opt => `
+                                <label class="option-label" data-question="${q.id}" data-value="${opt.value}">
+                                    <input type="radio" name="q${q.id}" value="${opt.value}" 
+                                           data-question="${q.id}" aria-label="${opt.label}">
+                                    ${opt.label} <span class="option-value">(${opt.short})</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    `;
+
+                    questionsContainer.appendChild(card);
+
+                    // 绑定选项事件
+                    const labels = card.querySelectorAll('.option-label');
+                    labels.forEach(label => {
+                        label.addEventListener('click', function(e) {
+                            const qId = parseInt(this.dataset.question);
+                            const val = parseInt(this.dataset.value);
+                            selectOption(qId, val, this);
+                        });
+                    });
+                });
+            }
+
+            // ===== 选择选项 =====
+            function selectOption(qId, val, labelElement) {
+                answers[qId] = val;
+
+                // 更新UI
+                const card = document.getElementById(`question-card-${qId}`);
+                const allLabels = card.querySelectorAll('.option-label');
+                allLabels.forEach(l => l.classList.remove('selected'));
+                if (labelElement) {
+                    labelElement.classList.add('selected');
+                } else {
+                    // 通过数据属性找到对应的label
+                    const targetLabel = card.querySelector(`.option-label[data-value="${val}"]`);
+                    if (targetLabel) targetLabel.classList.add('selected');
+                }
+                card.classList.add('answered');
+
+                // 同步radio
+                const radio = card.querySelector(`input[type="radio"][value="${val}"]`);
+                if (radio) radio.checked = true;
+
+                updateProgress();
+            }
+
+            // ===== 更新进度 =====
+            function updateProgress() {
+                const total = questions.length;
+                const answered = Object.keys(answers).length;
+                const percent = Math.round((answered / total) * 100);
+
+                progressBar.style.width = percent + '%';
+                progressText.textContent = `已完成 ${answered} / ${total} 题`;
+                progressPercent.textContent = percent + '%';
+
+                if (answered === total) {
+                    btnSubmit.disabled = false;
+                    btnSubmit.textContent = '✅ 提交测评';
+                } else {
+                    btnSubmit.disabled = true;
+                    btnSubmit.textContent = `请完成所有题目 (${answered}/${total})`;
+                }
+            }
+
+            // ===== 计算分数 =====
+            function calculateScores() {
+                const scores = { PT: 0, FS: 0, EC: 0, PD: 0 };
+                const rawScores = { PT: 0, FS: 0, EC: 0, PD: 0 };
+
+                questions.forEach(q => {
+                    const raw = answers[q.id] !== undefined ? answers[q.id] : 0;
+                    let finalScore = raw;
+                    if (q.reverse) {
+                        finalScore = 4 - raw; // 反向计分 0->4, 1->3, 2->2, 3->1, 4->0
+                    }
+                    scores[q.dimension] += finalScore;
+                    rawScores[q.dimension] += raw;
+                });
+
+                const total = scores.PT + scores.FS + scores.EC + scores.PD;
+                return { scores, rawScores, total };
+            }
+
+            // ===== 获取等级 =====
+            function getLevel(dimension, score) {
+                const ranges = {
+                    PT: { high: 15, low: 8 },
+                    FS: { high: 18, low: 11 },
+                    EC: { high: 19, low: 12 },
+                    PD: { high: 16, low: 9 }
+                };
+                const r = ranges[dimension];
+                if (score >= r.high) return 'high';
+                if (score <= r.low) return 'low';
+                return 'medium';
+            }
+
+            function getTotalLevel(total) {
+                if (total >= 60) return 'high';
+                if (total <= 39) return 'low';
+                return 'medium';
+            }
+
+            function getLevelLabel(level) {
+                const map = { high: '较高', medium: '中等', low: '较低' };
+                return map[level] || '中等';
+            }
+
+            function getLevelClass(level) {
+                return 'level-' + level;
+            }
+
+            function getTotalBadge(level) {
+                const map = {
+                    high: { text: '🌟 高共情水平', cls: 'badge-high' },
+                    medium: { text: '🌱 中等共情水平', cls: 'badge-medium' },
+                    low: { text: '💭 共情水平有待提升', cls: 'badge-low' }
+                };
+                return map[level] || map.medium;
+            }
+
+            // ===== 生成解读 =====
+            function generateInterpretations(scores, total, totalLevel) {
+                const interpretations = [];
+                const levels = {};
+                for (const dim in scores) {
+                    levels[dim] = getLevel(dim, scores[dim]);
+                }
+
+                // 观点采择
+                const ptLevel = levels.PT;
+                if (ptLevel === 'high') {
+                    interpretations.push({
+                        type: 'strength',
+                        title: '🎯 观点采择能力突出',
+                        text: '你非常善于从他人的角度看待问题，能够理解不同立场和观点，这是良好人际关系和有效沟通的重要基础。'
+                    });
+                } else if (ptLevel === 'medium') {
+                    interpretations.push({
+                        type: 'suggestion',
+                        title: '🎯 观点采择能力适中',
+                        text: '你具备一定的换位思考能力，但在某些情境下可能会更倾向于坚持自己的观点。建议在意见分歧时，有意识地先倾听对方，尝试理解其立场。'
+                    });
+                } else {
+                    interpretations.push({
+                        type: 'attention',
+                        title: '🎯 观点采择能力需要加强',
+                        text: '你倾向于从自己的角度看待问题，可能较少考虑他人的视角。建议在日常交流中多问"对方为什么会这样想"，培养换位思考的习惯。'
+                    });
+                }
+
+                // 想象力
+                const fsLevel = levels.FS;
+                if (fsLevel === 'high') {
+                    interpretations.push({
+                        type: 'strength',
+                        title: '📚 想象力共情丰富',
+                        text: '你能够很好地投入到虚构情境和故事中，感受人物的情感体验。这种能力使你在阅读、观影和艺术欣赏时能够获得更深刻的体验。'
+                    });
+                } else if (fsLevel === 'medium') {
+                    interpretations.push({
+                        type: 'suggestion',
+                        title: '📚 想象力共情适中',
+                        text: '你能够在一定程度上投入虚构情境，但有时可能保持一定的距离感。尝试更开放地体验故事和艺术，有助于丰富情感体验。'
+                    });
+                } else {
+                    interpretations.push({
+                        type: 'attention',
+                        title: '📚 想象力共情偏弱',
+                        text: '你在面对虚构情境时倾向于保持客观和理性，较少沉浸其中。这在一定程度上是优势，但也可能限制了情感体验的丰富性。'
+                    });
+                }
+
+                // 共情性关心
+                const ecLevel = levels.EC;
+                if (ecLevel === 'high') {
+                    interpretations.push({
+                        type: 'strength',
+                        title: '💗 共情性关心突出',
+                        text: '你对他人充满温暖、关怀和同情，能够敏锐地感知他人的需要并提供支持。这种品质使你成为他人信赖的对象，也是建立深厚人际关系的核心。'
+                    });
+                } else if (ecLevel === 'medium') {
+                    interpretations.push({
+                        type: 'suggestion',
+                        title: '💗 共情性关心适中',
+                        text: '你能够对他人表现出一定程度的关心和同情，但有时可能不够主动。尝试更多地关注身边人的情感状态，主动表达关心。'
+                    });
+                } else {
+                    interpretations.push({
+                        type: 'attention',
+                        title: '💗 共情性关心有待提升',
+                        text: '你对他人的情感需求可能不够敏感，较少主动表达关心。建议从关注亲近的人开始，练习识别和回应他人的情感信号。'
+                    });
+                }
+
+                // 个人痛苦
+                const pdLevel = levels.PD;
+                if (pdLevel === 'high') {
+                    interpretations.push({
+                        type: 'attention',
+                        title: '⚠️ 个人痛苦反应较强',
+                        text: '你在面对他人痛苦或紧急情况时容易产生较强的情绪反应，可能感到焦虑、不安或难以抽离。建议学习情绪调节技巧，建立适当的心理边界，避免共情疲劳。'
+                    });
+                } else if (pdLevel === 'medium') {
+                    interpretations.push({
+                        type: 'suggestion',
+                        title: '⚠️ 个人痛苦反应适中',
+                        text: '你在面对他人痛苦时会有一定的不安感，但通常能够调节自己的情绪。保持这种平衡，同时注意在高压情境下照顾好自己。'
+                    });
+                } else {
+                    interpretations.push({
+                        type: 'strength',
+                        title: '⚠️ 情绪稳定性良好',
+                        text: '你在面对他人痛苦和紧急情况时能够保持相对冷静和稳定，这有助于你在帮助他人时做出理性的判断和行动。不过也要注意不要过于理性而忽略了情感连接。'
+                    });
+                }
+
+                // 综合解读
+                if (totalLevel === 'high') {
+                    interpretations.push({
+                        type: 'strength',
+                        title: '🌟 整体共情能力优秀',
+                        text: '你的整体共情水平较高，能够理解他人、感受他人并给予适当的关怀。这是你人际交往中的重要优势。建议继续保持，同时注意在照顾他人的同时也要关注自己的心理健康。'
+                    });
+                } else if (totalLevel === 'medium') {
+                    interpretations.push({
+                        type: 'suggestion',
+                        title: '🌱 整体共情能力良好',
+                        text: '你的整体共情水平处于中等范围，具备基本的共情能力。通过有针对性的练习和反思，可以进一步提升共情技巧，促进更深度的人际连接。'
+                    });
+                } else {
+                    interpretations.push({
+                        type: 'attention',
+                        title: '💭 整体共情能力有待提升',
+                        text: '你的整体共情水平偏低，可能在理解他人感受或表达关心方面存在一些困难。共情能力是可以通过练习来提升的，建议从日常生活中的小练习开始。'
+                    });
+                }
+
+                // 特殊组合建议
+                if (ecLevel === 'high' && pdLevel === 'high') {
+                    interpretations.push({
+                        type: 'attention',
+                        title: '💡 特别提醒：共情疲劳风险',
+                        text: '你对他人充满关怀，但同时容易受到他人情绪的强烈影响。长期如此可能导致共情疲劳。建议学会区分"关心他人"与"承担他人情绪"，必要时寻求支持。'
+                    });
+                }
+                if (ecLevel === 'high' && pdLevel === 'low') {
+                    interpretations.push({
+                        type: 'strength',
+                        title: '💡 优势组合：成熟的共情',
+                        text: '你既能够深切关心他人，又能在面对他人痛苦时保持情绪稳定。这是一种"成熟的共情"，使你能够在帮助他人的同时照顾好自己。'
+                    });
+                }
+                if (ptLevel === 'low' && ecLevel === 'high') {
+                    interpretations.push({
+                        type: 'suggestion',
+                        title: '💡 建议：提升认知共情',
+                        text: '你情感上很关心他人，但可能在理解他人观点方面需要加强。尝试在表达关心之前，先了解对方的具体处境和想法，这会让你的关怀更加贴切有效。'
+                    });
+                }
+                if (ptLevel === 'high' && ecLevel === 'low') {
+                    interpretations.push({
+                        type: 'suggestion',
+                        title: '💡 建议：将理解转化为行动',
+                        text: '你很擅长理解他人的观点和处境，但可能较少在情感上表达关心。尝试将你的理解转化为具体的关怀行动，如一句温暖的问候或实际的帮助。'
+                    });
+                }
+
+                return interpretations;
+            }
+
+            // ===== 生成建议 =====
+            function generateSuggestions(scores, total, levels) {
+                const suggestions = [];
+
+                // 基于各维度的建议
+                if (levels.PT === 'low') {
+                    suggestions.push({
+                        title: '🎯 练习换位思考',
+                        text: '每天选择一个互动场景，尝试从对方的角度思考问题。问自己："如果我是他，我会怎么想？"'
+                    });
+                }
+                if (levels.PT === 'medium') {
+                    suggestions.push({
+                        title: '🎯 深化换位思考',
+                        text: '在重要对话前，花几分钟列出对方可能的立场和顾虑，这将帮助你更全面地理解问题。'
+                    });
+                }
+                if (levels.FS === 'low') {
+                    suggestions.push({
+                        title: '📚 丰富情感体验',
+                        text: '尝试阅读小说、观看电影时更投入地感受角色的情感，想象"如果是我会怎样"。'
+                    });
+                }
+                if (levels.EC === 'low') {
+                    suggestions.push({
+                        title: '💗 培养关怀习惯',
+                        text: '每天主动关心一位身边的人，可以从简单的问候开始，逐渐练习表达真诚的关心。'
+                    });
+                }
+                if (levels.EC === 'high') {
+                    suggestions.push({
+                        title: '💗 保持关怀的同时设立边界',
+                        text: '你的关怀是宝贵的品质，记得在照顾他人的同时也要关注自己的需要，学会说"不"。'
+                    });
+                }
+                if (levels.PD === 'high') {
+                    suggestions.push({
+                        title: '🧘 学习情绪调节',
+                        text: '练习正念冥想、深呼吸等放松技巧。当感到被他人情绪淹没时，给自己一些空间恢复。'
+                    });
+                }
+                if (levels.PD === 'high') {
+                    suggestions.push({
+                        title: '🛡️ 建立心理边界',
+                        text: '区分"理解他人感受"和"承担他人情绪"。你可以在关心的同时保持情感上的适当距离。'
+                    });
+                }
+                if (levels.PD === 'low' && levels.EC === 'high') {
+                    suggestions.push({
+                        title: '🌟 发挥成熟共情优势',
+                        text: '你拥有出色的共情能力且不易被情绪淹没，可以在团队中发挥调解和关怀的角色。'
+                    });
+                }
+                if (total >= 60) {
+                    suggestions.push({
+                        title: '🌿 保持平衡',
+                        text: '你的共情能力很强，记得定期进行自我关怀，保持心理能量的充足。'
+                    });
+                }
+                if (total <= 39) {
+                    suggestions.push({
+                        title: '📖 共情是可以学习的',
+                        text: '共情能力并非固定不变。通过阅读文学作品、参与志愿服务、练习倾听等方式，可以有效提升共情能力。'
+                    });
+                }
+
+                // 默认建议
+                suggestions.push({
+                    title: '👂 练习主动倾听',
+                    text: '在与人交谈时，专注于对方的言语和情感，不急于给出建议或评判，先让对方感受到被理解。'
+                });
+                suggestions.push({
+                    title: '🧠 拓展视角',
+                    text: '多接触不同背景、不同观点的人，了解多元的生活方式，有助于拓宽你的认知和情感视野。'
+                });
+
+                return suggestions.slice(0, 6); // 最多6条
+            }
+
+            // ===== 渲染结果 =====
+            function renderResults() {
+                const { scores, total } = calculateScores();
+                const totalLevel = getTotalLevel(total);
+                const levels = {};
+                for (const dim in scores) {
+                    levels[dim] = getLevel(dim, scores[dim]);
+                }
+
+                // 显示总分
+                document.getElementById('totalScoreDisplay').textContent = total;
+                const badge = getTotalBadge(totalLevel);
+                document.getElementById('totalBadge').innerHTML =
+                    `<span class="total-badge ${badge.cls}">${badge.text}</span>`;
+
+                // 渲染维度得分
+                const dimContainer = document.getElementById('dimensionResults');
+                dimContainer.innerHTML = '';
+                const dimOrder = ['PT', 'FS', 'EC', 'PD'];
+                dimOrder.forEach(dim => {
+                    const score = scores[dim];
+                    const max = dimensions[dim].max;
+                    const level = levels[dim];
+                    const percent = Math.round((score / max) * 100);
+                    const barClass = dim.toLowerCase() + '-bar';
+                    const levelLabel = getLevelLabel(level);
+                    const levelCls = getLevelClass(level);
+
+                    const item = document.createElement('div');
+                    item.className = 'dimension-item';
+                    item.innerHTML = `
+                        <div class="dimension-header">
+                            <span class="dimension-name">${dimensions[dim].name}</span>
+                            <span class="dimension-score">${score} <span class="dimension-max">/ ${max} 分</span></span>
+                            <span class="dimension-level ${levelCls}">${levelLabel}</span>
+                        </div>
+                        <div class="dimension-bar-outer">
+                            <div class="dimension-bar-inner ${barClass}" style="width: ${percent}%;"></div>
+                        </div>
+                        <p style="font-size:0.78rem;color:var(--text-light);margin-top:4px;">${dimensions[dim].description}</p>
+                    `;
+                    dimContainer.appendChild(item);
+                });
+
+                // 绘制雷达图
+                drawRadarChart(scores);
+
+                // 渲染解读
+                const interpContainer = document.getElementById('interpretationSection');
+                interpContainer.innerHTML = '';
+                const interpretations = generateInterpretations(scores, total, totalLevel);
+                interpretations.forEach(interp => {
+                    const div = document.createElement('div');
+                    div.className = `interpretation-item ${interp.type}`;
+                    div.innerHTML = `
+                        <h4>${interp.title}</h4>
+                        <p>${interp.text}</p>
+                    `;
+                    interpContainer.appendChild(div);
+                });
+
+                // 渲染建议
+                const suggContainer = document.getElementById('suggestionsContainer');
+                suggContainer.innerHTML = '';
+                const suggestions = generateSuggestions(scores, total, levels);
+                const suggGrid = document.createElement('div');
+                suggGrid.className = 'suggestions-grid';
+                suggestions.forEach(sugg => {
+                    const card = document.createElement('div');
+                    card.className = 'suggestion-card';
+                    card.innerHTML = `
+                        <strong>${sugg.title}</strong>
+                        ${sugg.text}
+                    `;
+                    suggGrid.appendChild(card);
+                });
+                suggContainer.appendChild(suggGrid);
+            }
+
+            // ===== 绘制雷达图 =====
+            function drawRadarChart(scores) {
+                const canvas = document.getElementById('radarChart');
+                const ctx = canvas.getContext('2d');
+
+                // 设置canvas尺寸
+                const size = Math.min(300, canvas.parentElement.clientWidth || 300);
+                canvas.width = size;
+                canvas.height = size;
+                canvas.style.width = size + 'px';
+                canvas.style.height = size + 'px';
+
+                const centerX = size / 2;
+                const centerY = size / 2;
+                const radius = size / 2 - 50;
+                const dims = ['PT', 'FS', 'EC', 'PD'];
+                const dimNames = ['观点采择', '想象力', '共情性关心', '个人痛苦'];
+                const numDims = dims.length;
+                const angleStep = (Math.PI * 2) / numDims;
+                const startAngle = -Math.PI / 2;
+
+                ctx.clearRect(0, 0, size, size);
+
+                // 绘制网格
+                for (let ring = 1; ring <= 4; ring++) {
+                    const ringRadius = (radius / 4) * ring;
+                    ctx.beginPath();
+                    for (let i = 0; i <= numDims; i++) {
+                        const angle = startAngle + i * angleStep;
+                        const x = centerX + ringRadius * Math.cos(angle);
+                        const y = centerY + ringRadius * Math.sin(angle);
+                        if (i === 0) ctx.moveTo(x, y);
+                        else ctx.lineTo(x, y);
+                    }
+                    ctx.closePath();
+                    ctx.strokeStyle = '#e0e3eb';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                    ctx.fillStyle = '#f8f9fb';
+                    ctx.fill();
+                }
+
+                // 绘制轴线
+                for (let i = 0; i < numDims; i++) {
+                    const angle = startAngle + i * angleStep;
+                    ctx.beginPath();
+                    ctx.moveTo(centerX, centerY);
+                    ctx.lineTo(centerX + radius * Math.cos(angle), centerY + radius * Math.sin(angle));
+                    ctx.strokeStyle = '#d0d4dd';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+
+                // 绘制数据多边形
+                const dataPoints = [];
+                dims.forEach((dim, i) => {
+                    const max = dimensions[dim].max;
+                    const score = scores[dim];
+                    const ratio = Math.min(score / max, 1);
+                    const angle = startAngle + i * angleStep;
+                    const x = centerX + radius * ratio * Math.cos(angle);
+                    const y = centerY + radius * ratio * Math.sin(angle);
+                    dataPoints.push({ x, y, score, max, dim, name: dimNames[i], angle });
+                });
+
+                // 填充数据区域
+                ctx.beginPath();
+                dataPoints.forEach((p, i) => {
+                    if (i === 0) ctx.moveTo(p.x, p.y);
+                    else ctx.lineTo(p.x, p.y);
+                });
+                ctx.closePath();
+                ctx.fillStyle = 'rgba(91, 106, 191, 0.25)';
+                ctx.fill();
+                ctx.strokeStyle = '#5b6abf';
+                ctx.lineWidth = 2.5;
+                ctx.stroke();
+
+                // 绘制数据点
+                dataPoints.forEach(p => {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 5, 0, Math.PI * 2);
+                    ctx.fillStyle = '#5b6abf';
+                    ctx.fill();
+                    ctx.strokeStyle = '#fff';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                });
+
+                // 绘制标签
+                ctx.font = 'bold 11px "PingFang SC", "Microsoft YaHei", sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                dataPoints.forEach(p => {
+                    const labelRadius = radius + 28;
+                    const lx = centerX + labelRadius * Math.cos(p.angle);
+                    const ly = centerY + labelRadius * Math.sin(p.angle);
+                    ctx.fillStyle = '#2d3142';
+                    ctx.fillText(p.name, lx, ly);
+
+                    // 分数标签
+                    const scoreRadius = radius + 12;
+                    const sx = centerX + scoreRadius * Math.cos(p.angle);
+                    const sy = centerY + scoreRadius * Math.sin(p.angle);
+                    ctx.font = '10px "PingFang SC", "Microsoft YaHei", sans-serif';
+                    ctx.fillStyle = '#6b7280';
+                    ctx.fillText(`${p.score}/${p.max}`, sx, sy);
+                    ctx.font = 'bold 11px "PingFang SC", "Microsoft YaHei", sans-serif';
+                });
+            }
+
+            // ===== 提交 =====
+            function handleSubmit() {
+                const total = questions.length;
+                const answered = Object.keys(answers).length;
+                if (answered < total) {
+                    alert(`请完成所有题目（当前已完成 ${answered}/${total} 题）`);
+                    return;
+                }
+
+                isSubmitted = true;
+                renderResults();
+
+                // 隐藏题目和提交按钮
+                questionsContainer.style.display = 'none';
+                submitSection.style.display = 'none';
+                introSection.style.display = 'none';
+                progressWrapper.style.display = 'none';
+
+                // 显示结果
+                resultSection.style.display = 'block';
+
+                // 滚动到结果
+                resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            // ===== 重新测评 =====
+            function handleRetake() {
+                if (!confirm('确定要重新开始测评吗？当前答案将被清除。')) return;
+
+                answers = {};
+                isSubmitted = false;
+
+                // 清除所有选中状态
+                document.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                document.querySelectorAll('.question-card').forEach(c => c.classList.remove('answered'));
+                document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+
+                // 显示题目
+                questionsContainer.style.display = '';
+                submitSection.style.display = '';
+                introSection.style.display = '';
+                progressWrapper.style.display = '';
+                resultSection.style.display = 'none';
+
+                // 重置进度
+                updateProgress();
+                btnReset.style.display = 'none';
+
+                // 滚动到顶部
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // ===== 打印结果 =====
+            function handlePrint() {
+                window.print();
+            }
+
+            // ===== 键盘导航支持 =====
+            function setupKeyboardNavigation() {
+                questionsContainer.addEventListener('keydown', function(e) {
+                    const target = e.target;
+                    if (target.tagName === 'INPUT' && target.type === 'radio') {
+                        const qId = parseInt(target.dataset.question);
+                        const currentVal = parseInt(target.value);
+                        let newVal = null;
+
+                        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                            newVal = Math.min(currentVal + 1, 4);
+                        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                            newVal = Math.max(currentVal - 1, 0);
+                        } else if (e.key >= '0' && e.key <= '4') {
+                            newVal = parseInt(e.key);
+                        }
+
+                        if (newVal !== null && newVal >= 0 && newVal <= 4) {
+                            e.preventDefault();
+                            selectOption(qId, newVal, null);
+                            // 聚焦到对应的radio
+                            const newRadio = document.querySelector(`input[type="radio"][data-question="${qId}"][value="${newVal}"]`);
+                            if (newRadio) newRadio.focus();
+                        }
+                    }
+                });
+            }
+
+            // ===== 初始化 =====
+            function init() {
+                renderQuestions();
+                updateProgress();
+                setupKeyboardNavigation();
+
+                btnSubmit.addEventListener('click', handleSubmit);
+                document.getElementById('btnRetake').addEventListener('click', handleRetake);
+                document.getElementById('btnPrint').addEventListener('click', handlePrint);
+
+                // 响应式重绘雷达图
+                window.addEventListener('resize', function() {
+                    if (isSubmitted) {
+                        const { scores } = calculateScores();
+                        drawRadarChart(scores);
+                    }
+                });
+            }
+
+            // 页面加载完成后初始化
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
+    </script>
+</body>
+</html>
