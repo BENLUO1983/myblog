@@ -2,13 +2,24 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>BEN的个人主页</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!-- 移动端顶部栏 -->
+    <header class="mobile-topbar">
+        <button class="menu-toggle" id="menuToggle" aria-label="打开导航菜单">
+            <span></span><span></span><span></span>
+        </button>
+        <span class="mobile-brand">BEN的个人主页</span>
+    </header>
+
+    <!-- 侧边栏遮罩（移动端） -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <!-- 侧边导航 -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
         <div class="profile">
             <div class="avatar">👤</div>
             <h1 class="site-title">BEN的个人主页</h1>
@@ -20,14 +31,14 @@
                 <li><a href="#news" class="nav-link" data-section="news">📢 学科动态</a></li>
                 <li><a href="#tools" class="nav-link" data-section="tools">🧮 计算</a></li>
                 <li><a href="#assess" class="nav-link" data-section="assess">📝 测评</a></li>
-                <li><a href="#assess" class="nav-link" data-section="read">📚 拓展阅读</a></li>
+                <li><a href="#read" class="nav-link" data-section="read">📚 拓展阅读</a></li>
             </ul>
         </nav>
         <div class="sidebar-footer">
             <div class="stat-mini">
                 <span class="stat-label">访问量</span>
-               <!-- 替换 [your-code] 为你的 GoatCounter 站点代码 -->
-<img src="https://laobanban.goatcounter.com/counter/TOTAL.svg" alt="Total Views">
+                <!-- 替换 [your-code] 为你的 GoatCounter 站点代码 -->
+                <img src="https://laobanban.goatcounter.com/counter/TOTAL.svg" alt="Total Views">
             </div>
         </div>
     </aside>
@@ -42,7 +53,7 @@
             </div>
             <div class="card">
                 <p class="lead">你好，欢迎来到我的个人主页！</p>
-                <p>这里是<strong>自我介绍</strong>栏目。一个关注人力资源管理、劳动经济学，热爱金融强国、运动强身、娱乐防呆等多种业余兴趣的普通教师。</p>
+                <p>这里是<strong>自我介绍</strong>栏目。一个关注人力资源管理、经济学，对金融投资、体育运动、文艺娱乐等非常兴趣的人。</p>
                 <div class="info-grid">
                     <div class="info-item">
                         <span class="info-label">姓名</span>
@@ -62,7 +73,7 @@
                     </div>
                 </div>
                 <h3>个人简介</h3>
-                <p>资深80后，先后毕业于华南师范大学人力资源管理本科（2005）、湖南师范大学行政管理硕士（2008）、福建农林大学涉农企业经营与管理博士（2016），现从事人力资源管理、劳动经济学、管理学等课程教学研究。获人力资源管理师（经济师）专业技术职称，兼任中国人力资源开发研究会适度劳动与职业健康分会理事、福建省人才研究会会员。</p>
+                <p>资深80后，先后毕业于华南师范大学人力资源管理本科（2005）、湖南师范大学行政管理硕士（2008）、福建农林大学涉农企业经营与管理博士（2016），现从事人力资源管理、劳动经济学、管理学等课程教学研究。拥有人力资源管理师（经济师）专业技术职称，兼任中国人力资源开发研究会适度劳动与职业健康分会理事、福建省人才研究会会员。</p>
                 <p>后期内容添加中......</p>
             </div>
         </section>
@@ -139,22 +150,29 @@
                 </div>
             </a>
         </section>
-      <!-- 学科动态 -->
+
+        <!-- 拓展阅读 -->
         <section id="read" class="section">
             <div class="section-header">
-                <h2>📚  阅读资料</h2>
-                <span class="section-tag">book</span>
+                <h2>📚 阅读资料</h2>
+                <span class="section-tag">Book</span>
             </div>
             <div class="card">
                 <p>这里是<strong>各类学习资料</strong>栏目</p>
                 <p class="hint">💡正在建设中</p>
             </div>
-            </article>
-            </div>
+  <!-- 测评入口卡片 -->
+            <a href="booklist.html" class="tool-card tool-entry">
+                <div class="tool-entry-icon">🧭</div>
+                <div class="tool-entry-body">
+                    <h3>商学院学生推荐阅读书目（1）</h3>
+                    <p>管理基础、组织职能、经济学、企业案例类推荐的部分书籍</p>
+                    <span class="tool-entry-tag">详细内容查看 →</span>
+                </div>
+            </a>
         </section>
-
-
     </main>
-        <script src="js/main.js"></script>
+
+    <script src="js/main.js"></script>
 </body>
 </html>
