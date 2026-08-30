@@ -1016,7 +1016,7 @@
                     card.id = `question-card-${q.id}`;
                     card.dataset.questionId = q.id;
 
-                    const reverseBadge = q.reverse ? '<span class="q-reverse">反向计分</span>' : '';
+                    const reverseBadge = q.reverse ? '<span class="q-reverse"></span>' : '';
 
                     card.innerHTML = `
                         <div class="q-header">
@@ -1105,7 +1105,7 @@
                     const raw = answers[q.id] !== undefined ? answers[q.id] : 0;
                     let finalScore = raw;
                     if (q.reverse) {
-                        finalScore = 4 - raw; // 反向计分 0->4, 1->3, 2->2, 3->1, 4->0
+                        finalScore = 4 - raw; //  0->4, 1->3, 2->2, 3->1, 4->0
                     }
                     scores[q.dimension] += finalScore;
                     rawScores[q.dimension] += raw;
