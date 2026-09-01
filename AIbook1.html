@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>AI 时代商学院管理类学生书单</title>
+<style>
+:root{
+  --primary:#4a6fa5; --primary-dark:#3a5a8a; --accent:#e8f0fe;
+  --text:#2c3e50; --text-light:#6b7a8d; --border:#e4e9f0;
+  --bg:#f7f9fc; --card:#ffffff; --radius:14px;
+  --shadow:0 2px 12px rgba(0,0,0,0.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;
+  color:var(--text);background:var(--bg);line-height:1.75;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:820px;margin:0 auto;padding:0 0 60px;}
+
+/* ---------- 站点导航条 ---------- */
+.sitebar{background:#3a5a8a;color:#fff;}
+.sitebar .sb-wrap{max-width:820px;margin:0 auto;padding:9px 16px;display:flex;align-items:center;gap:12px;}
+.sitebar a{color:#fff;text-decoration:none;font-size:13.5px;opacity:.9;white-space:nowrap;}
+.sitebar a:hover{opacity:1;text-decoration:underline;}
+.sitebar .sb-home{font-weight:700;display:inline-flex;align-items:center;gap:6px;}
+.sitebar .sb-links{margin-left:auto;display:flex;gap:13px;flex-wrap:wrap;}
+.sitebar .sb-links a{opacity:.78;}
+@media(max-width:720px){
+  .sitebar .sb-links{display:none;}
+  .sitebar .sb-wrap{padding:8px 14px;}
+}
+@media print{.sitebar{display:none!important;}}
+
+/* 顶部封面 */
+.hero{
+  background:linear-gradient(135deg,#4a6fa5 0%,#3a5a8a 100%);
+  color:#fff;padding:36px 24px 30px;text-align:center;
+}
+.hero .badge{font-size:13px;opacity:.9;letter-spacing:2px;}
+.hero h1{font-size:26px;margin:10px 0 8px;font-weight:700;}
+.hero p{font-size:14px;opacity:.9;}
+.hero .meta{display:inline-flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:14px;}
+.hero .meta span{background:rgba(255,255,255,.18);padding:4px 12px;border-radius:20px;font-size:12px;}
+
+/* 说明条 */
+.intro{padding:18px 20px;font-size:14px;color:var(--text-light);text-align:center;background:var(--bg);}
+.intro b{color:var(--primary-dark);}
+
+/* 分组 */
+.group{margin:8px 14px 18px;}
+.group-title{
+  display:flex;align-items:center;gap:10px;
+  font-size:17px;font-weight:700;color:var(--primary-dark);
+  padding:14px 4px;position:sticky;top:0;background:var(--bg);z-index:5;
+}
+.group-title .num{
+  width:30px;height:30px;border-radius:50%;flex-shrink:0;
+  background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:700;
+}
+.group-title small{font-size:12px;color:var(--text-light);font-weight:400;margin-left:auto;}
+.group-desc{font-size:13px;color:var(--text-light);padding:0 4px 10px;line-height:1.8;}
+
+/* 书籍卡片 */
+.book{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow);
+  transition:transform .2s,border-color .2s;
+}
+.book:active{transform:scale(.995);border-color:var(--primary);}
+.book .idx{font-size:12px;color:var(--primary);font-weight:700;letter-spacing:1px;}
+.book h3{font-size:16px;color:var(--text);margin:3px 0 4px;line-height:1.5;}
+.book .orig{font-size:12.5px;color:var(--text-light);font-style:italic;margin-bottom:8px;}
+.book .info{font-size:13px;color:var(--text-light);}
+.book .info .author{color:var(--text);font-weight:600;}
+.book .desc{font-size:13.5px;color:#445566;margin-top:9px;line-height:1.8;}
+.book .tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px;}
+.book .tag{
+  display:inline-block;font-size:11px;color:var(--primary);
+  background:var(--accent);padding:3px 10px;border-radius:12px;font-weight:600;
+}
+.book .tag.lv-hard{color:#a5443a;background:#fdecea;}
+.book .tag.lv-mid{color:#8a6d3b;background:#fff7e6;}
+.book .tag.lv-easy{color:#2f7a4d;background:#eaf7ef;}
+
+/* 底部 */
+.footer{padding:24px 24px 0;text-align:center;font-size:13px;color:var(--text-light);}
+.footer .tip{
+  background:#fffbe6;border:1px dashed #ffe58f;border-radius:10px;
+  padding:12px 16px;font-size:13px;color:#8a6d3b;text-align:left;line-height:1.8;margin-bottom:14px;
+}
+.footer .qrcode-note{margin-top:16px;font-size:12px;color:#9aa7b5;}
+</style>
+</head>
+<body>
+
+<nav class="sitebar">
+  <div class="sb-wrap">
+    <a href="index.html#intro" class="sb-home">← 返回 BEN 的个人主页</a>
+    <div class="sb-links">
+      <a href="index.html#read">📚 拓展阅读</a>
+      <a href="index.html#tools">🧮 计算</a>
+      <a href="index.html#assess">📝 测评</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="badge"> 拓 展 阅 读 </div>
+    <h1>AI 时代 · 商学院管理类书单</h1>
+    <p>AI类参考书</p>
+    <div class="meta">
+      <span>📚 17 本书</span>
+      <span>🎯 5 大模块</span>
+      <span>🌏 国内外热门</span>
+    </div>
+  </div>
+
+  <div class="intro">
+    面向未来<br>
+    从技术认知 → 商业战略 → 组织与工作 → 经济与治理 → 落地实践
+  </div>
+
+  <!-- ===== 模块一 ===== -->
+  <div class="group">
+    <div class="group-title"><span class="num">一</span>技术通识与基础原理<small>01-04</small></div>
+    <div class="group-desc">目标不是训练模型，而是看懂「能力—数据—错误—成本—风险」的传导链，建立对 AI 能力边界的判断力。</div>
+
+    <div class="book"><div class="idx">01</div><h3>《人工智能：现代方法（第 4 版）》</h3>
+      <div class="orig">Artificial Intelligence: A Modern Approach, 4th Edition</div>
+      <div class="info"><span class="author">Stuart Russell、Peter Norvig</span> · 张博雅 等译 · Pearson 2021｜人民邮电出版社 2023.01</div>
+      <div class="desc">全球 1500 多所高校采用的 AI 标准教材。管理者不必通读数学练习，重点看不确定推理、机器学习、安全与社会影响章节——只要看懂「模型是在特定目标与数据上学习，而非真正理解业务」，就建立了避免技术崇拜的关键屏障。</div>
+      <div class="tags"><span class="tag">通用底座 · AI 产品</span><span class="tag lv-hard">硬核</span></div></div>
+
+    <div class="book"><div class="idx">02</div><h3>《深度学习》</h3>
+      <div class="orig">Deep Learning</div>
+      <div class="info"><span class="author">Ian Goodfellow、Yoshua Bengio、Aaron Courville</span> · 赵申剑 等译 · MIT Press 2016｜人民邮电出版社 2017</div>
+      <div class="desc">深度学习领域的奠基性教材，解释神经网络、优化、表示学习与生成模型为何成立及其局限。豆瓣 8.3 分、约 1300 人评价，是中文读者认可度最高的技术书之一。建议作为可查阅的知识底座，而非第一本必读。</div>
+      <div class="tags"><span class="tag">数据团队管理 · AI 产品</span><span class="tag lv-hard">硬核</span></div></div>
+
+    <div class="book"><div class="idx">03</div><h3>《人工智能全传》</h3>
+      <div class="orig">The Road to Conscious Machines: The Story of AI</div>
+      <div class="info"><span class="author">Michael Wooldridge</span> · 许舒 译 · Penguin 2020｜浙江科学技术出版社 2021</div>
+      <div class="desc">牛津计算机科学家用非技术语言讲清 AI 能做什么、不能做什么，系统讨论算法偏见与人机能力差异。最适合作为管理类学生的<b>第一本 AI 入门读物</b>。</div>
+      <div class="tags"><span class="tag">通用入门首选</span><span class="tag lv-easy">入门</span></div></div>
+
+    <div class="book"><div class="idx">04</div><h3>《我看见的世界：李飞飞自传》</h3>
+      <div class="orig">The Worlds I See: Curiosity, Exploration, and Discovery at the Dawn of AI</div>
+      <div class="info"><span class="author">李飞飞 Fei-Fei Li</span> · 赵灿 译 · Flatiron Books 2023｜中信出版集团 2024.04</div>
+      <div class="desc">通过 ImageNet 与计算机视觉发展史，把抽象的「大数据」还原为数据标注、科研激励与产业应用的共同结果。豆瓣 8.8 分，曾获比尔·盖茨推荐。用来理解数据供给为何不是天然无限、低成本或毫无争议。</div>
+      <div class="tags"><span class="tag">战略 · 创新 · 产品</span><span class="tag lv-easy">入门</span></div></div>
+  </div>
+
+  <!-- ===== 模块二 ===== -->
+  <div class="group">
+    <div class="group-title"><span class="num">二</span>商业战略、运营与营销<small>05-09</small></div>
+    <div class="group-desc">把「预测变便宜」转化为流程重构：识别预测、判断、行动如何被重新分配，以及这种分配如何改变竞争边界与商业模式。</div>
+
+    <div class="book"><div class="idx">05</div><h3>《AI 极简经济学》</h3>
+      <div class="orig">Prediction Machines: The Simple Economics of Artificial Intelligence</div>
+      <div class="info"><span class="author">Ajay Agrawal、Joshua Gans、Avi Goldfarb</span> · 闾佳 译 · Harvard Business Review Press 2018｜湖南科学技术出版社 2018</div>
+      <div class="desc">把 AI 还原为「更便宜的预测」，从而推高判断、行动、数据与控制权设计的价值。<b>所有管理分支都可复用的第一性原理</b>——营销重做细分与归因，供应链重做需求预测，财务重做异常检测与判断复核。</div>
+      <div class="tags"><span class="tag">战略 · 财务 · 运营</span><span class="tag lv-mid">进阶</span></div></div>
+
+    <div class="book"><div class="idx">06</div><h3>《数智公司》</h3>
+      <div class="orig">Competing in the Age of AI: Strategy and Leadership When Algorithms and Networks Run the World</div>
+      <div class="info"><span class="author">Marco Iansiti、Karim R. Lakhani</span> · 机械工业出版社 2022</div>
+      <div class="desc">哈佛商学院教授代表作，解释数据运营模型、网络效应与算法规模如何重塑竞争优势。AI 的扩张逻辑不同于传统工业规模经济，理解这一点是判断平台型竞争的前提。</div>
+      <div class="tags"><span class="tag">战略 · 平台 · 数字化</span><span class="tag lv-mid">进阶</span></div></div>
+
+    <div class="book"><div class="idx">07</div><h3>《AI·未来》</h3>
+      <div class="orig">AI Superpowers: China, Silicon Valley and the New World Order</div>
+      <div class="info"><span class="author">李开复 Kai-Fu Lee</span> · Houghton Mifflin Harcourt 2018｜浙江人民出版社 2018.09</div>
+      <div class="desc">Goodreads 约 3 万人评分，中文平台约 8000 人评价，入选《经济学人》2018 年度书单。比较中美数据、场景、创业与就业重构，同时提出职业重构与社会契约问题。适合作为 AI 商业史与中美创新比较阅读，而非生成式 AI 实施手册。</div>
+      <div class="tags"><span class="tag">战略 · 创业 · 国际比较</span><span class="tag lv-easy">入门</span></div></div>
+
+    <div class="book"><div class="idx">08</div><h3>《AI 行动方案》</h3>
+      <div class="orig">All-in on AI: How Smart Companies Win Big with Artificial Intelligence</div>
+      <div class="info"><span class="author">Thomas H. Davenport、Nitin Mittal</span> · 任溶、桂曙光 译 · Harvard Business Review Press 2023｜中信出版集团 2024</div>
+      <div class="desc">强调从试验走向端到端业务流程与商业模式重构，案例覆盖平安、Airbus、壳牌等。适合存在既有流程、组织惯性和遗留系统的成熟企业，解释「转型执行」而非「竞争边界」，与第 06 本互补、不可互相替代。</div>
+      <div class="tags"><span class="tag">战略 · 运营 · 数字化转型</span><span class="tag lv-mid">进阶</span></div></div>
+
+    <div class="book"><div class="idx">09</div><h3>《AI 营销画布：数字化营销的落地与实战》</h3>
+      <div class="orig">The AI Marketing Canvas: A Five-Stage Road Map to Implementing AI in Marketing</div>
+      <div class="info"><span class="author">Rajkumar Venkatesan、Jim Lecinski</span> · 褚荣伟、闵彦冰 译 · Stanford Business Books 2021｜中国科学技术出版社 2023.04</div>
+      <div class="desc">用「打基础—做实验—扩场景—促转型—保收获」五阶段路线图，把模糊的「AI 营销」转译为阶段、责任与数据条件。以客户旅程和可衡量的交易关系检验 AI，而不是追求「全自动营销」。营销方向核心读物。</div>
+      <div class="tags"><span class="tag">市场营销 · CRM</span><span class="tag lv-mid">进阶</span></div></div>
+  </div>
+
+  <!-- ===== 模块三 ===== -->
+  <div class="group">
+    <div class="group-title"><span class="num">三</span>组织、工作与人力资源<small>10-12</small></div>
+    <div class="group-desc">AI 对组织的影响首先是任务拆分、授权与复核机制变化，其次才是岗位数量变化。核心问法是：哪些任务可自动化或增强？哪些判断必须保留人工？复核与激励如何设计？</div>
+
+    <div class="book"><div class="idx">10</div><h3>《机器与人：埃森哲论新人工智能》</h3>
+      <div class="orig">Human + Machine: Reimagining Work in the Age of AI</div>
+      <div class="info"><span class="author">Paul R. Daugherty、H. James Wilson</span> · Harvard Business Review Press 2018（2024 年推出 Updated and Expanded 扩充版）｜中信出版集团 2018</div>
+      <div class="desc">提出「人—流程—技术」协同，基于 1500 家组织研究，解释岗位如何围绕人机协作重新设计。作者于 2024 年推出扩充版补充生成式 AI 内容，中文版对应 2018 年首版。需注意：若 AI 只减少单个任务时间，却增加协调、验证或返工成本，局部效率可能高于系统效率。</div>
+      <div class="tags"><span class="tag">HR · 运营 · 领导力</span><span class="tag lv-mid">进阶</span></div></div>
+
+    <div class="book"><div class="idx">11</div><h3>《人机共融体：智能时代的人、机器与企业》</h3>
+      <div class="orig">The Humachine: Humankind, Machines, and the Future of Enterprise</div>
+      <div class="info"><span class="author">Nada R. Sanders、John D. Wood</span> · 王柏村、易兵、杨赓 译 · Routledge 2020 首版 / 2024 第 2 版｜电子工业出版社 2023.12</div>
+      <div class="desc">以「人机共同体」框架讨论互补、局限与组织价值。中译本据 2020 年英文版译出，英文第 2 版于 2024 年 3 月出版，两者内容有更新差异。</div>
+      <div class="tags"><span class="tag">HR · 组织行为 · 运营</span><span class="tag lv-mid">进阶</span></div></div>
+
+    <div class="book"><div class="idx">12</div><h3>《组织制胜：AI 时代的利润增长引擎》</h3>
+      <div class="orig">Organization Unlocked: The AI-Age Profit-and-Growth Engine</div>
+      <div class="info"><span class="author">Claudia Joustra（克劳迪·朱尔斯）</span> · 褚荣伟、闵彦冰 译 · McGraw Hill 2024｜人民邮电出版社 2024.01</div>
+      <div class="desc">把组织健康、数字/AI 能力与投资心智模型并列为价值创造基础，更接近一套组织诊断框架。适合用作组织管理专题阅读，与第 10、11 本的工作再设计视角形成互补。</div>
+      <div class="tags"><span class="tag">HR · 战略 · 创业</span><span class="tag lv-mid">进阶</span></div></div>
+  </div>
+
+  <!-- ===== 模块四 ===== -->
+  <div class="group">
+    <div class="group-title"><span class="num">四</span>经济、治理、伦理与风险<small>13-15</small></div>
+    <div class="group-desc">AI 的经济收益不会自动扩散。商学院学生既要学习效率逻辑，也要学会把公平、透明、隐私、安全与责任纳入商业决策——效率不是唯一目标，分配与约束同样决定技术方向。</div>
+
+    <div class="book"><div class="idx">13</div><h3>《权力与进步：技术与繁荣的千年斗争》</h3>
+      <div class="orig">Power and Progress: Our Thousand-Year Struggle Over Technology and Prosperity</div>
+      <div class="info"><span class="author">Daron Acemoglu、Simon Johnson</span> · PublicAffairs 2023.05｜天下文化 2023.11（繁体中文版）</div>
+      <div class="desc">以千年技术与繁荣史论证：自动化收益能否广泛共享，取决于制度、利益集团与社会选择，而非技术本身的「进步」属性。可纠正「AI 必然提高效率」的单线叙事。豆瓣 8.1 分。<b>注意：中文版为繁体，暂无大陆简体版</b>。</div>
+      <div class="tags"><span class="tag">战略 · 政策 · 经济学</span><span class="tag lv-mid">进阶</span></div></div>
+
+    <div class="book"><div class="idx">14</div><h3>《浪潮将至：技术、权力与未来的冲击》</h3>
+      <div class="orig">The Coming Wave: Technology, Power, and the End of the State?</div>
+      <div class="info"><span class="author">Mustafa Suleyman、Michael Bhaskar</span> · 贾海波 译 · Crown 2023.09｜中信出版集团 2024.10</div>
+      <div class="desc">《经济学人》《金融时报》《卫报》《Prospect》《星期日泰晤士报》年度图书，FT & Schroders 年度商业图书决选，比尔·盖茨推荐，《纽约时报》畅销书。把 AI 与合成生物学等通用技术并置，讨论国家、安全与治理难题，提醒管理者不能把「合规」理解为发布后补做一份审查清单。</div>
+      <div class="tags"><span class="tag">治理 · 战略 · 创业</span><span class="tag lv-mid">进阶</span></div></div>
+
+    <div class="book"><div class="idx">15</div><h3>《算法霸权：数学杀伤性武器的威胁》</h3>
+      <div class="orig">Weapons of Math Destruction: How Big Data Increases Inequality and Threatens Democracy</div>
+      <div class="info"><span class="author">Cathy O'Neil</span> · 马青玲 译 · Crown 2016｜中信出版集团 2018</div>
+      <div class="desc">用具体案例揭示黑箱、反馈回路与不公平如何被模型放大，2016 年美国国家书评人协会奖非虚构类长名单、Euler Book Prize 获奖。治理类中「算法、不平等、组织决策」交叉最清晰的一本，也是可读性最强的伦理入门读物。</div>
+      <div class="tags"><span class="tag">HR · 营销 · 治理</span><span class="tag lv-easy">入门</span></div></div>
+  </div>
+
+  <!-- ===== 模块五 ===== -->
+  <div class="group">
+    <div class="group-title"><span class="num">五</span>数据与 AI 落地实践<small>16-17</small></div>
+    <div class="group-desc">落地能力的最低标准是「能用业务语言说明数据、指标、流程与责任」，而不是完成完整模型训练。建议至少掌握目标变量定义、数据口径、选择偏差与人工复核。</div>
+
+    <div class="book"><div class="idx">16</div><h3>《利用 Python 进行数据分析（原书第 3 版）》</h3>
+      <div class="orig">Python for Data Analysis, 3rd Edition</div>
+      <div class="info"><span class="author">Wes McKinney</span> · O'Reilly 2022.09｜机械工业出版社 2023.11</div>
+      <div class="desc">pandas 作者亲著，掌握数据清洗、整理与可复现分析工作流。适合作为财务、营销、运营方向的数据分析必修工具书。实践训练应从问题定义开始，而非从算法选择开始——若目标变量、数据口径或业务假设本身错误，模型优化不会自动修正方向。</div>
+      <div class="tags"><span class="tag">财务 · 营销 · 运营</span><span class="tag lv-mid">进阶</span></div></div>
+
+    <div class="book"><div class="idx">17</div><h3>《Python 深度学习（第 2 版）》</h3>
+      <div class="orig">Deep Learning with Python, 2nd Edition</div>
+      <div class="info"><span class="author">François Chollet</span> · Manning 2021｜人民邮电出版社 2022.08</div>
+      <div class="desc">Keras 作者亲著，通过实践理解深度学习的工程实现。适合希望参与 AI 项目、开展原型开发的管理者；若课程依赖特定框架版本，还需核对印次与配套代码环境。非全员必读。</div>
+      <div class="tags"><span class="tag">AI 产品 · 数据管理</span><span class="tag lv-hard">硬核</span></div></div>
+  </div>
+
+  <div class="footer">
+    <div class="tip">
+      <b>💡 读书破万卷：在万千内卷中，唯有读书才破解困惑。</b>
+    </div>
+    <div class="qrcode-note">📚 读万卷书，行万里路</div>
+  </div>
+
+</div>
+</body>
+</html>
