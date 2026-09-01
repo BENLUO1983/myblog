@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MBTI 职业性格测试 · 简洁版</title>
+<style>
+:root{
+  --accent:#6C5CE7;
+  --accent2:#A29BFE;
+  --bg:#F5F6FA;
+  --card:#FFFFFF;
+  --text:#1F2233;
+  --sub:#6B7189;
+  --line:#EAECF5;
+  --shadow:0 10px 30px rgba(31,34,51,.07);
+  --radius:18px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB","Helvetica Neue",Arial,sans-serif;
+  color:var(--text);
+  background:var(--bg);
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:880px;margin:0 auto;padding:0 18px 80px;}
+
+/* ============ 顶部 ============ */
+.topbar{
+  background:linear-gradient(135deg,#6C5CE7,#8E7BFF 45%,#4FC3F7);
+  color:#fff;padding:34px 0 78px;position:relative;overflow:hidden;
+}
+.topbar::after{
+  content:"";position:absolute;left:-60px;bottom:-90px;width:260px;height:260px;
+  background:rgba(255,255,255,.13);border-radius:50%;
+}
+.topbar::before{
+  content:"";position:absolute;right:-40px;top:-70px;width:200px;height:200px;
+  background:rgba(255,255,255,.10);border-radius:50%;
+}
+.topbar .wrap{padding-bottom:0;position:relative;z-index:2;}
+.topbar h1{margin:0;font-size:29px;letter-spacing:1px;font-weight:800;}
+.topbar p{margin:8px 0 0;font-size:14px;opacity:.92;}
+
+/* ============ 卡片 ============ */
+.card{
+  background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:28px;margin-top:-52px;position:relative;z-index:3;
+}
+h2.sec{font-size:20px;margin:0 0 14px;display:flex;align-items:center;gap:8px;}
+h2.sec::before{content:"";width:5px;height:19px;border-radius:3px;background:var(--accent);}
+p.lead{color:var(--sub);font-size:14.5px;margin:0 0 18px;}
+
+/* ============ 四维介绍 ============ */
+.dimgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:6px 0 22px;}
+.dimbox{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:#FCFCFF;}
+.dimbox b{font-size:14.5px;display:block;margin-bottom:6px;}
+.dimbox span{font-size:12.5px;color:var(--sub);line-height:1.6;}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:none;cursor:pointer;font-size:16px;font-weight:700;
+  padding:15px 40px;border-radius:999px;color:#fff;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  box-shadow:0 8px 20px rgba(108,92,231,.32);
+  transition:transform .15s, box-shadow .15s;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(108,92,231,.38);}
+.btn.ghost{
+  background:#fff;color:var(--sub);box-shadow:none;border:1.5px solid var(--line);
+}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent);}
+.btn-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:26px;}
+
+/* ============ 答题 ============ */
+.qhead{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--sub);margin-bottom:10px;}
+.prog{height:8px;border-radius:99px;background:#EEEFF7;overflow:hidden;margin-bottom:26px;}
+.prog i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .35s ease;}
+.qtext{font-size:20px;font-weight:700;line-height:1.7;margin:30px 0 26px;min-height:70px;}
+.opts{display:flex;flex-direction:column;gap:10px;}
+.opt{
+  display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:13px;
+  padding:14px 16px;cursor:pointer;background:#fff;font-size:15px;transition:.18s;
+}
+.opt:hover{border-color:var(--accent);background:#F7F6FF;}
+.opt .dot{width:20px;height:20px;border-radius:50%;border:2px solid #D6D9E6;flex:0 0 20px;transition:.18s;position:relative;}
+.opt.on{border-color:var(--accent);background:#F2F0FF;}
+.opt.on .dot{border-color:var(--accent);background:var(--accent);box-shadow:inset 0 0 0 3.5px #fff;}
+.scalehint{display:flex;justify-content:space-between;font-size:12px;color:#9AA0B8;margin-top:14px;padding:0 4px;}
+.nav{display:flex;justify-content:space-between;margin-top:26px;gap:12px;}
+.nav button{
+  flex:1;padding:13px;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;
+  border:1.5px solid var(--line);background:#fff;color:var(--sub);transition:.18s;
+}
+.nav button.pri{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;}
+.nav button:disabled{opacity:.4;cursor:not-allowed;}
+.kbd{font-size:12px;color:#A6ABC0;text-align:center;margin-top:18px;}
+
+/* ============ 结果 ============ */
+.hero{
+  border-radius:var(--radius);padding:30px 26px;color:#fff;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+}
+.hero .grid2{display:grid;grid-template-columns:150px 1fr;gap:24px;align-items:center;position:relative;z-index:2;}
+.hero h3{margin:0;font-size:15px;opacity:.9;font-weight:600;letter-spacing:2px;}
+.hero .tname{font-size:34px;font-weight:800;margin:2px 0 6px;letter-spacing:1px;}
+.hero .ten{font-size:14px;opacity:.85;margin-bottom:10px;}
+.hero .tagline{font-size:15px;line-height:1.8;background:rgba(255,255,255,.16);border-radius:12px;padding:10px 14px;border:1px solid rgba(255,255,255,.22);}
+.hero::after{content:"";position:absolute;right:-70px;top:-70px;width:230px;height:230px;border-radius:50%;background:rgba(255,255,255,.12);}
+.hero::before{content:"";position:absolute;left:30%;bottom:-120px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.08);}
+.badge{width:150px;height:150px;}
+
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+.tag{background:#F3F2FF;color:var(--accent);border-radius:99px;padding:5px 14px;font-size:13px;font-weight:600;}
+.tag.gray{background:#F2F3F8;color:var(--sub);}
+
+/* 维度条 */
+.bars{margin-top:20px;}
+.bar{margin-bottom:18px;}
+.bar .bl{display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:6px;font-weight:600;}
+.bar .bl em{font-style:normal;color:var(--sub);font-weight:500;}
+.bar .track{height:14px;border-radius:99px;background:#F0F1F7;display:flex;overflow:hidden;}
+.bar .track i{display:block;height:100%;width:0;transition:width 1s cubic-bezier(.22,1,.36,1);}
+.bar .track i.a{background:linear-gradient(90deg,var(--accent),var(--accent2));}
+.bar .track i.b{background:linear-gradient(90deg,#DFE2EE,#C9CEE0);}
+.bar .note{font-size:12.5px;color:var(--sub);margin-top:6px;}
+
+/* 双栏 */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:center;}
+.radarbox{text-align:center;}
+.radarbox .cap{font-size:12.5px;color:var(--sub);margin-top:6px;}
+
+/* 认知功能 */
+.func{margin-top:6px;}
+.frow{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.frow .fn{width:78px;font-size:13px;font-weight:700;color:var(--sub);flex:0 0 78px;}
+.frow .fbar{flex:1;height:30px;border-radius:8px;background:#F4F5FA;position:relative;overflow:hidden;display:flex;align-items:center;}
+.frow .fbar i{position:absolute;left:0;top:0;height:100%;width:0;border-radius:8px;transition:width .9s ease;}
+.frow .fbar span{position:relative;z-index:2;padding-left:12px;font-size:13px;font-weight:600;color:#fff;}
+
+/* 列表 */
+ul.list{margin:0;padding-left:0;list-style:none;}
+ul.list li{position:relative;padding-left:26px;margin-bottom:11px;font-size:14.5px;line-height:1.8;}
+ul.list li::before{
+  content:"";position:absolute;left:6px;top:11px;width:7px;height:7px;border-radius:50%;background:var(--accent);
+}
+ul.list.con li::before{background:#FF7675;}
+ul.list.warn li::before{background:#FDCB6E;}
+
+/* 职业 */
+.careers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px;}
+.career{border:1px solid var(--line);border-radius:14px;padding:16px 12px;text-align:center;background:#FCFCFF;transition:.2s;}
+.career:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 8px 18px rgba(108,92,231,.10);}
+.career .ic{font-size:26px;line-height:1;}
+.career .cn{font-size:14px;font-weight:700;margin-top:8px;}
+.career .cd{font-size:12px;color:var(--sub);margin-top:3px;}
+
+.quote{
+  border-left:4px solid var(--accent);background:#F8F7FF;border-radius:0 12px 12px 0;
+  padding:14px 18px;font-size:14.5px;line-height:1.85;color:#3A3E55;
+}
+.tip{background:#FFFBF0;border:1px solid #FFE9B8;border-radius:14px;padding:16px 18px;font-size:14px;line-height:1.85;color:#6B5B2E;}
+
+/* 16型表 */
+.grid16{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:6px;}
+.g16{border:1.5px solid var(--line);border-radius:11px;padding:9px 4px;text-align:center;cursor:pointer;transition:.18s;background:#fff;}
+.g16:hover{border-color:var(--accent);transform:translateY(-2px);}
+.g16 b{display:block;font-size:13.5px;letter-spacing:.5px;}
+.g16 span{font-size:11.5px;color:var(--sub);}
+.g16.me{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;color:#fff;}
+.g16.me span{color:rgba(255,255,255,.85);}
+.g16 .gdot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-bottom:3px;}
+
+.foot{text-align:center;color:#9AA0B8;font-size:12.5px;margin-top:34px;line-height:1.9;}
+
+.hide{display:none !important;}
+.fade{animation:fade .4s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+
+.loading{text-align:center;padding:60px 0;}
+.loading .ring{width:64px;height:64px;margin:0 auto 20px;border-radius:50%;border:5px solid #EEEFF7;border-top-color:var(--accent);animation:spin .9s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading p{color:var(--sub);font-size:15px;margin:0;}
+
+@media(max-width:700px){
+  .topbar{padding:26px 0 66px;}
+  .topbar h1{font-size:23px;}
+  .card{padding:20px 17px;margin-top:-42px;}
+  .dimgrid{grid-template-columns:1fr;}
+  .hero .grid2{grid-template-columns:1fr;text-align:center;gap:14px;}
+  .badge{width:120px;height:120px;margin:0 auto;}
+  .hero .tagline{text-align:left;}
+  .two{grid-template-columns:1fr;}
+  .careers{grid-template-columns:repeat(2,1fr);}
+  .grid16{grid-template-columns:repeat(2,1fr);}
+  .qtext{font-size:18px;min-height:60px;margin:22px 0 20px;}
+  .btn{padding:14px 30px;font-size:15px;}
+  .frow .fn{width:60px;flex:0 0 60px;font-size:12px;}
+}
+
+@media print{
+  body{background:#fff;}
+  .topbar{background:var(--accent) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .hero,.bar .track i,.frow .fbar i,.g16.me,.tag{ -webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .noprint{display:none !important;}
+  .card{box-shadow:none;margin-top:0;padding:0 0 20px;}
+  .sitebar{display:none!important;}
+}
+
+/* ---------- 站点导航条（与主站统一配色） ---------- */
+.sitebar{background:#3a5a8a;color:#fff;}
+.sitebar .sb-wrap{max-width:880px;margin:0 auto;padding:9px 16px;display:flex;align-items:center;gap:12px;}
+.sitebar a{color:#fff;text-decoration:none;font-size:13.5px;opacity:.9;white-space:nowrap;}
+.sitebar a:hover{opacity:1;text-decoration:underline;}
+.sitebar .sb-home{font-weight:700;display:inline-flex;align-items:center;gap:6px;}
+.sitebar .sb-links{margin-left:auto;display:flex;gap:13px;flex-wrap:wrap;}
+.sitebar .sb-links a{opacity:.78;}
+@media(max-width:720px){
+  .sitebar .sb-links{display:none;}
+  .sitebar .sb-wrap{padding:8px 14px;}
+}
+</style>
+</head>
+<body>
+
+<!-- 站点导航条（返回主页 + 栏目快捷入口） -->
+<nav class="sitebar noprint">
+  <div class="sb-wrap">
+    <a href="index.html#intro" class="sb-home">← 返回 BEN 的个人主页</a>
+    <div class="sb-links">
+      <a href="index.html#assess">📝 测评</a>
+      <a href="index.html#tools">🧮 计算</a>
+      <a href="index.html#read">📚 拓展阅读</a>
+      <a href="holland.html">霍兰德职业测评</a>
+      <a href="IRC.html">共情能力测评</a>
+    </div>
+  </div>
+</nav>
+
+<div class="topbar">
+  <div class="wrap">
+    <h1>MBTI 职业性格测试 · 简洁版</h1>
+    <p>28 道题 · 约 5 分钟 · 测出你的 16 型人格、职业倾向与成长建议</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ============ 首页 ============ -->
+  <div id="home" class="card">
+    <h2 class="sec">测试说明</h2>
+    <p class="lead">
+      MBTI 以荣格的心理类型理论为基础，用四个维度描述人天生偏好的「获取能量、接收信息、做出决策、组织生活」的方式。
+      本简洁版共 <b>28 道题</b>，请根据<b>第一直觉</b>作答，不必纠结"应该"如何——越真实，结果越准。
+    </p>
+
+    <div class="dimgrid">
+      <div class="dimbox"><b>⚡ 能量方向　E / I</b><span>外向 E：从人群与行动中获得能量；内向 I：从独处与思考中恢复能量。</span></div>
+      <div class="dimbox"><b>🔍 信息获取　S / N</b><span>实感 S：相信事实、细节与经验；直觉 N：关注意义、可能与整体图景。</span></div>
+      <div class="dimbox"><b>⚖️ 决策方式　T / F</b><span>思考 T：以逻辑与客观标准为先；情感 F：以价值与他人的影响为先。</span></div>
+      <div class="dimbox"><b>🗓️ 生活态度　J / P</b><span>判断 J：偏好计划、秩序与确定性；知觉 P：保留开放、灵活与弹性。</span></div>
+    </div>
+
+    <div class="tip">
+      💡 <b>答题提示：</b>请想象「在大多数情况下、最自然的自己」，而不是某个特殊场景（比如工作中的你 vs 度假中的你可能不同）。题目没有对错，也没有"更好的"答案。
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" onclick="startTest()">开始测试 →</button>
+    </div>
+
+    <div class="foot">本测试为自我探索工具，结果仅供参考，不能替代专业的职业咨询或心理评估。</div>
+  </div>
+
+  <!-- ============ 答题 ============ -->
+  <div id="quiz" class="card hide">
+    <div class="qhead">
+      <span>第 <b id="qno">1</b> / 28 题</span>
+      <span id="qdim">能量方向</span>
+    </div>
+    <div class="prog"><i id="progbar"></i></div>
+    <div class="qtext" id="qtext"></div>
+    <div class="opts" id="opts"></div>
+    <div class="scalehint"><span>完全不同意</span><span>完全同意</span></div>
+    <div class="nav">
+      <button id="btnPrev" onclick="prevQ()">← 上一题</button>
+      <button id="btnNext" class="pri" onclick="nextQ()">下一题 →</button>
+    </div>
+    <div class="kbd noprint">小技巧：按键盘 <b>1~5</b> 可直接选择选项</div>
+  </div>
+
+  <!-- ============ 计算 ============ -->
+  <div id="loading" class="card hide">
+    <div class="loading">
+      <div class="ring"></div>
+      <p>正在分析你的性格画像…</p>
+    </div>
+  </div>
+
+  <!-- ============ 结果 ============ -->
+  <div id="result" class="card hide"></div>
+
+</div>
+
+<script>
+/* =========================================================
+   1. 题目（28 题，四维各 7 题）
+   dim: EI / SN / TF / JP ；dir: 1 → 偏向 A 极，-1 → 偏向 B 极
+   ========================================================= */
+const QUESTIONS = [
+  // E / I
+  {d:'EI',k:1,t:'在陌生的社交场合，我往往是先开口、主动认识人的那个。'},
+  {d:'EI',k:-1,t:'经过一整天的社交后，我最需要的是独处来恢复精力。'},
+  {d:'EI',k:1,t:'我习惯"边说边想"，和别人讨论能帮我理清思路。'},
+  {d:'EI',k:-1,t:'我更愿意用文字消息沟通，而不是打电话或当面聊。'},
+  {d:'EI',k:1,t:'热闹的人群和活动让我感到兴奋，而不是想要逃离。'},
+  {d:'EI',k:-1,t:'比起大型聚会，我更喜欢两三个人的深度交谈。'},
+  {d:'EI',k:1,t:'独处太久会让我觉得无聊，会想找人说说话。'},
+  // S / N
+  {d:'SN',k:1,t:'我更关注眼前的事实与细节，而不是背后的可能性。'},
+  {d:'SN',k:-1,t:'我常常由一个点子，联想到许多新的想法和方向。'},
+  {d:'SN',k:1,t:'动手之前，我喜欢先有清晰明确的步骤和说明。'},
+  {d:'SN',k:-1,t:'比起"怎么做"，我更在意"为什么"和"还能变成什么"。'},
+  {d:'SN',k:-1,t:'我对抽象的理论、概念和隐喻很感兴趣。'},
+  {d:'SN',k:1,t:'我更相信亲身经历和可验证的数据，而不是直觉。'},
+  {d:'SN',k:-1,t:'别人常说我"想得太远"，有点脱离实际。'},
+  // T / F
+  {d:'TF',k:1,t:'做决定时，我优先讲逻辑和客观标准。'},
+  {d:'TF',k:-1,t:'我很容易被他人的处境、情绪和故事打动。'},
+  {d:'TF',k:1,t:'即使真相会让人不舒服，我也认为应该如实说出来。'},
+  {d:'TF',k:-1,t:'我更在意一个决定对他人的影响，而不是它是否绝对公平。'},
+  {d:'TF',k:1,t:'别人向我倾诉时，我的第一反应是帮他分析问题。'},
+  {d:'TF',k:-1,t:'做选择时，我常问自己"这样做对不对得起我的价值观"。'},
+  {d:'TF',k:1,t:'我习惯把情绪和事情分开，先解决问题再说。'},
+  // J / P
+  {d:'JP',k:1,t:'我习惯提前做好计划，并严格按照计划推进。'},
+  {d:'JP',k:-1,t:'我更愿意保留灵活空间，随时根据情况调整。'},
+  {d:'JP',k:1,t:'待办事项没有完成，会让我心里不踏实。'},
+  {d:'JP',k:-1,t:'截止日期前的压力，反而能激发我的最佳状态。'},
+  {d:'JP',k:1,t:'我的桌面、文件和日程通常是井井有条的。'},
+  {d:'JP',k:-1,t:'我享受即兴的旅行和临时起意的邀约。'},
+  {d:'JP',k:-1,t:'做决定前我总想再多收集些信息，不急于下结论。'}
+];
+
+const DIM_NAME = {EI:'能量方向', SN:'信息获取', TF:'决策方式', JP:'生活态度'};
+const POLES = {
+  EI:['E','I'], SN:['S','N'], TF:['T','F'], JP:['J','P']
+};
+
+/* =========================================================
+   2. 四维解读
+   ========================================================= */
+const DIM_INFO = {
+  E:{t:'外向 Extraversion', d:'你的能量来自外部世界。你习惯在行动与交流中思考，反应快、乐于表达，社交圈往往比较广。需要注意：长期缺乏互动会让你"电量"下降。'},
+  I:{t:'内向 Introversion', d:'你的能量来自内心世界。你习惯先想清楚再说，享受深度而非广度，独处是你恢复状态的方式。需要注意：过度封闭会让机会与你擦肩。'},
+  S:{t:'实感 Sensing', d:'你信任看得见、摸得着的事实。你关注细节、讲究经验，做事脚踏实地、可靠稳健。需要注意：别因过于务实而错过新的可能性。'},
+  N:{t:'直觉 Intuition', d:'你天生捕捉模式与意义。你喜欢想象"还能成为什么"，擅长抽象思考与前瞻。需要注意：别忘了把灵感落到可执行的细节上。'},
+  T:{t:'思考 Thinking', d:'你以逻辑和客观标准做决定。你重视公平与真相，能冷静分析问题，不易被情绪带走。需要注意：真理之外，别忘了照顾他人的感受。'},
+  F:{t:'情感 Feeling', d:'你以价值和人际关系做决定。你善解人意、重视和谐，能敏锐感知他人的需要。需要注意：别为了照顾别人而委屈自己。'},
+  J:{t:'判断 Judging', d:'你偏好计划与确定。你喜欢把事情安排妥当、按部就班推进，讨厌悬而未决。需要注意：过度计划会让你错失意外的惊喜。'},
+  P:{t:'知觉 Perceiving', d:'你偏好开放与弹性。你喜欢保留选择、随机应变，对新信息保持欢迎。需要注意：无限期延迟决定，也是一种代价。'}
+};
+
+/* =========================================================
+   3. 16 型人格详细档案
+   ========================================================= */
+const GROUPS = {
+  NT:{g:'理性分析家', c1:'#6C5CE7', c2:'#A29BFE', d:'理性、好奇、追求胜任与真理'},
+  NF:{g:'理想外交家', c1:'#00B894', c2:'#55E6C1', d:'共情、理想、追求意义与成长'},
+  SJ:{g:'稳健守卫者', c1:'#0984E3', c2:'#74B9FF', d:'可靠、秩序、追求责任与稳定'},
+  SP:{g:'自由探索者', c1:'#E17055', c2:'#FAB1A0', d:'灵活、感官、追求自由与体验'}
+};
+
+const TYPES = {
+INTJ:{n:'建筑师',en:'Architect',gp:'NT',kw:['战略家','独立','远见','完美主义'],fn:['Ni 内倾直觉','Te 外倾思考','Fi 内倾情感','Se 外倾感觉'],
+ tag:'在脑海中先建好未来，再一步步把它搬进现实。',
+ desc:'你是罕见而坚定的战略型思考者。你几乎对一切都有自己的判断，习惯站在系统层面看问题：不只看"现在怎么样"，更看"三年后会变成什么样"。你享受独立工作，对低效、敷衍和空洞的口号缺乏耐心。你对自己的要求远高于外界对你的要求，这种内在驱动力让你能在无人喝彩时依然推进长远计划。',
+ st:['能看到问题的底层结构，善于搭建系统而非解决单点','长期规划能力极强，自我驱动不需要外部鞭策','决策时不易被情绪和舆论裹挟','一旦认准目标，执行力与抗干扰能力惊人'],
+ wk:['容易显得高冷疏离，让人不敢靠近','对低效和"不够聪明"缺乏耐心，容易挫伤他人','完美主义导致迟迟不落地，或反复推倒重来','不擅长表达情感，关心常被误解为挑剔'],
+ cf:['战略咨询','科技与研发','金融投研','系统架构','高等教育','企业高管'],
+ cj:[['🧭','战略顾问','为企业设计长期路径'],['📊','数据科学家','用模型回答关键问题'],['🏗️','系统架构师','搭建复杂而优雅的结构'],['🔬','研究员','在专业领域深耕到底'],['💼','投资分析师','判断长期价值'],['📐','产品经理(策略向)','定义产品的方向']],
+ rl:'你不擅长寒暄，却极度忠诚。你的爱往往不是甜言蜜语，而是"我把你的问题当成我的问题来解决"。你需要一个能理解"关心不等于时刻陪伴"的伴侣，也需要在关系里主动说出自己的在意，而不是默认对方能读懂。',
+ gr:['把"完成"置于"完美"之前，先交付 80 分再迭代','练习用语言而不是只用行动表达关心','允许别人用完全不同的路径达到同样的结果','主动维护几段能说真心话的关系，而非只靠自己']},
+
+INTP:{n:'逻辑学家',en:'Logician',gp:'NT',kw:['好奇','抽象','怀疑','沉浸'],fn:['Ti 内倾思考','Ne 外倾直觉','Si 内倾感觉','Fe 外倾情感'],
+ tag:'为理解而生的头脑，永远在追问"这背后的原理是什么"。',
+ desc:'你活在由概念、模型和"如果……会怎样"构成的世界里。比起答案，你更迷恋推导过程；比起权威结论，你更相信自己的逻辑。你能长时间沉浸在一个问题中忘记时间，也会因为突然失去兴趣而把事情搁在一边。对你而言，准确比礼貌重要，有趣比有用重要。',
+ st:['严密的逻辑推演与模型建构能力','能从多个角度拆解同一个问题','对知识本身有纯粹热情，学习速度快','不受权威、惯例和"大家都这么做"的束缚'],
+ wk:['想得多做得少，容易陷入分析瘫痪','忽视截止日期与行政琐事','社交场合显得笨拙或心不在焉','对重复性的细节工作极不耐烦'],
+ cf:['理论科研','软件开发','算法与数据','哲学与科学传播','系统分析','产品研究'],
+ cj:[['🧠','算法工程师','让数学在现实中运行'],['💻','软件工程师','用代码搭建可运行的逻辑'],['📚','研究员 / 学者','把一个领域推向边界'],['🧪','数据科学家','从噪声中发现规律'],['📝','科普作者','把复杂讲得通透'],['🔧','系统分析师','诊断复杂系统的病因']],
+ rl:'你在关系里需要大量独处空间，也渴望真正能"聊到一起"的智力共鸣。你表达感情的方式偏理性，容易被误解为冷淡。试着把"我帮你想了三个方案"换成"我理解你现在很难受"，效果会完全不同。',
+ gr:['为每个想法设定一个"最小可交付物"','用外部截止线（公开承诺）约束自己','刻意练习识别他人的情绪信号','把想法写下来，别让它只停留在脑中']},
+
+ENTJ:{n:'指挥官',en:'Commander',gp:'NT',kw:['果断','领导','战略','目标感'],fn:['Te 外倾思考','Ni 内倾直觉','Se 外倾感觉','Fi 内倾情感'],
+ tag:'天生要把混乱变成秩序、把目标变成结果。',
+ desc:'你是天生的组织者与推动者。你看见低效就会忍不住想改造，看见目标就会立刻拆解路径、分配资源。你说话直接、决策迅速，在危机时刻尤其能扛事。你相信能力可以被训练、结果可以被管理，也因此对自己和他人都要求很高。',
+ st:['快速决策与高效整合资源的能力','天然的领袖气质，能带动团队往前冲','战略眼光，能看到三到五年后的格局','极强的执行力与抗压能力'],
+ wk:['过于强势，容易忽视他人的感受与节奏','习惯把人际关系也当作项目来管理','对"跟不上节奏"的人缺乏耐心','难以承认错误或示弱'],
+ cf:['企业管理','创业','战略咨询','销售管理','项目管理','法律与投行'],
+ cj:[['🚀','创业者 / 创始人','从 0 到 1 建起事业'],['🏢','总经理 / 高管','带组织打胜仗'],['📈','战略顾问','为复杂局面定方向'],['🎯','销售总监','用目标驱动团队'],['📋','项目总监','把大工程按时落地'],['⚖️','律师 / 投行人士','在高对抗中取胜']],
+ rl:'你是"共同成长型"的伴侣：希望和对方一起变强，会用高标准要求关系。但亲密关系不是 KPI，试着在爱人面前放下效率，允许自己说"我今天其实有点撑不住"。',
+ gr:['先听完再发言，把"倾听"当作一项能力训练','在决策流程里给"人的感受"留一个位置','学会授权，而不是每件事都亲力亲为','定期自省：我追求的是成就，还是我自己真正想要的生活？']},
+
+ENTP:{n:'辩论家',en:'Debater',gp:'NT',kw:['机敏','创意','挑战','即兴'],fn:['Ne 外倾直觉','Ti 内倾思考','Fe 外倾情感','Si 内倾感觉'],
+ tag:'点子永远不会枯竭，最怕的是无聊和循规蹈矩。',
+ desc:'你的大脑像一台永不熄火的联想机器：一个新闻、一句话，都能触发十条新思路。你享受观点的碰撞，甚至会为了检验一个论点而故意站在反面。你擅长开场，也擅长救场，但"把一件事做完"往往比"开始一件事"难得多。',
+ st:['快速看到可能性与事物之间的连接','头脑风暴中的绝对主力','临场应变与危机公关能力强','表达与说服极具感染力'],
+ wk:['虎头蛇尾，兴趣转移太快','争论上瘾，容易让讨论变成对抗','抗拒流程和 routine，讨厌被束缚','低估执行难度，时间表常常过于乐观'],
+ cf:['创业创新','市场营销','产品策划','媒体公关','管理咨询','法律(辩论向)'],
+ cj:[['💡','产品经理(创新型)','定义下一个可能性'],['📣','品牌 / 营销策划','用创意撬动注意力'],['🎤','媒体人 / 主持人','在表达中发现机会'],['🗣️','管理顾问','为客户重构问题'],['🚀','创业公司合伙人','在不断试错中找路'],['⚖️','律师','以辩论为职业']],
+ rl:'你有趣、热烈、充满惊喜，但也可能显得善变。你需要一个能接住你节奏、又不被你绕晕的伴侣。关系里最该练习的是：对方不是在和你辩论，而是在向你表达需要。',
+ gr:['建立"收尾机制"：用外部 accountability 逼自己交卷','区分"有趣"和"重要"，每天先做最重要的那件','提出点子后主动认领一部分执行','练习先复述对方的观点，再表达不同意见']},
+
+INFJ:{n:'提倡者',en:'Advocate',gp:'NF',kw:['洞察','理想','共情','使命感'],fn:['Ni 内倾直觉','Fe 外倾情感','Ti 内倾思考','Se 外倾感觉'],
+ tag:'表面温和，内心有一整套关于"世界应该如何"的理想。',
+ desc:'你能在别人说完之前就感知到他们真正想表达的东西。你温和但有原则，安静却有力量——内心对价值和意义有着近乎苛刻的标准。你常常把他人的需要放在自己前面，也会因为理想与现实的落差而陷入深深的疲惫。',
+ st:['看穿他人未说出口的需求，洞察力极强','强烈的使命感与价值感，愿意长期投入','深度倾听，让人感到被真正理解','长线思维，能为一件事坚持很多年'],
+ wk:['过度承担他人情绪，容易耗竭','完美主义导致自我消耗与拖延','难以拒绝，边界感薄弱','理想落空时容易幻灭、彻底抽离'],
+ cf:['心理咨询','教育','公益与非营利','内容创作','组织发展(HR)','医疗与社会工作'],
+ cj:[['🕊️','心理咨询师','陪人走过最暗的路'],['📖','教育工作者 / 教师','点亮一个人的成长'],['🌱','公益项目负责人','让善意变成系统'],['✍️','内容创作者 / 作家','用文字影响人心'],['🤝','组织发展顾问','让组织更像人'],['🏥','社工 / 疗愈师','在细微处修复生活']],
+ rl:'你追求灵魂层面的连接，择友择偶标准极高，宁缺毋滥。你习惯付出，却很少开口索取。请记住：被理解是双向的，你不说，对方永远猜不到。',
+ gr:['建立情绪边界：别人的课题不必由你背负','把宏大理想切成本季度可执行的一小步','允许自己被照顾，接受他人不完美的善意','及时表达不满，而不是忍耐到彻底失望']},
+
+INFP:{n:'调停者',en:'Mediator',gp:'NF',kw:['真诚','想象力','价值驱动','温柔'],fn:['Fi 内倾情感','Ne 外倾直觉','Si 内倾感觉','Te 外倾思考'],
+ tag:'内心有一片柔软而坚定的海，只为真正相信的事奔走。',
+ desc:'你有一个丰富而私密的内心世界，那里住着你的价值观、想象和对"更好"的执念。你温和、包容、不愿伤害任何人，但一旦触碰到核心信念，你会展现出惊人的坚定。你容易共情，也容易被无意义的事务消耗。',
+ st:['深刻的共情力，能站在他人位置感受世界','忠于内心价值，不为外部评价轻易动摇','丰富的想象力与出色的文字／视觉表达','接纳差异，能容纳多元的人和想法'],
+ wk:['过度理想化现实，落差感强','回避冲突，把不满积压在心里','执行力与事务管理能力偏弱','容易自我怀疑，陷入内耗'],
+ cf:['写作与编辑','心理咨询','设计','公益 NGO','教育','艺术与音乐'],
+ cj:[['✍️','作家 / 编辑','把感受铸成文字'],['🎨','视觉 / 平面设计师','让美成为沟通语言'],['🕊️','心理咨询师','在倾听中疗愈'],['🌍','NGO 项目官员','为相信的事奔走'],['📚','教师 / 阅读推广','守护一颗心长大'],['🎵','音乐人 / 艺术创作者','把情绪变成作品']],
+ rl:'你渴望被真正"看见"，而不只是被喜欢。你需要温和、稳定、允许你做自己的关系。请练习在委屈发生的当下说出来，而不是等它发酵成"你根本不懂我"。',
+ gr:['把价值感翻译成具体行动：这周我能做哪一件小事？','练习直面冲突，冲突不等于关系破裂','用外部结构（日程、伙伴、deadline）补足执行力','区分"我不喜欢"和"这不好"，避免感性判断一切']},
+
+ENFJ:{n:'主人公',en:'Protagonist',gp:'NF',kw:['热情','感染力','责任感','凝聚力'],fn:['Fe 外倾情感','Ni 内倾直觉','Se 外倾感觉','Ti 内倾思考'],
+ tag:'天生想把一群人凝聚成一束光。',
+ desc:'你总能看见别人身上连他们自己都没发现的潜力，并忍不住想推他们一把。你热情、善于沟通、责任感极强，常常是团队的黏合剂和气氛担当。但你也容易把别人的期待背在自己身上，为他人的评价而活。',
+ st:['激励与凝聚团队的天赋','高度敏感的人际雷达，能照顾到每个人的感受','出色的演讲与沟通能力','真心愿意为他人的成长投入时间与精力'],
+ wk:['过度在意评价，容易为他人的情绪负责','为他人牺牲自我，导致耗竭','以爱之名的控制欲','把精力都给别人，回避自己的问题'],
+ cf:['教育与培训','人力资源','公关传播','公益与社工','销售与客户成功','团队管理'],
+ cj:[['🎓','培训师 / 教师','点燃一群人的热情'],['🤝','HR / 组织发展','让人才被看见'],['📣','公关 / 品牌传播','替组织发出温度'],['🌱','公益机构负责人','用影响力做善事'],['💬','客户成功经理','陪客户一起长成'],['🏆','团队负责人','把一群人带成一支队伍']],
+ rl:'你是付出型的伴侣，会记得对方所有的小习惯，也期待同等的回应。但你常常不说自己的需求，然后失望。请练习把"我希望你能……"直接说出来。',
+ gr:['先照顾好自己，再照顾世界——你的电量也是有限的','课题分离：别人的结果不等于你的责任','接受"不是所有人都会喜欢你"这件事','建立内在评价体系，减少对外界反馈的依赖']},
+
+ENFP:{n:'竞选者',en:'Campaigner',gp:'NF',kw:['活力','好奇','共情','自由'],fn:['Ne 外倾直觉','Fi 内倾情感','Te 外倾思考','Si 内倾感觉'],
+ tag:'可能性本身，就是我前行的燃料。',
+ desc:'你对世界保持着近乎孩子气的好奇，也对人怀有真诚的兴趣。你能在五分钟内和一个陌生人聊得像老朋友，也能为一个新点子兴奋到半夜。你讨厌重复与束缚，向往自由与意义兼具的生活。',
+ st:['快速与人建立连接，社交天然亲和','创意与联想能力出众，点子源源不断','热情具有感染力，能带动周围气氛','适应变化能力强，不惧不确定性'],
+ wk:['三分钟热度，难以坚持到收获期','对事务性、细节性工作有天然抗拒','情绪起伏较大，容易冲动决策','承诺过多，导致精力分散'],
+ cf:['创意策划','市场与品牌','媒体与内容','心理咨询','教育与培训','创业与商务拓展'],
+ cj:[['🎪','创意策划','把灵感变成一场活动'],['📣','品牌 / 市场经理','让故事被人记住'],['🎙️','内容创作者 / 主持人','用表达连接人群'],['🕊️','心理咨询师','在对话中发现人'],['🧭','生涯规划师','陪人找到方向'],['🚀','商务拓展 / 创业者','在不确定中开路']],
+ rl:'你浪漫、热烈、充满惊喜，是最好的"同行者"。但你需要自由与回应并存：既要有自己的空间，也要被及时回应。关系里最需要练习的是把热情坚持下去，而不只是点燃。',
+ gr:['一次只选一件事，做完再开下一条线','建立最基础的例行事务系统（账单、日程、收纳）','用记录代替情绪化决策：先写下来，24 小时后再决定','给承诺留缓冲，宁可少答应，也要做得到']},
+
+ISTJ:{n:'物流师',en:'Logistician',gp:'SJ',kw:['可靠','严谨','务实','守序'],fn:['Si 内倾感觉','Te 外倾思考','Fi 内倾情感','Ne 外倾直觉'],
+ tag:'承诺过的事，就一定会按标准完成。',
+ desc:'你是那种"交给你就放心"的人。你重视事实、流程和先例，做事有条不紊，对质量有近乎固执的坚持。你不爱说大话，但每一个承诺都会被认真兑现。你是组织里最稳定的那块基石。',
+ st:['极强的责任心，说到一定做到','对细节与流程的把控力出众','情绪稳定，判断不易被带偏','善于积累经验，形成可复用方法论'],
+ wk:['抗拒变化，适应新流程较慢','情感表达笨拙，容易被误解为冷淡','容易固执于"以前就是这么做的"','对混乱和跳脱零容忍，容易焦虑'],
+ cf:['财务会计','行政运营','法务合规','工程管理','医疗技术','数据管理'],
+ cj:[['📊','会计师 / 审计师','让每一笔账都站得住'],['⚙️','运营经理','让流程稳定运转'],['⚖️','合规 / 法务专员','守住规则的底线'],['🏗️','工程 / 项目主管','按图纸落成现实'],['🔬','医学检验 / 技师','用精确守护健康'],['🗄️','数据 / 资料管理','让信息永远可追溯']],
+ rl:'你用行动而不是语言表达爱：准时、记得细节、把事情安排妥当。你忠诚而长情，但需要被理解——你的"不浪漫"不等于"不在乎"。试着把"为什么我在意"说出来，而不只是"规矩就是这样"。',
+ gr:['给变化留一个"试用期"，先试两周再下结论','多解释背后的原因，而不只强调规则','练习主动表达肯定与赞美','允许一次不完美的尝试，结果常常没那么糟']},
+
+ISFJ:{n:'守卫者',en:'Defender',gp:'SJ',kw:['体贴','细致','奉献','可靠'],fn:['Si 内倾感觉','Fe 外倾情感','Ti 内倾思考','Ne 外倾直觉'],
+ tag:'默默记住每个人的需要，然后把它们一件件办好。',
+ desc:'你有一种安静而强大的守护力。你会注意到别人没说出口的需求：谁不吃香菜、谁今天情绪不对、谁的生日快到了。你把照顾他人当成理所当然，也常常因此忽略自己。你低调、谦逊，却是很多关系与组织真正的稳定器。',
+ st:['细腻的观察力与照顾他人的本能','极强的耐心与责任感','稳固可靠，关键时刻绝不掉链子','擅长维护团队和谐与归属感'],
+ wk:['不懂拒绝，把委屈积压在心里','害怕冲突与批评，习惯退让','过度牺牲，导致身心耗竭','对改变和陌生方式适应较慢'],
+ cf:['医疗护理','教育','行政与后勤','人力资源','社会工作','客户服务'],
+ cj:[['🩺','护士 / 护理师','用专业与温柔照护'],['📚','教师 / 教务','细致守护每个孩子'],['🗂️','行政 / 后勤主管','把琐碎打理成体系'],['🤝','人力资源 / 员工关系','照顾组织里的人'],['🌱','社工','为弱势者撑一把伞'],['🎧','客户服务专家','让每个问题有着落']],
+ rl:'你是付出型的伴侣，爱藏在细节里。你需要被主动看见和感谢——一句"谢谢你记得"就能治愈很久。请练习直接说出需求，而不是用暗示期待对方猜中。',
+ gr:['练习说"不"，拒绝不等于伤害关系','直接表达需求，把暗示换成陈述句','把照顾自己的额度留给自己一份','接受分歧：有冲突不代表关系要破裂']},
+
+ESTJ:{n:'总经理',en:'Executive',gp:'SJ',kw:['组织','果断','务实','责任感'],fn:['Te 外倾思考','Si 内倾感觉','Ne 外倾直觉','Fi 内倾情感'],
+ tag:'把事情做成、做成规矩、做成体系。',
+ desc:'你是天生的管理者：目标清晰、标准明确、推动有力。你相信秩序和纪律能解决大部分问题，也愿意为此承担最重的责任。你说话直来直去，讨厌含糊和推诿，是团队在混乱时最先想到的那个人。',
+ st:['强大的组织与推动能力','清晰的标准感与公平意识','危机时刻敢于担当、扛得住压','高效执行，不拖延不空谈'],
+ wk:['沟通过于直接，容易伤人而不自知','不擅长处理情绪与"软性"问题','固执己见，不容易接受相反意见','把效率置于人的感受之上'],
+ cf:['管理与运营','项目管理','销售管理','行政与政务','财务','生产制造管理'],
+ cj:[['🏢','运营总监 / 总经理','让组织高效运转'],['📋','项目经理','把目标拆成可执行的日程'],['🎯','销售管理者','带团队拿下结果'],['🏛️','行政管理 / 公务员','让规则落地'],['📊','财务管理者','用数字守住健康'],['🏭','生产经理','让产线稳定输出']],
+ rl:'你是关系里的"主心骨"，负责、可靠、有担当。但亲密关系需要温度而非标准：试着在指出问题之前，先说一句"我知道你已经很努力了"。',
+ gr:['先肯定再纠正，批评前先给一句认可','给他人完整的表达空间，不要急着下结论','区分"高效"和"重要"：有些事值得慢慢来','经营情感账户，定期往里存款']},
+
+ESFJ:{n:'执政官',en:'Consul',gp:'SJ',kw:['热心','社交','和谐','责任感'],fn:['Fe 外倾情感','Si 内倾感觉','Ne 外倾直觉','Ti 内倾思考'],
+ tag:'让每个人都舒服，是我最本能的成就感。',
+ desc:'你是人群中的暖光：热情、周到、善于照顾气氛。你记得每个人的名字和喜好，乐于组织聚会与活动，也真心为别人的好事高兴。你重视传统与归属感，渴望被需要和认可。',
+ st:['照顾他人、营造氛围的天赋','出色的组织与协调能力','可靠忠诚，答应了就一定办到','沟通亲和，容易获得他人信任'],
+ wk:['过度在意他人评价，容易受伤','回避冲突，却暗自积累委屈','难以接受批评，容易往心里去','依赖既有圈子与传统，抗拒突变'],
+ cf:['教育','医疗护理','人力资源','客户服务与销售','活动策划','行政管理'],
+ cj:[['📚','教师 / 教育工作者','在陪伴中影响人'],['🩺','护理 / 健康管理','用细致照护他人'],['🤝','HR / 员工关怀','让组织有温度'],['🛎️','客户经理 / 服务专家','把客户处成朋友'],['🎉','活动策划','让每个场合都热闹圆满'],['🗂️','行政主管','把日常打理得井井有条']],
+ rl:'你是关系里的照顾者，付出细致而周到。你需要的是明确而及时的回应——被感谢、被需要、被放在心上。请练习直接说出"我也希望你能为我做……"。',
+ gr:['建立内在评价：我的价值不由别人的脸色决定','练习接受不同意见，分歧不等于否定','为自己的需求发声，而不是等对方发现','允许别人用自己的方式做事，哪怕效率低一点']},
+
+ISTP:{n:'鉴赏家',en:'Virtuoso',gp:'SP',kw:['冷静','动手','观察','独立'],fn:['Ti 内倾思考','Se 外倾感觉','Ni 内倾直觉','Fe 外倾情感'],
+ tag:'话不多，但一动手就知道门道。',
+ desc:'你安静、克制，却对身边的物理世界保持着敏锐的观察。你喜欢拆开东西看它怎么运转，也享受用双手解决问题。危机来临时你异常冷静，能在别人慌乱时冷静地找到症结。你讨厌被安排，也讨厌无意义的规矩。',
+ st:['极强的实操与故障排查能力','临危不乱，危机中反而更清醒','逻辑清晰，能快速定位问题根因','不盲从规则，只相信验证过的结论'],
+ wk:['情感表达迟钝，容易显得冷漠','容易厌倦，说走就走','长期承诺与稳定节奏较难维持','不爱解释，让人难以理解你的想法'],
+ cf:['工程与制造','IT 运维与安全','技术工种','运动与户外','数据分析','机械与航空航天'],
+ cj:[['🔧','工程师 / 技师','让机器重新运转'],['🛡️','网络安全 / 运维','在攻击中守住系统'],['🏍️','运动 / 户外教练','用身体理解极限'],['📈','数据分析师','从数据里找真相'],['⚙️','机械 / 硬件工程师','把结构做到精准'],['🚁','飞行员 / 特种作业','在高压下保持冷静']],
+ rl:'你用行动而非言语表达在乎：修好一个东西、解决一个麻烦，就是你的"我爱你"。你需要被尊重空间的伴侣。请练习把想法说出来——对方看不见你的行动逻辑，只看见你的沉默。',
+ gr:['说出你的想法，而不只是默默把事做完','给关系一点可预期的稳定性','挑选一件值得长期投入的事，坚持一年','刻意练习识别他人的情绪信号并回应']},
+
+ISFP:{n:'探险家',en:'Adventurer',gp:'SP',kw:['审美','温和','当下','自由'],fn:['Fi 内倾情感','Se 外倾感觉','Ni 内倾直觉','Te 外倾思考'],
+ tag:'用感官活在此刻，用审美定义自己。',
+ desc:'你温和、低调，却有着极强的审美与感知力。你对色彩、质感、声音和氛围异常敏感，喜欢亲手创造美的东西。你活在当下，忠于自己的感受，讨厌被催促、被安排、被贴标签。',
+ st:['敏锐的审美与感官感知力','温和包容，让人感到放松','对热爱之事行动力很强','忠于自我，不为迎合而改变'],
+ wk:['回避冲突与长期规划','目标感弱，容易随波逐流','对批评敏感，容易受打击','讨厌被安排，抗拒外部结构'],
+ cf:['设计(平面/室内/服装)','摄影与影像','音乐与手作','护理与疗愈','餐饮花艺美容','自然与户外'],
+ cj:[['🎨','平面 / 室内设计师','让空间与画面说话'],['📷','摄影师','定格一瞬间的光'],['🎵','音乐人 / 手作人','把情绪做成物件'],['🌿','疗愈师 / 护理人员','用温柔缓解痛苦'],['🍰','主厨 / 花艺师','把美感做进日常'],['🏕️','户外 / 自然向导','带人回到真实世界']],
+ rl:'你用细节与陪伴表达爱：记得对方喜欢的那首歌、准备一份贴心的小礼物。你需要被尊重自由、不被催促。请练习在受伤时说出来，而不是默默退后直到消失。',
+ gr:['建立最基础的财务与计划框架（先记账三个月）','练习表达不满，用"我觉得"开头','给梦想设一个时间点，让它从感觉变成目标','把批评和否定分开：改的是作品，不是你这个人']},
+
+ESTP:{n:'企业家',en:'Entrepreneur',gp:'SP',kw:['行动','冒险','机敏','现实'],fn:['Se 外倾感觉','Ti 内倾思考','Fe 外倾情感','Ni 内倾直觉'],
+ tag:'机会就在眼前，先上场再说。',
+ desc:'你是行动派中的行动派。你对现场的细微变化极其敏感，能在别人还在讨论时就已经出手。你喜欢有风险、有反馈、有输赢的赛场，讨厌冗长的会议和遥远的理论。你是天生的破局者。',
+ st:['极强的临场反应与应变能力','善于捕捉稍纵即逝的机会','谈判与说服能力强','抗压性高，越紧张越兴奋'],
+ wk:['冲动行事，风险评估不足','缺乏长期规划，容易顾此失彼','对重复、流程化的工作迅速厌倦','容易忽视行为对他人造成的后果'],
+ cf:['销售与商务','创业','市场拓展','危机公关','体育与演艺','金融交易'],
+ cj:[['💼','销售 / 商务总监','在谈判桌上拿结果'],['🚀','创业者','看到机会就先干一票'],['📈','市场拓展(BD)','打开新局面'],['🔥','危机公关','在火线上解决问题'],['🏆','职业运动员 / 演艺','用表现说话'],['📊','交易员 / 投资经理','在波动中决策']],
+ rl:'你充满激情、慷慨大方，是很有魅力的伴侣。但你需要在关系里学会稳定：兑现承诺、按时出现、在对方需要时留在原地，而不只是带来惊喜。',
+ gr:['重大决定前强制停三秒，想想最坏的结果','为自己设一个三年目标，并每季度复盘','说到做到：承诺越少，信用越高','做事前多想一步对他人的影响']},
+
+ESFP:{n:'表演者',en:'Entertainer',gp:'SP',kw:['热情','感染力','乐观','当下'],fn:['Se 外倾感觉','Fi 内倾情感','Te 外倾思考','Ni 内倾直觉'],
+ tag:'把每一个当下都活得有声有色。',
+ desc:'你是天生的气氛制造者。你热情、乐观、善于观察现场气氛，能让身边的人放松下来。你喜欢新鲜事物，享受被关注，也真心为朋友的成功而开心。你活得真实而热烈，只是偶尔会被"以后怎么办"难住。',
+ st:['让人放松与快乐的能力','敏锐捕捉现场气氛与情绪','行动迅速，不拖延不纠结','真诚热情，容易赢得好感'],
+ wk:['难以坚持长期、枯燥的任务','情绪化决策，事后容易后悔','回避深度冲突与严肃话题','财务规划与延迟满足能力较弱'],
+ cf:['演艺与主持','活动策划','销售与服务','旅游与酒店','教育培训','美容与时尚'],
+ cj:[['🎤','主持人 / 演员','把舞台点亮'],['🎉','活动策划 / 婚礼策划','让每个瞬间值得纪念'],['🛍️','销售 / 体验顾问','用热情带动成交'],['✈️','旅游 / 酒店管理','把快乐做成服务'],['🎈','幼儿 / 艺教老师','带着孩子玩中学'],['💄','美妆 / 时尚顾问','让美被看见']],
+ rl:'你是热烈的伴侣，擅长创造快乐与惊喜。你需要被欣赏、被陪伴，也需要对方能陪你一起面对那些"不好玩"的现实问题。请练习在冲突里留下来，而不是用玩笑带过。',
+ gr:['建立自动储蓄与记账习惯，先存后花','练习面对不舒服的话题，不逃避','为长期目标忍受一段短期的"无趣"','区分"我现在想做"和"我应该做"']}
+};
+
+/* =========================================================
+   4. 状态与流程
+   ========================================================= */
+let answers = new Array(QUESTIONS.length).fill(0);
+let cur = 0;
+let myType = null;
+
+const SCALE = ['完全不同意','不太同意','中立 / 不确定','比较同意','完全同意'];
+
+function $(id){return document.getElementById(id);}
+function show(id){
+  ['home','quiz','loading','result'].forEach(x=>{
+    $(x).classList.toggle('hide', x!==id);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function startTest(){
+  answers = new Array(QUESTIONS.length).fill(0);
+  cur = 0; myType = null;
+  show('quiz'); renderQ();
+}
+
+function renderQ(){
+  const q = QUESTIONS[cur];
+  $('qno').textContent = cur+1;
+  $('qdim').textContent = DIM_NAME[q.d];
+  $('progbar').style.width = ((cur)/QUESTIONS.length*100)+'%';
+  $('qtext').textContent = q.t;
+
+  const box = $('opts');
+  box.innerHTML = '';
+  SCALE.forEach((s,i)=>{
+    const v = i+1;
+    const el = document.createElement('div');
+    el.className = 'opt' + (answers[cur]===v ? ' on':'');
+    el.innerHTML = '<span class="dot"></span><span>'+s+'</span>';
+    el.onclick = ()=>{ answers[cur]=v; renderQ(); setTimeout(nextQ,180); };
+    box.appendChild(el);
+  });
+
+  $('btnPrev').disabled = (cur===0);
+  $('btnNext').textContent = (cur===QUESTIONS.length-1) ? '查看结果 ✓' : '下一题 →';
+  $('qtext').classList.remove('fade');
+  void $('qtext').offsetWidth;
+  $('qtext').classList.add('fade');
+}
+
+function nextQ(){
+  if(!answers[cur]){ alert('请先选择一个选项 🙂'); return; }
+  if(cur < QUESTIONS.length-1){ cur++; renderQ(); }
+  else { $('progbar').style.width='100%'; doResult(); }
+}
+function prevQ(){ if(cur>0){ cur--; renderQ(); } }
+
+document.addEventListener('keydown', e=>{
+  if($('quiz').classList.contains('hide')) return;
+  const n = parseInt(e.key);
+  if(n>=1 && n<=5){ answers[cur]=n; renderQ(); setTimeout(nextQ,180); }
+});
+
+/* =========================================================
+   5. 计分
+   ========================================================= */
+function doResult(){
+  show('loading');
+  // 居中计分：每道题换算为 -2 ~ +2 的倾向分，避免"全都选同一档"造成的系统性偏差
+  const sum = {EI:0,SN:0,TF:0,JP:0};
+  const num = {EI:0,SN:0,TF:0,JP:0};
+  QUESTIONS.forEach((q,i)=>{
+    num[q.d] += 1;
+    sum[q.d] += q.k * (answers[i] - 3);
+  });
+
+  // A 极（E / S / T / J 方向）得分百分比，50% 为完全平衡
+  const pct = {};
+  ['EI','SN','TF','JP'].forEach(d=>{
+    let p = 50 + (sum[d] / (2*num[d])) * 50;
+    pct[d] = Math.max(1, Math.min(99, p));
+  });
+
+  let code = '';
+  const detail = [];
+  ['EI','SN','TF','JP'].forEach(d=>{
+    const a = POLES[d][0], b = POLES[d][1];
+    const pa = pct[d], pb = 100-pa;
+    const win = pa>=pb ? a : b;
+    const winP = Math.max(pa,pb), loseP = Math.min(pa,pb);
+    let level = winP>=82 ? '非常明显' : winP>=70 ? '明显' : winP>=58 ? '中等' : winP>=53 ? '轻微' : '接近平衡';
+    code += win;
+    detail.push({dim:d, a:a, b:b, pa:Math.round(pa), pb:Math.round(pb),
+                 win:win, winP:Math.round(winP), loseP:Math.round(loseP), level:level});
+  });
+
+  myType = code;
+  setTimeout(()=>renderResult(code, detail), 900);
+}
+
+/* =========================================================
+   6. 结果渲染
+   ========================================================= */
+function strengthWord(p){ return p>=80?'非常明显':p>=68?'明显':p>=56?'中等':'轻微'; }
+
+function badgeSVG(code, c1, c2){
+  return `<svg class="badge" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#fff" stop-opacity=".28"/>
+        <stop offset="100%" stop-color="#fff" stop-opacity=".06"/>
+      </linearGradient>
+    </defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg1)" stroke="rgba(255,255,255,.55)" stroke-width="2"/>
+    <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="1.5" stroke-dasharray="4 7"/>
+    <path d="M100 34 L157 67 L157 133 L100 166 L43 133 L43 67 Z"
+          fill="rgba(255,255,255,.16)" stroke="rgba(255,255,255,.6)" stroke-width="2"/>
+    <text x="100" y="96" text-anchor="middle" font-size="17" fill="rgba(255,255,255,.9)"
+          font-family="sans-serif" letter-spacing="2">MBTI</text>
+    <text x="100" y="132" text-anchor="middle" font-size="36" font-weight="bold" fill="#fff"
+          font-family="sans-serif" letter-spacing="3">${code}</text>
+  </svg>`;
+}
+
+function radarSVG(detail, c1, c2){
+  const cx=140, cy=140, R=100;
+  const labels = detail.map(d=> d.win + ' ' + d.winP + '%');
+  const pts = detail.map((d,i)=>{
+    const ang = -Math.PI/2 + i*Math.PI/2;
+    const r = R * (d.winP/100);
+    return [cx + r*Math.cos(ang), cy + r*Math.sin(ang)];
+  });
+  const poly = pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+
+  let rings='';
+  [0.25,0.5,0.75,1].forEach(k=>{
+    const rp = [0,1,2,3].map(i=>{
+      const ang = -Math.PI/2 + i*Math.PI/2;
+      return (cx + R*k*Math.cos(ang)).toFixed(1)+','+(cy + R*k*Math.sin(ang)).toFixed(1);
+    }).join(' ');
+    rings += `<polygon points="${rp}" fill="none" stroke="#E6E8F2" stroke-width="1"/>`;
+  });
+  let axes='';
+  [0,1,2,3].forEach(i=>{
+    const ang = -Math.PI/2 + i*Math.PI/2;
+    axes += `<line x1="${cx}" y1="${cy}" x2="${(cx+R*Math.cos(ang)).toFixed(1)}" y2="${(cy+R*Math.sin(ang)).toFixed(1)}" stroke="#E6E8F2" stroke-width="1"/>`;
+  });
+  let dots = pts.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="5" fill="${c1}"/>`).join('');
+
+  const labPos = [
+    {x:cx, y:cy-R-22, a:'middle'},
+    {x:cx+R+34, y:cy+4, a:'start'},
+    {x:cx, y:cy+R+30, a:'middle'},
+    {x:cx-R-34, y:cy+4, a:'end'}
+  ];
+  let labs='';
+  detail.forEach((d,i)=>{
+    labs += `<text x="${labPos[i].x}" y="${labPos[i].y}" text-anchor="${labPos[i].a}"
+      font-size="14" font-weight="700" fill="${c1}" font-family="sans-serif">${labels[i]}</text>`;
+    labs += `<text x="${labPos[i].x}" y="${labPos[i].y+16}" text-anchor="${labPos[i].a}"
+      font-size="12" fill="#8A90A8" font-family="sans-serif">${DIM_NAME[d.dim]}</text>`;
+  });
+
+  return `<svg viewBox="-60 -40 400 360" width="100%" style="max-width:360px">
+    ${rings}${axes}
+    <polygon points="${poly}" fill="${c1}" fill-opacity="0.22" stroke="${c1}" stroke-width="2.5" stroke-linejoin="round"/>
+    ${dots}${labs}
+  </svg>`;
+}
+
+function renderResult(code, detail, viewOnly){
+  const t = TYPES[code];
+  const g = GROUPS[t.gp];
+  document.documentElement.style.setProperty('--accent', g.c1);
+  document.documentElement.style.setProperty('--accent2', g.c2);
+
+  const bars = detail.map(d=>{
+    const aIsWin = d.win===d.a;
+    const wA = d.pa, wB = d.pb;
+    // 获胜的一侧用主题色，另一侧用灰色
+    const clsA = aIsWin ? 'a' : 'b';
+    const clsB = aIsWin ? 'b' : 'a';
+    return `<div class="bar">
+      <div class="bl"><span>${DIM_NAME[d.dim]}　<b style="color:var(--accent)">${d.win}</b></span>
+        <em>${d.win} ${d.winP}%　·　${d.win===d.a?d.b:d.a} ${d.loseP}%　·　${d.level}</em></div>
+      <div class="track"><i class="${clsA}" style="width:${wA}%"></i><i class="${clsB}" style="width:${wB}%"></i></div>
+      <div class="note">${d.level==='接近平衡'
+        ? `<b>两种倾向势均力敌</b>：你能在「${DIM_INFO[d.a].t.split(' ')[0]}」与「${DIM_INFO[d.b].t.split(' ')[0]}」之间自如切换，视情境调用即可，这是相当大的优势。`
+        : `<b>${DIM_INFO[d.win].t}</b>：${DIM_INFO[d.win].d}`}</div>
+    </div>`;
+  }).join('');
+
+  const fnColors = ['rgba(0,0,0,.85)','rgba(0,0,0,.55)','rgba(0,0,0,.32)','rgba(0,0,0,.18)'];
+  const fnLabels = ['主导','辅助','第三','劣势'];
+  const fnList = t.fn.map((f,i)=>`<div class="frow">
+      <div class="fn">${fnLabels[i]}</div>
+      <div class="fbar"><i style="width:${[100,72,46,26][i]}%;background:${g.c1};opacity:${[1,.72,.45,.28][i]}"></i>
+      <span>${f}</span></div>
+    </div>`).join('');
+
+  const grid16 = Object.keys(TYPES).map(k=>{
+    const gg = GROUPS[TYPES[k].gp];
+    return `<div class="g16 ${k===code?'me':''}" onclick="viewOther('${k}')">
+      <span class="gdot" style="background:${k===code?'#fff':gg.c1};display:block;margin:0 auto 4px;"></span>
+      <b>${k}</b><span>${TYPES[k].n}</span></div>`;
+  }).join('');
+
+  const careers = t.cj.map(c=>`<div class="career"><div class="ic">${c[0]}</div>
+      <div class="cn">${c[1]}</div><div class="cd">${c[2]}</div></div>`).join('');
+
+  const html = `
+  ${viewOnly?`<div class="noprint" style="margin-bottom:16px;"><button class="btn ghost" onclick="backToMine()">← 返回我的结果（${myType}）</button></div>`:''}
+
+  <div class="hero">
+    <div class="grid2">
+      <div>${badgeSVG(code, g.c1, g.c2)}</div>
+      <div>
+        <h3>${g.g}　·　${code} 型</h3>
+        <div class="tname">${t.n}　<span style="font-size:19px;opacity:.85;font-weight:600">${t.en}</span></div>
+        <div class="ten">${t.kw.map(k=>'#'+k).join('　')}</div>
+        <div class="tagline">「${t.tag}」</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tags" style="margin-top:18px;">
+    ${t.kw.map(k=>`<span class="tag">${k}</span>`).join('')}
+    <span class="tag gray">${g.g}</span>
+    <span class="tag gray">人群占比约 ${({INTJ:'2%',INTP:'3%',ENTJ:'2%',ENTP:'3%',INFJ:'1.5%',INFP:'4%',ENFJ:'2%',ENFP:'7%',ISTJ:'12%',ISFJ:'14%',ESTJ:'9%',ESFJ:'12%',ISTP:'5%',ISFP:'8%',ESTP:'4%',ESFP:'8%'})[code]}</span>
+  </div>
+
+  <h2 class="sec" style="margin-top:34px;">🧭 你的四维倾向</h2>
+  <div class="bars" id="bars">${bars}</div>
+
+  <h2 class="sec" style="margin-top:34px;">📡 倾向雷达图 &amp; 认知功能</h2>
+  <div class="two">
+    <div class="radarbox">${radarSVG(detail, g.c1, g.c2)}<div class="cap">越靠外＝该维度倾向越强（50% 为平衡）</div></div>
+    <div class="func">${fnList}
+      <div class="note" style="font-size:12.5px;color:var(--sub);margin-top:8px;line-height:1.7">
+      认知功能栈描述了你处理信息的"默认顺序"：<b>主导</b>是你最信赖的能力，<b>辅助</b>帮你平衡内外，<b>第三</b>在放松时显现，<b>劣势</b>则是压力下的短板与一生的成长课题。</div>
+    </div>
+  </div>
+
+  <h2 class="sec" style="margin-top:34px;">🪞 性格画像</h2>
+  <div class="quote">${t.desc}</div>
+
+  <div class="two" style="margin-top:22px;align-items:start;">
+    <div>
+      <h2 class="sec" style="font-size:17px;">✅ 你的优势</h2>
+      <ul class="list">${t.st.map(x=>`<li>${x}</li>`).join('')}</ul>
+    </div>
+    <div>
+      <h2 class="sec" style="font-size:17px;">⚠️ 你的盲点</h2>
+      <ul class="list warn">${t.wk.map(x=>`<li>${x}</li>`).join('')}</ul>
+    </div>
+  </div>
+
+  <h2 class="sec" style="margin-top:30px;">💼 职业方向</h2>
+  <p class="lead" style="margin-bottom:12px;">适合你的领域：<b>${t.cf.join('　·　')}</b></p>
+  <div class="careers">${careers}</div>
+  <div class="tip" style="margin-top:18px;">
+    🔎 <b>如何判断一份工作适不适合你：</b>先看它是否用得上你的优势（而不是要求你伪装成别人），再看它的日常内容是否让你在下班后仍然有能量，最后看它能否容纳你的短板——比如给 INFP 留出安静空间、给 ESTP 留出变化与刺激。
+  </div>
+
+  <h2 class="sec" style="margin-top:34px;">❤️ 人际关系与情感</h2>
+  <div class="quote">${t.rl}</div>
+
+  <h2 class="sec" style="margin-top:34px;">🌱 成长建议</h2>
+  <ul class="list con">${t.gr.map(x=>`<li>${x}</li>`).join('')}</ul>
+
+  <h2 class="sec" style="margin-top:34px;">🔤 16 型速查表<span style="font-size:12.5px;color:var(--sub);font-weight:400;">（点击可查看任一类型）</span></h2>
+  <div class="grid16">${grid16}</div>
+
+  <div class="btn-row noprint">
+    <button class="btn" onclick="restart()">重新测试</button>
+    <button class="btn ghost" onclick="window.print()">🖨 保存 / 打印报告</button>
+    <button class="btn ghost" onclick="copyResult()">📋 复制结果</button>
+  </div>
+
+  <div class="foot">
+    MBTI 描述的是偏好，不是能力，更不是宿命。<br>
+    它最大的价值，是帮你理解"我为什么会这样"，以及"我还可以怎么选择"。<br>
+    本结果为自我探索参考，不能替代专业的职业规划或心理评估。
+  </div>`;
+
+  $('result').innerHTML = html;
+  $('result').classList.remove('hide');
+  show('result');
+  if(!viewOnly){ currentDetail = detail; }
+
+  setTimeout(()=>{
+    document.querySelectorAll('#bars .track i').forEach(el=>{
+      const w = el.style.width; el.style.width='0';
+      void el.offsetWidth; el.style.width = w;
+    });
+  },80);
+}
+
+let currentDetail = null;
+function backToMine(){ renderResult(myType, currentDetail); }
+function restart(){ startTest(); }
+
+// 查看其它类型时，用一组代表性的倾向强度示意（非本人实测数据）
+function viewOther(code){
+  const d = [];
+  ['EI','SN','TF','JP'].forEach((dim,i)=>{
+    const [a,b] = POLES[dim];
+    const win = code[i];
+    const winP = 70;
+    d.push({
+      dim:dim, a:a, b:b, win:win, winP:winP, loseP:100-winP,
+      pa: win===a ? winP : 100-winP,
+      pb: win===a ? 100-winP : winP,
+      level:'明显（示意）'
+    });
+  });
+  renderResult(code, d, true);
+}
+
+function copyResult(){
+  if(!myType || !currentDetail){ alert('请先完成测试再复制结果 🙂'); return; }
+  const t = TYPES[myType];
+  const txt = `我的 MBTI 测试结果：${myType} ${t.n}（${t.en}）\n` +
+    currentDetail.map(d=>`· ${DIM_NAME[d.dim]}：${d.win} ${d.winP}% / ${d.win===d.a?d.b:d.a} ${d.loseP}%（${d.level}）`).join('\n') +
+    `\n\n一句话：${t.tag}\n关键词：${t.kw.join('、')}\n适合领域：${t.cf.join('、')}\n\n—— 来自 MBTI 职业性格测试（简洁版）`;
+  navigator.clipboard.writeText(txt).then(()=>alert('结果已复制到剪贴板 ✅')).catch(()=>alert('复制失败，请手动选择文本'));
+}
+</script>
+
+<!-- 站点访问统计（与主站其他工具页一致，纯本地统计） -->
+<script src="js/visits.js"></script>
+</body>
+</html>

@@ -19,6 +19,22 @@ body{
 }
 .wrap{max-width:720px;margin:0 auto;padding:0 0 60px;}
 
+/* ---------- 站点导航条（与主站统一配色） ---------- */
+.sitebar{background:#3a5a8a;color:#fff;}
+.sitebar .sb-wrap{max-width:720px;margin:0 auto;padding:9px 16px;display:flex;align-items:center;gap:12px;}
+.sitebar a{color:#fff;text-decoration:none;font-size:13.5px;opacity:.9;white-space:nowrap;}
+.sitebar a:hover{opacity:1;text-decoration:underline;}
+.sitebar .sb-home{font-weight:700;display:inline-flex;align-items:center;gap:6px;}
+.sitebar .sb-links{margin-left:auto;display:flex;gap:13px;flex-wrap:wrap;}
+.sitebar .sb-links a{opacity:.78;}
+@media(max-width:720px){
+  .sitebar .sb-links{display:none;}
+  .sitebar .sb-wrap{padding:8px 14px;}
+}
+@media print{
+  .sitebar{display:none!important;}
+}
+
 /* 顶部封面 */
 .hero{
   background:linear-gradient(135deg,#4a6fa5 0%,#3a5a8a 100%);
@@ -73,6 +89,18 @@ body{
 </style>
 </head>
 <body>
+<!-- 站点导航条（返回主页 + 栏目快捷入口） -->
+<nav class="sitebar">
+  <div class="sb-wrap">
+    <a href="index.html#intro" class="sb-home">← 返回 BEN 的个人主页</a>
+    <div class="sb-links">
+      <a href="index.html#read">📚 拓展阅读</a>
+      <a href="index.html#tools">🧮 计算</a>
+      <a href="index.html#assess">📝 测评</a>
+    </div>
+  </div>
+</nav>
+
 <div class="wrap">
 
   <div class="hero">
@@ -328,7 +356,7 @@ body{
 
   <div class="footer">
     <div class="tip">
-      <b>💡读万卷书，行万里路 。
+      <b>💡读万卷书，行万里路 。</b>
     </div>
   
   </div>

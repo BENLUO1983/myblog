@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>九型人格专业测评工具</title>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+    <!-- html2canvas CDN (截图功能) -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
+    </script>
+    <style>
+        /* ----- 全局重置 & 基础 ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'PingFang SC', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f5f7fc;
+            color: #1e2a3a;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            /* 允许站点导航条独占一行，主体内容换到下一行 */
+            flex-wrap: wrap;
+        }
+
+        .app {
+            max-width: 880px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 20px 60px rgba(0, 20, 50, 0.12);
+            padding: 32px 36px 48px;
+            transition: all 0.2s;
+        }
+
+        @media (max-width: 640px) {
+            .app {
+                padding: 18px 16px 32px;
+                border-radius: 18px;
+            }
+        }
+
+        /* ----- 头部 ----- */
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+            border-bottom: 2px solid #eef2f7;
+            padding-bottom: 22px;
+        }
+
+        .header h1 {
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #0b1a33;
+        }
+
+        .header h1 span {
+            background: linear-gradient(135deg, #4a6cf7, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .sub {
+            font-size: 15px;
+            color: #5b6f87;
+            margin-top: 6px;
+            letter-spacing: 0.3px;
+        }
+
+        .header .badge {
+            display: inline-block;
+            background: #eef3fe;
+            color: #2d4b9e;
+            font-size: 13px;
+            padding: 4px 18px;
+            border-radius: 30px;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        /* ----- 进度条 ----- */
+        .progress-wrap {
+            background: #eef2f7;
+            border-radius: 40px;
+            height: 10px;
+            margin: 16px 0 24px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #4a6cf7, #7c3aed);
+            border-radius: 40px;
+            transition: width 0.35s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #3d556e;
+            font-weight: 500;
+            margin-top: -6px;
+            margin-bottom: 10px;
+        }
+
+        /* ----- 题目卡片 ----- */
+        .question-card {
+            background: #fafbff;
+            border-radius: 18px;
+            padding: 22px 26px;
+            margin-bottom: 16px;
+            border: 1px solid #e9edf5;
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+
+        .question-card:hover {
+            border-color: #c8d4e9;
+            box-shadow: 0 4px 12px rgba(74, 108, 247, 0.06);
+        }
+
+        .q-header {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .q-num {
+            font-weight: 700;
+            color: #4a6cf7;
+            background: #e6edfe;
+            border-radius: 40px;
+            padding: 0 14px;
+            font-size: 14px;
+            line-height: 28px;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .q-type {
+            font-size: 13px;
+            color: #6d7f98;
+            background: #eef2f7;
+            padding: 0 14px;
+            border-radius: 40px;
+            line-height: 26px;
+            font-weight: 500;
+        }
+
+        .q-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #142433;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        /* ----- 选项按钮 (1-5分) ----- */
+        .options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .opt-btn {
+            flex: 1;
+            min-width: 52px;
+            padding: 8px 0;
+            border: 2px solid #dce3ef;
+            border-radius: 40px;
+            background: white;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2e405b;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+            user-select: none;
+        }
+
+        .opt-btn:hover {
+            border-color: #8ca3d0;
+            background: #f4f8ff;
+        }
+
+        .opt-btn.active {
+            border-color: #4a6cf7;
+            background: #e6edfe;
+            color: #1a3a8a;
+            box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.15);
+        }
+
+        .opt-btn .label {
+            display: block;
+            font-size: 11px;
+            font-weight: 400;
+            color: #6a7f9b;
+            margin-top: 2px;
+        }
+
+        /* ----- 提交按钮 ----- */
+        .submit-area {
+            text-align: center;
+            margin: 28px 0 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4a6cf7, #6d4af7);
+            border: none;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            padding: 14px 56px;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.25s;
+            box-shadow: 0 8px 24px rgba(74, 108, 247, 0.30);
+            letter-spacing: 1px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(74, 108, 247, 0.40);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 4px 12px rgba(74, 108, 247, 0.15);
+        }
+
+        /* ----- 操作按钮 (打印/截图) ----- */
+        .action-bar {
+            text-align: center;
+            margin: 24px 0 20px;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-secondary {
+            background: #ffffff;
+            border: 2px solid #d0d9ea;
+            color: #1e2a3a;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 32px;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary:hover {
+            border-color: #4a6cf7;
+            background: #f4f8ff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(74, 108, 247, 0.10);
+        }
+
+        .btn-secondary:active {
+            transform: translateY(0);
+        }
+
+        /* ----- 结果区域 ----- */
+        #resultArea {
+            margin-top: 32px;
+            display: none;
+            animation: fadeUp 0.6s ease;
+        }
+
+        @keyframes fadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-card {
+            background: #f8faff;
+            border-radius: 24px;
+            padding: 28px 30px;
+            border: 1px solid #e4ebf6;
+            margin-bottom: 28px;
+        }
+
+        .result-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #0b1a33;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .result-title .type-badge {
+            background: #4a6cf7;
+            color: white;
+            font-size: 18px;
+            padding: 2px 20px;
+            border-radius: 40px;
+        }
+
+        .result-sub {
+            color: #4a5f7a;
+            font-size: 16px;
+            margin-top: 6px;
+        }
+
+        .result-desc {
+            margin-top: 16px;
+            line-height: 1.8;
+            color: #1d3147;
+            font-size: 15px;
+        }
+
+        .result-desc strong {
+            color: #0b1a33;
+        }
+
+        /* ----- 雷达图容器 ----- */
+        .chart-container {
+            max-width: 500px;
+            margin: 20px auto 28px;
+            padding: 10px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+        }
+
+        /* ----- 各类型详细卡片 ----- */
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 640px) {
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .detail-item {
+            background: white;
+            border-radius: 16px;
+            padding: 18px 20px;
+            border-left: 5px solid #4a6cf7;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+            border: 1px solid #e9edf5;
+            border-left-width: 5px;
+            transition: transform 0.1s;
+        }
+
+        .detail-item .d-name {
+            font-weight: 700;
+            font-size: 17px;
+            color: #0b1a33;
+        }
+
+        .detail-item .d-score {
+            float: right;
+            font-weight: 700;
+            color: #4a6cf7;
+            font-size: 18px;
+        }
+
+        .detail-item .d-tag {
+            font-size: 13px;
+            color: #5b6f87;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .detail-item .d-brief {
+            font-size: 14px;
+            color: #2e405b;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .type-1 {
+            border-left-color: #e74c3c;
+        }
+        .type-2 {
+            border-left-color: #f39c12;
+        }
+        .type-3 {
+            border-left-color: #f1c40f;
+        }
+        .type-4 {
+            border-left-color: #9b59b6;
+        }
+        .type-5 {
+            border-left-color: #3498db;
+        }
+        .type-6 {
+            border-left-color: #1abc9c;
+        }
+        .type-7 {
+            border-left-color: #e67e22;
+        }
+        .type-8 {
+            border-left-color: #e74c3c;
+        }
+        .type-9 {
+            border-left-color: #2ecc71;
+        }
+
+        .footer-note {
+            margin-top: 28px;
+            text-align: center;
+            font-size: 13px;
+            color: #7a8da5;
+            border-top: 1px solid #eef2f7;
+            padding-top: 22px;
+            line-height: 1.6;
+        }
+
+        .footer-note a {
+            color: #4a6cf7;
+            text-decoration: none;
+        }
+
+        /* ===== 打印样式 ===== */
+        @media print {
+            body {
+                background: white !important;
+                padding: 0 !important;
+            }
+            .app {
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                padding: 20px !important;
+                max-width: 100% !important;
+            }
+            /* 隐藏不需要打印的元素 */
+            .header .badge,
+            .progress-wrap,
+            .progress-text,
+            #questionsContainer,
+            .submit-area,
+            .action-bar,
+            .footer-note,
+            .sitebar {
+                display: none !important;
+            }
+            /* 只显示结果区域 */
+            #resultArea {
+                display: block !important;
+                animation: none !important;
+                margin-top: 0 !important;
+            }
+            .result-card {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                border: 1px solid #ccc;
+                background: #fafafa;
+            }
+            .detail-grid {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+            .detail-item {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+            .chart-container {
+                max-width: 400px;
+                margin: 10px auto;
+            }
+            /* 避免canvas被截断 */
+            canvas {
+                max-width: 100% !important;
+                height: auto !important;
+            }
+            /* 打印时显示所有得分卡片 */
+            .detail-item {
+                background: #fff !important;
+            }
+        }
+
+        /* ----- 工具类 ----- */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* ---------- 站点导航条（与主站统一配色） ---------- */
+        .sitebar {
+            /* body 为 flex 居中布局，占满整行并抵消 20px 内边距，实现通栏 */
+            flex: 0 0 100%;
+            width: 100%;
+            margin: -20px -20px 14px;
+            background: #3a5a8a;
+            color: #fff;
+        }
+        .sitebar .sb-wrap {
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 9px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .sitebar a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 13.5px;
+            opacity: .9;
+            white-space: nowrap;
+        }
+        .sitebar a:hover { opacity: 1; text-decoration: underline; }
+        .sitebar .sb-home {
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .sitebar .sb-links {
+            margin-left: auto;
+            display: flex;
+            gap: 13px;
+            flex-wrap: wrap;
+        }
+        .sitebar .sb-links a { opacity: .78; }
+        @media (max-width: 720px) {
+            .sitebar .sb-links { display: none; }
+            .sitebar .sb-wrap { padding: 8px 14px; }
+        }
+
+        /* 雷达图降级提示（Chart.js 未加载时） */
+        .chart-fallback {
+            text-align: center;
+            padding: 14px;
+            font-size: 13px;
+            color: #7a8da5;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- 站点导航条（返回主页 + 栏目快捷入口） -->
+    <nav class="sitebar">
+        <div class="sb-wrap">
+            <a href="index.html#intro" class="sb-home">← 返回 BEN 的个人主页</a>
+            <div class="sb-links">
+                <a href="index.html#assess">📝 测评</a>
+                <a href="index.html#tools">🧮 计算</a>
+                <a href="index.html#read">📚 拓展阅读</a>
+                <a href="holland.html">霍兰德职业测评</a>
+                <a href="MBTItest.html">MBTI 性格测试</a>
+                <a href="IRC.html">共情能力测评</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="app" id="app">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>🧠 <span>九型人格</span> 专业测评</h1>
+            <div class="sub">基于权威90题五点量表 · 自动计分 · 雷达图可视化</div>
+            <div class="badge">📋 共90题 · 约8-12分钟</div>
+        </div>
+
+        <!-- 进度 -->
+        <div class="progress-text">
+            <span id="progressLabel">已完成 0 / 90</span>
+            <span id="progressPercent">0%</span>
+        </div>
+        <div class="progress-wrap">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <!-- 题目容器 -->
+        <div id="questionsContainer"></div>
+
+        <!-- 提交 -->
+        <div class="submit-area">
+            <button class="btn-primary" id="submitBtn" disabled>📊 查看我的测评报告</button>
+        </div>
+
+        <!-- 结果区域 -->
+        <div id="resultArea">
+            <!-- 主结果卡片 -->
+            <div class="result-card" id="mainResult">
+                <div class="result-title">
+                    您的核心类型：
+                    <span class="type-badge" id="primaryTypeBadge">—</span>
+                </div>
+                <div class="result-sub" id="primaryTypeSub">加载中...</div>
+                <div class="result-desc" id="primaryTypeDesc"></div>
+            </div>
+
+            <!-- 雷达图 -->
+            <div class="chart-container">
+                <canvas id="radarChart" width="400" height="400"></canvas>
+            </div>
+
+            <!-- 各类型详细得分 -->
+            <h3 style="margin: 8px 0 12px; font-size: 20px; color: #0b1a33;">📊 九型得分详情</h3>
+            <div class="detail-grid" id="detailGrid"></div>
+
+            <!-- 操作按钮：打印 & 截图 -->
+            <div class="action-bar">
+                <button class="btn-secondary" id="printBtn">🖨️ 打印报告</button>
+                <button class="btn-secondary" id="screenshotBtn">📷 保存为图片</button>
+            </div>
+
+            <div class="footer-note">
+                ⚠️ 本测评基于九型人格理论设计，用于人格类型初步评估与自我认知参考，<br>
+                不作为人格定性的唯一依据。 建议结合专业书籍与自我反思综合判断。
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  1. 题目数据 (90题, 每型10题)  参考权威90题五点量表版
+        // ============================================================
+        const QUESTIONS = [
+            // ---- 1号 完美型 (10题) ----
+            { id: 1, text: '我对自己和他人都有较高的标准，希望事情能做到尽善尽美', type: 1 },
+            { id: 2, text: '我容易发现自身或他人行为中的不足，并希望加以改正', type: 1 },
+            { id: 3, text: '我重视规则和原则，认为事情应该遵循正确的流程和规范', type: 1 },
+            { id: 4, text: '我对自己的行为有严格要求，做错事后会过度自责', type: 1 },
+            { id: 5, text: '我喜欢批评不合理的现象，愿意为维护公平正义发声', type: 1 },
+            { id: 6, text: '我做事认真严谨，注重细节，不喜欢敷衍了事', type: 1 },
+            { id: 7, text: '我很难容忍自己或他人的马虎和不负责', type: 1 },
+            { id: 8, text: '我常常会反思自己的行为是否符合道德和伦理标准', type: 1 },
+            { id: 9, text: '我倾向于用“对与错”来评判事物，立场明确', type: 1 },
+            { id: 10, text: '我不喜欢模糊不清的状态，会主动梳理事情的条理和逻辑', type: 1 },
+            // ---- 2号 助人型 (10题) ----
+            { id: 11, text: '我乐于主动关心他人的需求，愿意为他人提供帮助', type: 2 },
+            { id: 12, text: '我希望得到他人的认可和喜爱，会努力迎合他人的期待', type: 2 },
+            { id: 13, text: '我能敏锐地察觉到他人的情绪变化，并主动给予安慰', type: 2 },
+            { id: 14, text: '我习惯优先考虑他人的感受，常常忽略自己的需求', type: 2 },
+            { id: 15, text: '我喜欢参与公益或帮助他人的活动，从中获得成就感', type: 2 },
+            { id: 16, text: '我不善于拒绝他人的请求，担心让对方失望', type: 2 },
+            { id: 17, text: '我会主动维护人际关系，希望身边的人都能和谐相处', type: 2 },
+            { id: 18, text: '我常常会为他人操心，甚至比自己的事情还上心', type: 2 },
+            { id: 19, text: '我倾向于通过帮助他人来证明自己的价值', type: 2 },
+            { id: 20, text: '我能快速融入不同的人际圈子，主动关心身边的人', type: 2 },
+            // ---- 3号 成就型 (10题) ----
+            { id: 21, text: '我非常重视个人成就，希望通过努力获得他人的认可', type: 3 },
+            { id: 22, text: '我喜欢设定明确的目标，并努力高效地完成目标', type: 3 },
+            { id: 23, text: '我在意自己的形象和口碑，希望在他人眼中是成功的', type: 3 },
+            { id: 24, text: '我乐于参与竞争，享受获胜带来的成就感', type: 3 },
+            { id: 25, text: '我会根据目标调整自己的状态和行为，确保任务顺利完成', type: 3 },
+            { id: 26, text: '我不喜欢原地踏步，总是在寻找提升自己的机会', type: 3 },
+            { id: 27, text: '我习惯用成果来证明自己的能力，重视实际效益', type: 3 },
+            { id: 28, text: '我能快速适应不同的环境，为了达成目标灵活调整策略', type: 3 },
+            { id: 29, text: '我常常会把工作或学习放在优先位置，甚至牺牲个人休息时间', type: 3 },
+            { id: 30, text: '我喜欢挑战和竞争，在竞争中能激发我的潜能', type: 3 },
+            // ---- 4号 自我型 (10题) ----
+            { id: 31, text: '我经常感到自己与别人不同，有一种独特的孤独感', type: 4 },
+            { id: 32, text: '我容易被美、艺术和深刻的情感所打动', type: 4 },
+            { id: 33, text: '我常常沉浸在自己的内心世界，思考人生的意义', type: 4 },
+            { id: 34, text: '我渴望找到真正的自我，不喜欢随波逐流', type: 4 },
+            { id: 35, text: '我容易被悲伤、忧郁的情绪感染，并从中获得创作灵感', type: 4 },
+            { id: 36, text: '我注重个人的独特风格，不喜欢平庸和雷同', type: 4 },
+            { id: 37, text: '我常常觉得自己缺少某些东西，羡慕别人所拥有的', type: 4 },
+            { id: 38, text: '我善于表达细腻的情感和内心感受', type: 4 },
+            { id: 39, text: '我喜欢探索人性深层的复杂和矛盾', type: 4 },
+            { id: 40, text: '我有时会觉得自己被误解，不被他人真正理解', type: 4 },
+            // ---- 5号 理智型 (10题) ----
+            { id: 41, text: '我喜欢独处，在安静的环境中思考和观察', type: 5 },
+            { id: 42, text: '我善于分析问题，喜欢探究事物的本质和原理', type: 5 },
+            { id: 43, text: '我注重知识积累，对感兴趣的话题会深入研究', type: 5 },
+            { id: 44, text: '我倾向于用理性思考来应对情感问题', type: 5 },
+            { id: 45, text: '我不喜欢过多的人际应酬，觉得耗费精力', type: 5 },
+            { id: 46, text: '我习惯先观察再行动，不会轻易表露自己的想法', type: 5 },
+            { id: 47, text: '我对隐私和独立空间有较高的需求', type: 5 },
+            { id: 48, text: '我常常思考抽象的概念和理论问题', type: 5 },
+            { id: 49, text: '我在专业领域有较强的能力，但可能不擅长表达情感', type: 5 },
+            { id: 50, text: '我喜欢系统化地整理信息，建立自己的知识体系', type: 5 },
+            // ---- 6号 忠诚型 (10题) ----
+            { id: 51, text: '我常常会设想最坏的情况，并提前做好准备', type: 6 },
+            { id: 52, text: '我倾向于怀疑和质疑，不容易轻易相信别人', type: 6 },
+            { id: 53, text: '我对权威和规则持谨慎态度，有时会挑战或质疑', type: 6 },
+            { id: 54, text: '我重视忠诚和可靠，希望身边的人也能如此', type: 6 },
+            { id: 55, text: '我做决定时常常犹豫不决，需要多方求证', type: 6 },
+            { id: 56, text: '我有时会过度担忧，对不确定性感到不安', type: 6 },
+            { id: 57, text: '我善于发现潜在的风险和问题', type: 6 },
+            { id: 58, text: '我重视团队和集体的安全感，愿意为集体付出', type: 6 },
+            { id: 59, text: '我常常试探或考验朋友、伴侣的忠诚', type: 6 },
+            { id: 60, text: '我有时会在顺从和反抗之间摇摆不定', type: 6 },
+            // ---- 7号 活跃型 (10题) ----
+            { id: 61, text: '我热爱生活，喜欢尝试新鲜有趣的事物', type: 7 },
+            { id: 62, text: '我常觉得很多事情都很好玩，人生充满快乐', type: 7 },
+            { id: 63, text: '我不喜欢被束缚和限制，追求自由和多样化的体验', type: 7 },
+            { id: 64, text: '我善于发现生活中的美好和乐趣', type: 7 },
+            { id: 65, text: '我常常同时进行多个计划，精力充沛', type: 7 },
+            { id: 66, text: '我倾向于回避痛苦和负面情绪，用积极的事物转移注意力', type: 7 },
+            { id: 67, text: '我喜欢社交和聚会，享受与人互动的快乐', type: 7 },
+            { id: 68, text: '我有时会过于乐观，低估事情的难度和风险', type: 7 },
+            { id: 69, text: '我不喜欢重复和单调，需要不断有新的刺激', type: 7 },
+            { id: 70, text: '我善于激励他人，带来活力和正能量', type: 7 },
+            // ---- 8号 领袖型 (10题) ----
+            { id: 71, text: '我有较强的掌控欲，喜欢主导局面和决策', type: 8 },
+            { id: 72, text: '我敢于直面冲突和挑战，不畏惧对抗', type: 8 },
+            { id: 73, text: '我做事果断，不喜欢拖泥带水和犹豫不决', type: 8 },
+            { id: 74, text: '我重视力量和正义感，愿意保护弱者和维护公平', type: 8 },
+            { id: 75, text: '我说话直接，不喜欢拐弯抹角和虚伪客套', type: 8 },
+            { id: 76, text: '我习惯于掌控自己的命运，不喜欢被人指挥', type: 8 },
+            { id: 77, text: '我精力旺盛，喜欢挑战和竞争', type: 8 },
+            { id: 78, text: '我有时会显得强势，但内心其实关心身边的人', type: 8 },
+            { id: 79, text: '我相信自己的判断，不容易被他人左右', type: 8 },
+            { id: 80, text: '我追求独立和自主，不愿依赖他人', type: 8 },
+            // ---- 9号 和平型 (10题) ----
+            { id: 81, text: '我追求和谐，不喜欢冲突和争吵', type: 9 },
+            { id: 82, text: '我常常会顺应他人的意见，避免产生分歧', type: 9 },
+            { id: 83, text: '我容易忽视自己的需求，优先照顾他人的感受', type: 9 },
+            { id: 84, text: '我倾向于维持现状，不喜欢大的变动和冒险', type: 9 },
+            { id: 85, text: '我善于倾听和调解，能缓和紧张的气氛', type: 9 },
+            { id: 86, text: '我有时会拖延重要的事情，因为不想面对压力', type: 9 },
+            { id: 87, text: '我容易满足，对生活没有太高的要求', type: 9 },
+            { id: 88, text: '我喜欢平静和舒适的生活节奏', type: 9 },
+            { id: 89, text: '我常常在多个选择中犹豫，难以做出决定', type: 9 },
+            { id: 90, text: '我重视人际关系的和谐，会主动化解矛盾', type: 9 }
+        ];
+
+        // ============================================================
+        //  2. 类型元数据 (名称、颜色、描述)
+        // ============================================================
+        const TYPE_META = {
+            1: {
+                name: '完美型',
+                emoji: '📐',
+                color: '#e74c3c',
+                sub: '改革者 · 原则性强 · 追求卓越',
+                desc: '你具有强烈的原则性和责任感，对自己和他人都有较高的标准。你追求完美，注重细节，善于发现问题并推动改进。你相信"对与错"的界限分明，做事认真严谨。' +
+                    ' <strong>成长建议：</strong>学会接纳不完美，允许自己和他人犯错，放松对"应该"的执着，培养更多的包容和弹性。'
+            },
+            2: {
+                name: '助人型',
+                emoji: '🤝',
+                color: '#f39c12',
+                sub: '给予者 · 善解人意 · 温暖体贴',
+                desc: '你有一颗温暖的心，善于察觉他人的需求并主动提供帮助。你通过付出和关怀来建立关系，渴望被爱和被需要。你常常把他人的感受放在第一位。' +
+                    ' <strong>成长建议：</strong>学会关注自己的需求，学会说"不"，避免过度付出而忽略自我，建立健康的边界。'
+            },
+            3: {
+                name: '成就型',
+                emoji: '🏆',
+                color: '#f1c40f',
+                sub: '实干者 · 目标导向 · 追求成功',
+                desc: '你充满干劲和野心，善于设定目标并高效达成。你重视形象和成就，渴望通过成果获得认可。你适应力强，能根据不同场景调整自己。' +
+                    ' <strong>成长建议：</strong>放慢脚步，关注过程而非仅结果，学会欣赏自己的内在价值，而不仅仅是外在成就。'
+            },
+            4: {
+                name: '自我型',
+                emoji: '🎨',
+                color: '#9b59b6',
+                sub: '浪漫主义者 · 独特 · 情感深邃',
+                desc: '你拥有丰富的情感和独特的审美，渴望找到真实的自我和生命的意义。你容易被美和深刻的情感打动，有时会沉浸在自己的内心世界。' +
+                    ' <strong>成长建议：</strong>接纳平凡和日常的美好，避免过度沉溺于情绪，学会将创造力落实到具体的行动中。'
+            },
+            5: {
+                name: '理智型',
+                emoji: '🔍',
+                color: '#3498db',
+                sub: '观察者 · 博学 · 独立思考',
+                desc: '你热爱知识和思考，善于独立分析和深度探究。你注重隐私和独立空间，倾向于用理性来应对世界。你在专业领域往往有深厚的积累。' +
+                    ' <strong>成长建议：</strong>多参与人际互动，尝试表达情感和需求，避免过度孤立，将知识与实践相结合。'
+            },
+            6: {
+                name: '忠诚型',
+                emoji: '🛡️',
+                color: '#1abc9c',
+                sub: '怀疑论者 · 可靠 · 谨慎周全',
+                desc: '你具有敏锐的风险意识，善于预见问题并提前准备。你重视忠诚和信任，对人际关系和团队有强烈的责任感。你做事谨慎，考虑周全。' +
+                    ' <strong>成长建议：</strong>学会信任自己和他人，减少过度担忧，培养内在的安全感，勇敢面对不确定性。'
+            },
+            7: {
+                name: '活跃型',
+                emoji: '🌟',
+                color: '#e67e22',
+                sub: '热情者 · 乐观 · 多才多艺',
+                desc: '你充满热情和活力，热爱新鲜事物和多样化的体验。你乐观开朗，善于发现生活中的乐趣，能带给周围人快乐和正能量。' +
+                    ' <strong>成长建议：</strong>学会面对和接纳负面情绪，专注完成一件事情，避免浅尝辄止，培养深度和持久力。'
+            },
+            8: {
+                name: '领袖型',
+                emoji: '⚡',
+                color: '#c0392b',
+                sub: '挑战者 · 果断 · 保护者',
+                desc: '你具有强大的领导力和决断力，敢于直面挑战和冲突。你重视正义和力量，愿意保护弱者和维护公平。你果断直接，不喜欢虚伪和拖延。' +
+                    ' <strong>成长建议：</strong>学会柔软和示弱，尊重他人的意见和边界，避免过度强势，培养同理心和耐心。'
+            },
+            9: {
+                name: '和平型',
+                emoji: '☮️',
+                color: '#2ecc71',
+                sub: '调停者 · 包容 · 随和',
+                desc: '你追求和谐与平静，善于倾听和调解冲突。你随和包容，容易适应环境和他人，重视人际关系的稳定和舒适。' +
+                    ' <strong>成长建议：</strong>正视自己的需求和意见，学会主动表达和决策，避免用"顺其自然"来逃避问题。'
+            }
+        };
+
+        // ============================================================
+        //  3. 状态
+        // ============================================================
+        const answers = {}; // { questionId: score(1-5) }
+        let chartInstance = null;
+
+        // ============================================================
+        //  4. 渲染题目
+        // ============================================================
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            let html = '';
+            QUESTIONS.forEach((q, idx) => {
+                const typeName = TYPE_META[q.type].name;
+                html += `
+                    <div class="question-card" data-qid="${q.id}">
+                        <div class="q-header">
+                            <span class="q-num">${idx + 1}</span>
+                            <span class="q-type">${typeName}</span>
+                        </div>
+                        <div class="q-text">${q.text}</div>
+                        <div class="options" data-qid="${q.id}">
+                            ${[1,2,3,4,5].map(score => `
+                                <button class="opt-btn" data-score="${score}" data-qid="${q.id}">
+                                    ${score}
+                                    <span class="label">${['非常不符','较不符','一般','较符合','非常符合'][score-1]}</span>
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+
+            // 绑定选项点击事件
+            document.querySelectorAll('.opt-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const qid = parseInt(this.dataset.qid);
+                    const score = parseInt(this.dataset.score);
+                    selectOption(qid, score);
+                });
+            });
+        }
+
+        // ============================================================
+        //  5. 选择逻辑 & 进度
+        // ============================================================
+        function selectOption(qid, score) {
+            answers[qid] = score;
+
+            // 更新UI：同一题的其他按钮取消激活
+            const parent = document.querySelector(`.options[data-qid="${qid}"]`);
+            if (parent) {
+                parent.querySelectorAll('.opt-btn').forEach(btn => {
+                    btn.classList.toggle('active', parseInt(btn.dataset.score) === score);
+                });
+            }
+
+            updateProgress();
+            checkSubmitReady();
+        }
+
+        function updateProgress() {
+            const total = QUESTIONS.length;
+            const done = Object.keys(answers).length;
+            const pct = Math.round((done / total) * 100);
+            document.getElementById('progressBar').style.width = pct + '%';
+            document.getElementById('progressLabel').textContent = `已完成 ${done} / ${total}`;
+            document.getElementById('progressPercent').textContent = pct + '%';
+        }
+
+        function checkSubmitReady() {
+            const total = QUESTIONS.length;
+            const done = Object.keys(answers).length;
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = done < total;
+            if (done === total) {
+                btn.textContent = '📊 查看我的测评报告';
+            } else {
+                btn.textContent = `📊 请完成全部题目 (${done}/${total})`;
+            }
+        }
+
+        // ============================================================
+        //  6. 计算 & 展示结果
+        // ============================================================
+        function computeScores() {
+            const scores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+            QUESTIONS.forEach(q => {
+                if (answers[q.id] !== undefined) {
+                    scores[q.type] += answers[q.id];
+                }
+            });
+            return scores;
+        }
+
+        function showResults() {
+            const scores = computeScores();
+
+            // 找到最高分类型
+            let maxType = 1;
+            let maxScore = 0;
+            for (let t = 1; t <= 9; t++) {
+                if (scores[t] > maxScore) {
+                    maxScore = scores[t];
+                    maxType = t;
+                }
+            }
+
+            // ---- 主结果 ----
+            const meta = TYPE_META[maxType];
+            document.getElementById('primaryTypeBadge').textContent = `${meta.emoji} ${maxType}号 · ${meta.name}`;
+            document.getElementById('primaryTypeSub').textContent = meta.sub;
+            document.getElementById('primaryTypeDesc').innerHTML = meta.desc;
+
+            // ---- 详细得分卡片 ----
+            const grid = document.getElementById('detailGrid');
+            let detailHtml = '';
+            for (let t = 1; t <= 9; t++) {
+                const m = TYPE_META[t];
+                const sc = scores[t] || 0;
+                const isMax = (t === maxType);
+                detailHtml += `
+                    <div class="detail-item type-${t}" style="${isMax ? 'background:#f0f4ff; border-color:#4a6cf7;' : ''}">
+                        <span class="d-score">${sc}</span>
+                        <div class="d-name">${m.emoji} ${t}号 · ${m.name}</div>
+                        <span class="d-tag">${m.sub}</span>
+                        <div class="d-brief">${m.desc.split('。')[0]}。</div>
+                    </div>
+                `;
+            }
+            grid.innerHTML = detailHtml;
+
+            // ---- 先显示结果区，避免图表异常时整份报告白屏 ----
+            document.getElementById('resultArea').style.display = 'block';
+
+            // ---- 雷达图（Chart.js 不可用时自动降级为自绘） ----
+            try {
+                renderRadar(scores, maxType);
+            } catch (err) {
+                console.warn('Chart.js 渲染失败，改用内置降级图表：', err);
+                renderRadarFallback(scores, maxType);
+            }
+
+            document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // ============================================================
+        //  7. 雷达图 (Chart.js)
+        // ============================================================
+        function renderRadar(scores, maxType) {
+            // CDN 不可用（离线打开 / 网络不通）时，直接走内置降级图表
+            if (typeof Chart === 'undefined') {
+                renderRadarFallback(scores, maxType);
+                return;
+            }
+
+            const ctx = document.getElementById('radarChart').getContext('2d');
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            const labels = [];
+            const data = [];
+            const colors = [];
+            for (let t = 1; t <= 9; t++) {
+                const m = TYPE_META[t];
+                labels.push(`${t}号 ${m.name}`);
+                data.push(scores[t] || 0);
+                colors.push(m.color);
+            }
+
+            chartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '各类型得分',
+                        data: data,
+                        backgroundColor: 'rgba(74, 108, 247, 0.15)',
+                        borderColor: '#4a6cf7',
+                        borderWidth: 2.5,
+                        pointBackgroundColor: colors,
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 50,
+                            ticks: {
+                                stepSize: 10,
+                                font: { size: 10 }
+                            },
+                            pointLabels: {
+                                font: { size: 12, weight: '600' },
+                                color: '#1e2a3a'
+                            },
+                            grid: {
+                                color: 'rgba(0,0,0,0.06)'
+                            },
+                            angleLines: {
+                                color: 'rgba(0,0,0,0.08)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw} 分`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // ============================================================
+        //  7b. 雷达图降级方案（纯 Canvas 自绘，零依赖）
+        //       当 Chart.js 未能从 CDN 加载时启用，保证离线也能看到完整报告
+        // ============================================================
+        function renderRadarFallback(scores, maxType) {
+            const holder = document.querySelector('.chart-container');
+            const canvas = document.getElementById('radarChart');
+            if (!holder || !canvas) return;
+
+            // 复用同一个 canvas，用 2D 上下文自绘
+            const dpr = window.devicePixelRatio || 1;
+            const size = 400;
+            canvas.width = size * dpr;
+            canvas.height = size * dpr;
+            canvas.style.width = size + 'px';
+            canvas.style.height = size + 'px';
+            const ctx = canvas.getContext('2d');
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            ctx.clearRect(0, 0, size, size);
+
+            const cx = size / 2, cy = size / 2;
+            const R = 118;            // 半径
+            const MAX = 50;           // 满分（每型10题×5分）
+            const n = 9;
+            const start = -Math.PI / 2;
+            const pt = (i, r) => [
+                cx + Math.cos(start + i * 2 * Math.PI / n) * r,
+                cy + Math.sin(start + i * 2 * Math.PI / n) * r
+            ];
+
+            // 背景网格（5 圈）
+            ctx.lineWidth = 1;
+            for (let ring = 1; ring <= 5; ring++) {
+                ctx.beginPath();
+                for (let i = 0; i < n; i++) {
+                    const [x, y] = pt(i, R * ring / 5);
+                    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+                ctx.strokeStyle = 'rgba(0,0,0,0.07)';
+                ctx.stroke();
+            }
+            // 轴线 + 刻度
+            ctx.strokeStyle = 'rgba(0,0,0,0.10)';
+            for (let i = 0; i < n; i++) {
+                const [x, y] = pt(i, R);
+                ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(x, y); ctx.stroke();
+            }
+            ctx.fillStyle = '#7a8da5';
+            ctx.font = '10px sans-serif';
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            for (let ring = 1; ring <= 5; ring++) {
+                ctx.fillText(String(ring * 10), cx - 4, cy - R * ring / 5);
+            }
+
+            // 数据多边形
+            const vals = [];
+            for (let t = 1; t <= 9; t++) vals.push(scores[t] || 0);
+            ctx.beginPath();
+            vals.forEach((v, i) => {
+                const [x, y] = pt(i, R * Math.min(v, MAX) / MAX);
+                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+            });
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(74, 108, 247, 0.18)';
+            ctx.fill();
+            ctx.strokeStyle = '#4a6cf7';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            // 顶点圆点 + 标签
+            for (let t = 1; t <= 9; t++) {
+                const i = t - 1;
+                const [x, y] = pt(i, R * Math.min(vals[i], MAX) / MAX);
+                ctx.beginPath();
+                ctx.arc(x, y, t === maxType ? 6 : 4.5, 0, Math.PI * 2);
+                ctx.fillStyle = TYPE_META[t].color || '#4a6cf7';
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // 外圈标签
+                const [lx, ly] = pt(i, R + 26);
+                ctx.font = (t === maxType ? 'bold ' : '') + '12px sans-serif';
+                ctx.fillStyle = t === maxType ? '#1a3a8a' : '#1e2a3a';
+                ctx.textAlign = Math.abs(lx - cx) < 6 ? 'center' : (lx > cx ? 'left' : 'right');
+                ctx.textBaseline = 'middle';
+                ctx.fillText(`${t}号 ${TYPE_META[t].name}`, lx, ly);
+                ctx.font = '11px sans-serif';
+                ctx.fillStyle = '#7a8da5';
+                ctx.fillText(String(vals[i]), lx, ly + 14);
+            }
+
+            // 提示条
+            let tip = holder.querySelector('.chart-fallback');
+            if (!tip) {
+                tip = document.createElement('div');
+                tip.className = 'chart-fallback';
+                holder.appendChild(tip);
+            }
+            tip.innerHTML = '图表由内置引擎绘制（未联网加载 Chart.js，显示效果一致）';
+        }
+
+        // ============================================================
+        //  8. 打印 & 截图功能
+        // ============================================================
+
+        // 打印报告
+        document.getElementById('printBtn').addEventListener('click', function() {
+            window.print();
+        });
+
+        // 截图保存为图片
+        document.getElementById('screenshotBtn').addEventListener('click', function() {
+            const resultArea = document.getElementById('resultArea');
+
+            // 依赖未加载（离线打开 / CDN 不通）时给出明确指引，而不是直接报错
+            if (typeof html2canvas === 'undefined') {
+                alert('截图功能需要联网加载图片库，当前未能加载。\n\n您可以：\n· 点击「🖨️ 打印报告」按钮，在打印窗口中选择「另存为 PDF」；\n· 或联网后刷新页面再试。');
+                return;
+            }
+
+            const btn = this;
+            const oldText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = '⏳ 正在生成图片...';
+
+            // 使用 html2canvas 捕获结果区域
+            html2canvas(resultArea, {
+                scale: 2, // 高清输出
+                backgroundColor: '#ffffff',
+                allowTaint: false,
+                useCORS: true,
+                logging: false,
+                onclone: function(clonedDoc) {
+                    // 确保canvas渲染完成
+                }
+            }).then(canvas => {
+                // 创建下载链接
+                const link = document.createElement('a');
+                const pad = n => String(n).padStart(2, '0');
+                const d = new Date();
+                const stamp = d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate());
+                link.download = `九型人格测评报告_${stamp}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }).catch(err => {
+                alert('截图生成失败，请尝试使用打印功能。错误信息：' + err.message);
+            }).finally(() => {
+                btn.disabled = false;
+                btn.textContent = oldText;
+            });
+        });
+
+        // ============================================================
+        //  9. 提交按钮
+        // ============================================================
+        document.getElementById('submitBtn').addEventListener('click', function() {
+            const total = QUESTIONS.length;
+            const done = Object.keys(answers).length;
+            if (done < total) {
+                alert(`您还有 ${total - done} 道题未作答，请完成全部题目。`);
+                return;
+            }
+            showResults();
+            this.disabled = true;
+            this.textContent = '✅ 报告已生成';
+        });
+
+        // ============================================================
+        //  10. 初始化
+        // ============================================================
+        renderQuestions();
+        updateProgress();
+        checkSubmitReady();
+    </script>
+
+</body>
+</html>

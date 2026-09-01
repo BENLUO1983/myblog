@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>离职补偿 N / N+1 / 2N 计算器 · 附法律依据</title>
+<style>
+:root{
+  --brand:#1B4F8A;
+  --brand2:#2E7DD1;
+  --gold:#C9A227;
+  --bg:#F4F6FA;
+  --card:#FFFFFF;
+  --text:#1C2333;
+  --sub:#6B7488;
+  --line:#E6EAF2;
+  --ok:#0E9F6E;
+  --warn:#D97706;
+  --danger:#DC2626;
+  --radius:16px;
+  --shadow:0 8px 26px rgba(28,35,51,.07);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB","Helvetica Neue",Arial,sans-serif;
+  color:var(--text);background:var(--bg);line-height:1.7;-webkit-font-smoothing:antialiased;
+  font-variant-numeric:tabular-nums;
+}
+.wrap{max-width:940px;margin:0 auto;padding:0 16px 72px;}
+
+/* ---------- 顶栏 ---------- */
+.topbar{
+  background:linear-gradient(135deg,#123A66 0%,#1B4F8A 45%,#2E7DD1 100%);
+  color:#fff;padding:30px 0 64px;position:relative;overflow:hidden;
+}
+.topbar::after{content:"";position:absolute;right:-70px;top:-80px;width:260px;height:260px;border-radius:50%;background:rgba(255,255,255,.08);}
+.topbar::before{content:"";position:absolute;left:-50px;bottom:-120px;width:230px;height:230px;border-radius:50%;background:rgba(255,255,255,.06);}
+.topbar .wrap{padding-bottom:0;position:relative;z-index:2;}
+.topbar h1{margin:0;font-size:27px;font-weight:800;letter-spacing:.5px;}
+.topbar p{margin:7px 0 0;font-size:14px;opacity:.9;}
+.topbar .meta{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;}
+.topbar .meta span{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);border-radius:99px;padding:4px 13px;font-size:12.5px;}
+
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px;margin-top:-40px;position:relative;z-index:3;margin-bottom:18px;}
+h2.sec{font-size:19px;margin:0 0 6px;display:flex;align-items:center;gap:9px;font-weight:800;}
+h2.sec::before{content:"";width:5px;height:18px;border-radius:3px;background:var(--brand);}
+.sub{color:var(--sub);font-size:13.5px;margin:0 0 18px;}
+
+/* ---------- 表单 ---------- */
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:15px;}
+.f{display:flex;flex-direction:column;}
+.f.full{grid-column:1/-1;}
+label{font-size:13.5px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+label .opt{font-weight:400;color:var(--sub);font-size:12px;}
+label .q{
+  width:15px;height:15px;border-radius:50%;background:#DDE3EF;color:#6B7488;font-size:10px;
+  display:inline-flex;align-items:center;justify-content:center;cursor:help;font-weight:700;flex:0 0 15px;
+}
+input,select{
+  border:1.5px solid var(--line);border-radius:11px;padding:11px 13px;font-size:15px;
+  font-family:inherit;color:var(--text);background:#fff;width:100%;transition:.16s;
+}
+input:focus,select:focus{outline:none;border-color:var(--brand2);box-shadow:0 0 0 3px rgba(46,125,209,.12);}
+input:read-only{background:#F7F9FC;color:#4A5368;}
+.hint{font-size:12px;color:var(--sub);margin-top:5px;line-height:1.6;}
+.unit{position:relative;}
+.unit .u{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:13px;color:#9AA2B5;pointer-events:none;}
+
+/* 分段选择 */
+.seg{display:flex;gap:8px;flex-wrap:wrap;}
+.seg button{
+  flex:1;min-width:96px;padding:11px 8px;border-radius:11px;border:1.5px solid var(--line);
+  background:#fff;font-size:14px;font-weight:700;cursor:pointer;color:var(--sub);font-family:inherit;transition:.16s;
+}
+.seg button:hover{border-color:var(--brand2);color:var(--brand);}
+.seg button.on{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;border-color:transparent;box-shadow:0 5px 14px rgba(27,79,138,.26);}
+.seg button small{display:block;font-weight:500;font-size:11.5px;opacity:.85;margin-top:1px;}
+
+/* 提示条 */
+.note{border-radius:12px;padding:13px 16px;font-size:13.5px;line-height:1.75;margin-top:14px;}
+.note.blue{background:#EEF4FD;border:1px solid #CFE1F7;color:#1A4A80;}
+.note.amber{background:#FFF8E9;border:1px solid #F5E2B0;color:#7A5B12;}
+.note.grey{background:#F5F6FA;border:1px solid var(--line);color:var(--sub);}
+.note b{font-weight:800;}
+
+.btnrow{display:flex;gap:11px;flex-wrap:wrap;margin-top:22px;}
+.btn{
+  border:none;cursor:pointer;font-size:15.5px;font-weight:800;padding:13px 30px;border-radius:11px;
+  color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand2));font-family:inherit;
+  box-shadow:0 7px 18px rgba(27,79,138,.28);transition:.16s;display:inline-flex;align-items:center;gap:7px;
+}
+.btn:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(27,79,138,.34);}
+.btn.ghost{background:#fff;color:var(--sub);box-shadow:none;border:1.5px solid var(--line);}
+.btn.ghost:hover{border-color:var(--brand);color:var(--brand);}
+
+/* ---------- 情境诊断 ---------- */
+.diag{border:1.5px solid var(--line);border-radius:14px;padding:18px;background:#FCFDFF;}
+.qstep{margin-bottom:16px;}
+.qstep:last-child{margin-bottom:0;}
+.qstep .qt{font-size:14px;font-weight:700;margin-bottom:8px;}
+.chips{display:flex;gap:8px;flex-wrap:wrap;}
+.chip{
+  padding:8px 14px;border-radius:99px;border:1.5px solid var(--line);background:#fff;
+  font-size:13.5px;cursor:pointer;transition:.16s;font-family:inherit;color:var(--sub);
+}
+.chip:hover{border-color:var(--brand2);}
+.chip.on{background:var(--brand);color:#fff;border-color:var(--brand);}
+.diagres{margin-top:16px;border-radius:12px;padding:15px 17px;font-size:14px;line-height:1.8;display:none;}
+.diagres.show{display:block;}
+.diagres .big{font-size:17px;font-weight:800;margin-bottom:5px;}
+
+/* ---------- 结果 ---------- */
+#result{display:none;}
+.total{
+  background:linear-gradient(135deg,#123A66,#1B4F8A 55%,#2E7DD1);color:#fff;border-radius:16px;
+  padding:26px 24px;position:relative;overflow:hidden;margin-bottom:18px;
+}
+.total::after{content:"";position:absolute;right:-60px;top:-70px;width:210px;height:210px;border-radius:50%;background:rgba(255,255,255,.09);}
+.total .lab{font-size:13.5px;opacity:.88;position:relative;z-index:2;letter-spacing:1px;}
+.total .num{font-size:42px;font-weight:800;margin:4px 0 2px;position:relative;z-index:2;letter-spacing:1px;}
+.total .num small{font-size:17px;font-weight:600;opacity:.85;margin-left:5px;}
+.total .desc{font-size:13.5px;opacity:.9;position:relative;z-index:2;line-height:1.7;}
+.total .tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;position:relative;z-index:2;}
+.total .tags span{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.24);border-radius:99px;padding:3px 12px;font-size:12.5px;}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:20px;}
+.kpi{border:1.5px solid var(--line);border-radius:13px;padding:15px 13px;text-align:center;background:#fff;}
+.kpi .k{font-size:12px;color:var(--sub);margin-bottom:5px;}
+.kpi .v{font-size:20px;font-weight:800;color:var(--brand);line-height:1.3;}
+.kpi .v small{font-size:12px;font-weight:600;color:var(--sub);display:block;margin-top:2px;}
+.kpi.hl{border-color:var(--gold);background:#FFFDF5;}
+.kpi.hl .v{color:#A8860F;}
+
+/* 计算过程 */
+.steps{border:1.5px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:18px;}
+.step{display:flex;border-bottom:1px solid var(--line);}
+.step:last-child{border-bottom:none;}
+.step .si{
+  flex:0 0 34px;background:#F7F9FC;display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;color:var(--brand);border-right:1px solid var(--line);
+}
+.step .sc{flex:1;padding:13px 16px;}
+.step .st{font-size:13.5px;font-weight:700;margin-bottom:3px;}
+.step .sf{font-size:12.5px;color:var(--sub);line-height:1.75;font-family:ui-monospace,Menlo,Consolas,monospace;}
+.step .sv{font-size:15px;font-weight:800;color:var(--brand);text-align:right;flex:0 0 130px;padding:13px 16px;display:flex;align-items:center;justify-content:flex-end;}
+.step.hit .si{background:#FFF6E5;color:#A8860F;}
+.step.hit .sv{color:#A8860F;}
+
+/* 条形可视化 */
+.viz{border:1.5px solid var(--line);border-radius:14px;padding:18px;margin-bottom:18px;}
+.vizrow{margin-bottom:14px;}
+.vizrow:last-child{margin-bottom:0;}
+.vizrow .vl{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;}
+.vizrow .vl b{font-weight:700;}
+.vizrow .vl span{color:var(--sub);}
+.vtrack{height:22px;border-radius:7px;background:#F1F3F9;position:relative;overflow:hidden;}
+.vtrack i{display:block;height:100%;width:0;border-radius:7px;transition:width .8s cubic-bezier(.22,1,.36,1);}
+.vtrack .c1{background:linear-gradient(90deg,var(--brand),var(--brand2));}
+.vtrack .c2{background:linear-gradient(90deg,var(--gold),#E0B93C);}
+.vtrack .c3{background:linear-gradient(90deg,#0E9F6E,#34D399);}
+.vlegend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--sub);margin-top:12px;}
+.vlegend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px;}
+
+/* 法律依据 */
+.law{border:1.5px solid var(--line);border-radius:13px;margin-bottom:11px;background:#fff;overflow:hidden;}
+.law summary{
+  padding:14px 17px;cursor:pointer;font-size:14.5px;font-weight:700;list-style:none;
+  display:flex;align-items:center;gap:10px;transition:.16s;
+}
+.law summary::-webkit-details-marker{display:none;}
+.law summary:hover{background:#F8FAFD;}
+.law summary .ar{margin-left:auto;color:#A8B0C2;font-size:12px;transition:.2s;}
+.law[open] summary{background:#F8FAFD;border-bottom:1px solid var(--line);}
+.law[open] summary .ar{transform:rotate(180deg);}
+.law .art{
+  width:64px;flex:0 0 64px;text-align:center;background:#EEF4FD;color:var(--brand);
+  border-radius:7px;font-size:12.5px;font-weight:800;padding:3px 0;
+}
+.law .art.key{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;}
+.lawbody{padding:15px 18px;font-size:13.5px;line-height:1.9;color:#3A4257;}
+.lawbody .quote{
+  border-left:3px solid var(--brand);background:#F8FAFD;padding:11px 15px;border-radius:0 9px 9px 0;
+  margin:9px 0;color:#2A3145;
+}
+.lawbody .plain{background:#FFFDF5;border:1px dashed #E8D9A8;border-radius:9px;padding:10px 14px;margin-top:9px;color:#6B5A20;}
+.lawbody .plain b{color:#8A6D0B;}
+
+table.lawtbl{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
+table.lawtbl th,table.lawtbl td{border:1px solid var(--line);padding:8px 10px;text-align:left;}
+table.lawtbl th{background:#F7F9FC;font-weight:700;color:#3A4257;}
+table.lawtbl td.c{text-align:center;white-space:nowrap;}
+
+.foot{text-align:center;color:#98A0B4;font-size:12.5px;margin-top:26px;line-height:1.9;}
+
+@media(max-width:720px){
+  .topbar{padding:24px 0 56px;}
+  .topbar h1{font-size:22px;}
+  .card{padding:19px 16px;margin-top:-32px;}
+  .formgrid{grid-template-columns:1fr;}
+  .kpis{grid-template-columns:repeat(2,1fr);}
+  .total .num{font-size:33px;}
+  .step{flex-wrap:wrap;}
+  .step .sv{flex:0 0 100%;justify-content:flex-start;padding:0 16px 12px;text-align:left;}
+  .btnrow .btn{flex:1;justify-content:center;padding:13px 16px;}
+  .seg button{min-width:calc(50% - 4px);}
+}
+
+@media print{
+  body{background:#fff;}
+  .topbar{background:var(--brand)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .noprint{display:none!important;}
+  .card{box-shadow:none;padding:0 0 16px;margin-top:0;}
+  .total,.kpi,.vtrack i,.law .art.key{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .law[open] summary{border-bottom:1px solid var(--line);}
+  .lawbody{display:block!important;}
+  .sitebar{display:none!important;}
+}
+
+/* ---------- 站点导航条（与主站统一配色） ---------- */
+.sitebar{background:#3a5a8a;color:#fff;}
+.sitebar .sb-wrap{max-width:940px;margin:0 auto;padding:9px 16px;display:flex;align-items:center;gap:12px;}
+.sitebar a{color:#fff;text-decoration:none;font-size:13.5px;opacity:.9;white-space:nowrap;}
+.sitebar a:hover{opacity:1;text-decoration:underline;}
+.sitebar .sb-home{font-weight:700;display:inline-flex;align-items:center;gap:6px;}
+.sitebar .sb-links{margin-left:auto;display:flex;gap:13px;flex-wrap:wrap;}
+.sitebar .sb-links a{opacity:.78;}
+@media(max-width:720px){
+  .sitebar .sb-links{display:none;}
+  .sitebar .sb-wrap{padding:8px 14px;}
+}
+</style>
+</head>
+<body>
+
+<!-- 站点导航条（返回主页 + 栏目快捷入口） -->
+<nav class="sitebar noprint">
+  <div class="sb-wrap">
+    <a href="index.html#intro" class="sb-home">← 返回 BEN 的个人主页</a>
+    <div class="sb-links">
+      <a href="index.html#tools">🧮 计算</a>
+      <a href="index.html#assess">📝 测评</a>
+      <a href="index.html#read">📚 拓展阅读</a>
+      <a href="capital.html">人力资本投资决策</a>
+      <a href="time-value.html">时间价值计算器</a>
+    </div>
+  </div>
+</nav>
+
+<div class="topbar">
+  <div class="wrap">
+    <h1>离职补偿 N / N+1 / 2N 计算器</h1>
+    <p>自动套用「社平工资三倍 + 12 年」双封顶规则，附完整法律依据</p>
+    <div class="meta">
+      <span>依据《劳动合同法》第 36/40/46/47/48/87 条</span>
+      <span>含代通知金、赔偿金、个税免税额</span>
+      <span>数据截至 2026 年 9 月</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ============ 情境诊断 ============ -->
+  <div class="card">
+    <h2 class="sec">第一步 · 先判断你属于哪种情形<span style="font-size:12.5px;color:var(--sub);font-weight:400;">（可跳过，直接往下填）</span></h2>
+    <p class="sub">很多人不确定自己该拿 N、N+1 还是 2N。回答下面几步，系统会给出初步判断并自动切换计算方式。</p>
+    <div class="diag">
+      <div class="qstep">
+        <div class="qt">1. 这次离职是谁先提出的？</div>
+        <div class="chips" data-g="who">
+          <button class="chip" data-v="emp">公司提出</button>
+          <button class="chip" data-v="self">我自己辞职</button>
+          <button class="chip" data-v="expire">合同到期</button>
+        </div>
+      </div>
+      <div class="qstep" id="qs_reason" style="display:none;">
+        <div class="qt">2. 公司给的理由是？</div>
+        <div class="chips" data-g="reason">
+          <button class="chip" data-v="nego">协商一致解除</button>
+          <button class="chip" data-v="c40">不胜任 / 医疗期满 / 客观情况变化</button>
+          <button class="chip" data-v="layoff">经济性裁员</button>
+          <button class="chip" data-v="fault">说我严重违纪</button>
+          <button class="chip" data-v="none">没给理由 / 理由不成立</button>
+        </div>
+      </div>
+      <div class="qstep" id="qs_self" style="display:none;">
+        <div class="qt">2. 你辞职的原因是？</div>
+        <div class="chips" data-g="selfwhy">
+          <button class="chip" data-v="personal">个人原因（换工作、回老家等）</button>
+          <button class="chip" data-v="fault38">公司欠薪 / 未缴社保 / 违法调岗</button>
+        </div>
+      </div>
+      <div class="qstep" id="qs_expire" style="display:none;">
+        <div class="qt">2. 合同到期时，公司的态度是？</div>
+        <div class="chips" data-g="expirehow">
+          <button class="chip" data-v="no">不续签</button>
+          <button class="chip" data-v="lower">降低条件续签（降薪降职）</button>
+          <button class="chip" data-v="keep">维持或提高条件续签，我不签</button>
+        </div>
+      </div>
+      <div class="qstep" id="qs_notice" style="display:none;">
+        <div class="qt">3. 公司有没有提前 30 天书面通知你？</div>
+        <div class="chips" data-g="notice">
+          <button class="chip" data-v="yes">有，提前 30 天书面通知了</button>
+          <button class="chip" data-v="no">没有，临时通知我走人</button>
+        </div>
+      </div>
+      <div class="diagres" id="diagres"></div>
+    </div>
+  </div>
+
+  <!-- ============ 计算表单 ============ -->
+  <div class="card">
+    <h2 class="sec">第二步 · 填写你的信息</h2>
+    <p class="sub">带 <span style="color:var(--brand);font-weight:700;">*</span> 的为必填。所有数据只在你的浏览器里计算，不会上传。</p>
+
+    <div class="formgrid">
+      <div class="f">
+        <label for="city">工作所在城市 <span style="color:var(--brand);">*</span>
+          <span class="q" title="法条原文是「用人单位所在直辖市、设区的市级人民政府」。若合同履行地与注册地不一致，通常按劳动合同履行地标准，见下方提示。">?</span>
+        </label>
+        <select id="city"></select>
+        <div class="hint" id="cityHint"></div>
+      </div>
+
+      <div class="f">
+        <label for="cap">当地三倍封顶基数（元/月）
+          <span class="q" title="＝当地上年度职工月平均工资×3。你的月工资若超过它，经济补偿基数就按它算，且年限最高只算12年。">?</span>
+        </label>
+        <div class="unit"><input type="number" id="cap" min="0" step="0.01" placeholder="选城市后自动填入"><span class="u">元/月</span></div>
+        <div class="hint" id="capHint">可手动修改，用于核对或补录未收录城市</div>
+      </div>
+
+      <div class="f">
+        <label for="d1">入职日期 <span style="color:var(--brand);">*</span></label>
+        <input type="date" id="d1">
+      </div>
+      <div class="f">
+        <label for="d2">离职日期（解除/终止日）<span style="color:var(--brand);">*</span></label>
+        <input type="date" id="d2">
+      </div>
+
+      <div class="f full">
+        <label>工作年限计算结果</label>
+        <input type="text" id="yearsTxt" readonly value="填写上方便自动计算">
+        <div class="hint">规则：每满 1 年算 1 个月工资；满 6 个月不满 1 年按 1 年算；不满 6 个月算半个月。<a href="#" onclick="toggleManualYears();return false;" id="myLink">→ 改为手动输入年限</a></div>
+      </div>
+
+      <div class="f" id="manualYearsBox" style="display:none;">
+        <label for="myears">手动填写工作年限（年）</label>
+        <div class="unit"><input type="number" id="myears" min="0" step="0.5" placeholder="如 3.5"><span class="u">年</span></div>
+        <div class="hint">按 0.5 年递进填，如 2 年 7 个月填 3</div>
+      </div>
+
+      <div class="f">
+        <label for="wage">离职前 12 个月平均应发工资 <span style="color:var(--brand);">*</span>
+          <span class="q" title="应发＝税前、扣社保公积金之前的全部收入，包含计时/计件工资、奖金、津贴、补贴、加班费等货币性收入（《劳动合同法实施条例》第27条）。">?</span>
+        </label>
+        <div class="unit"><input type="number" id="wage" min="0" step="1" placeholder="如 15000"><span class="u">元/月</span></div>
+        <div class="hint">含奖金、津贴、补贴、加班费，按税前应发额算</div>
+      </div>
+
+      <div class="f">
+        <label for="lastwage">离职前上一月工资（用于代通知金）
+          <span class="q" title="代通知金按「上一个月的工资标准」确定，不按12个月平均，也不受三倍封顶限制（《劳动合同法实施条例》第20条）。">?</span>
+        </label>
+        <div class="unit"><input type="number" id="lastwage" min="0" step="1" placeholder="默认同上"><span class="u">元/月</span></div>
+        <div class="hint">仅 N+1 情形需要，留空默认等于上一栏</div>
+      </div>
+
+      <div class="f">
+        <label for="minwage">当地最低工资（选填）
+          <span class="q" title="若前12个月平均工资低于当地最低工资标准，按最低工资标准计算（《劳动合同法实施条例》第27条）。">?</span>
+        </label>
+        <div class="unit"><input type="number" id="minwage" min="0" step="1" placeholder="选填"><span class="u">元/月</span></div>
+        <div class="hint">用于低收入保底校验</div>
+      </div>
+
+      <div class="f full">
+        <label>补偿类型 <span style="color:var(--brand);">*</span></label>
+        <div class="seg" id="segType">
+          <button data-v="N" class="on">N<small>经济补偿</small></button>
+          <button data-v="N1">N+1<small>补偿 + 代通知金</small></button>
+          <button data-v="2N">2N<small>违法解除赔偿金</small></button>
+        </div>
+        <div class="hint" id="typeHint"></div>
+      </div>
+    </div>
+
+    <div class="btnrow">
+      <button class="btn" onclick="calc()">立即计算</button>
+      <button class="btn ghost" onclick="resetAll()">清空重置</button>
+    </div>
+  </div>
+
+  <!-- ============ 结果 ============ -->
+  <div class="card" id="result"></div>
+
+  <!-- ============ 法律依据 ============ -->
+  <div class="card">
+    <h2 class="sec">法律依据 · 条文节选</h2>
+    <p class="sub">下列为《中华人民共和国劳动合同法》及其实施条例的核心条款节选，点击展开查看原文与解读。全文可通过<strong>国家法律法规数据库</strong>或人社部官网核对。</p>
+    <div id="laws"></div>
+
+    <div class="note amber" style="margin-top:18px;">
+      <b>⚠️ 四个最容易算错的地方</b><br>
+      1. <b>不存在「2N+1」。</b>2N 是违法解除的赔偿金，代通知金只适用于第 40 条的合法解除，两者法律前提不同，不能叠加。<br>
+      2. <b>代通知金不封顶。</b>第 47 条的「三倍、12 年」只约束经济补偿基数与年限，代通知金按上一个月工资实算。<br>
+      3. <b>协商解除没有 +1。</b>依第 36 条协商一致解除的，只有 N，公司没有支付代通知金的义务。<br>
+      4. <b>封顶是「双封顶」且只针对高收入者。</b>只有月工资超过当地社平三倍时，才同时触发基数封顶和 12 年年限封顶；没超过的人，工作 20 年就该按 20 年算。<br>
+      <b>本工具根据网络资料整理，仅供参考。核定实际赔偿金额请参照国家法律法规和当地政策具体判断分析。(by Ben)</b>
+    </div>
+  </div>
+
+  <div class="foot">
+    本工具依据现行法律法规设计，计算结果仅供参考，不构成法律意见。<br>
+    各地统计口径与裁判实践存在差异，个案请以当地人社部门、劳动仲裁机构或专业律师的意见为准。<br>
+    数据截止 2026 年 9 月；社平工资每年更新，请留意当地统计局最新公告。
+  </div>
+
+</div>
+
+<script>
+/* =====================================================================
+   各城市「上年度职工月平均工资 × 3」封顶基数
+   数据来源：各地统计局 / 人社局 / 政府公开文件，截至 2026 年 9 月
+   status: confirmed=有交叉印证 | published=已发布待确认适用口径
+           ss=社保口径参数不可直接套用 | manual=需手动录入
+   ===================================================================== */
+const CITIES = [
+  {n:'北京',p:'北京',y:2025,cal:'城镇非私营单位在岗职工平均工资',m:20011.08,st:'published',note:'历史封顶实践曾采用「法人单位从业人员平均工资」，2025 年该口径是否延续待官方确认，建议核对后使用。'},
+  {n:'上海',p:'上海',y:2025,cal:'全口径城镇单位就业人员平均工资（社保参数）',m:12577.00,st:'ss',note:'此数值为 2026 社保年度缴费基数参数（上限 37731 元/月）。社保全口径通常不直接等同于经济补偿封顶基数，请以上海人社部门口径为准。'},
+  {n:'广州',p:'广东',y:2025,cal:'城镇非私营单位在岗职工平均工资',m:14310.92,st:'confirmed',note:'2025 年城镇非私营单位在岗职工年平均工资 171731 元。广州统计局答复称未开展全口径月平均工资统计。'},
+  {n:'深圳',p:'广东',y:2025,cal:'城镇非私营单位在岗职工平均工资',m:16156.75,st:'confirmed',note:'2025 年城镇非私营单位在岗职工年平均工资 193881 元，统计局 2026-07-24 发布。'},
+  {n:'成都',p:'四川',y:2025,cal:'城镇非私营单位就业人员平均工资',m:10989.50,st:'confirmed',note:'2025 年数据 131874 元，市公积金缴存基数上限按此口径三倍核定，形成用途印证。'},
+  {n:'杭州',p:'浙江',y:2024,cal:'全市非私营单位就业人员月平均工资',m:13564.67,st:'published',note:'沿用 2024 年度数据（2025 公积金年度口径），2025 年度正式数据发布后需更新。'},
+  {n:'南京',p:'江苏',y:2025,cal:'城镇非私营单位在岗职工平均工资',m:14146.58,st:'published',note:'2025 年数据 169759 元，统计已发布，市级补偿适用口径尚待确认。'},
+  {n:'苏州',p:'江苏',y:2025,cal:'城镇非私营单位在岗职工平均工资',m:12363.67,st:'published',note:'2025 年数据 148364 元，统计已发布，市级补偿适用口径尚待确认。'},
+  {n:'无锡',p:'江苏',y:2025,cal:'城镇非私营单位在岗职工平均工资',m:12274.42,st:'published',note:'2025 年数据 147293 元，统计已发布，市级补偿适用口径尚待确认。'},
+  {n:'常州',p:'江苏',y:2025,cal:'城镇单位就业人员平均工资',m:10308.42,st:'published',note:'2025 年数据 123701 元，口径细节待统计局正文确认。'},
+  {n:'武汉',p:'湖北',y:2025,cal:'城镇非私营单位在岗职工平均工资',m:9757.92,st:'published',note:'2025 年数据 117095 元，引自 2026 年残保金申报文件，建议复核。'},
+  {n:'长沙',p:'湖南',y:2025,cal:'城镇非私营单位在岗职工平均工资',m:10914.58,st:'confirmed',note:'2025 年数据 130975 元，与当地公积金基数计算口径一致。'},
+  {n:'合肥',p:'安徽',y:2025,cal:'城镇非私营单位在岗职工平均工资',m:10824.42,st:'confirmed',note:'2025 年数据 129893 元，市级公积金文件明确引用该统计值。'},
+  {n:'福州',p:'福建',y:2025,cal:'城镇非私营单位就业人员平均工资',m:10810.08,st:'confirmed',note:'2025 年数据 129721 元，市级公积金缴存基数上限交叉印证。'},
+  {n:'厦门',p:'福建',y:0,cal:'',m:0,st:'manual',note:'暂未取得可核验的官方年度工资数据，请手动填写当地三倍封顶基数。'},
+  {n:'郑州',p:'河南',y:2025,cal:'城镇非私营单位就业人员平均工资',m:9288.75,st:'published',note:'2025 年数据 111465 元，统计已发布，市级补偿适用口径尚待确认。'},
+  {n:'西安',p:'陕西',y:2025,cal:'城镇非私营单位就业人员平均工资',m:10908.67,st:'published',note:'2025 年数据 130904 元，统计已发布，市级补偿适用口径尚待确认。'},
+  {n:'青岛',p:'山东',y:2025,cal:'城镇非私营单位在岗职工（含劳务派遣）',m:11447.58,st:'published',note:'2025 年数据 137371 元，统计已发布，市级补偿适用口径尚待确认。'},
+  {n:'济南',p:'山东',y:0,cal:'',m:0,st:'manual',note:'市级公开答复仅确认省级全口径用于工伤保险，不能推导经济补偿封顶，请手动填写。'},
+  {n:'宁波',p:'浙江',y:2025,cal:'非私营单位在岗职工（含劳务派遣）',m:12189.83,st:'published',note:'2025 年数据 146278 元，统计已发布，市级补偿适用口径尚待确认。'},
+  {n:'温州',p:'浙江',y:0,cal:'',m:0,st:'manual',note:'暂未取得可核验的官方年度工资数据，请手动填写当地三倍封顶基数。'},
+  {n:'佛山',p:'广东',y:2025,cal:'城镇非私营单位在岗职工平均工资',m:10465.42,st:'confirmed',note:'2025 年数据 125585 元，可作候选默认值。'},
+  {n:'东莞',p:'广东',y:2025,cal:'城镇非私营单位在岗职工平均工资',m:9233.58,st:'published',note:'2025 年数据 110803 元，统计已发布，市级补偿适用口径尚待确认。'},
+  {n:'天津',p:'天津',y:0,cal:'',m:0,st:'manual',note:'暂未取得可核验的市级官方年度工资数据，请手动填写。'},
+  {n:'重庆',p:'重庆',y:0,cal:'',m:0,st:'manual',note:'直辖市口径需确认按全市还是主城区，请手动填写。'},
+  {n:'沈阳',p:'辽宁',y:0,cal:'',m:0,st:'manual',note:'暂未取得 2025 年度官方原始工资数据，请手动填写。'},
+  {n:'大连',p:'辽宁',y:0,cal:'',m:0,st:'manual',note:'市统计局已发布年度工资公告但未取得正文数值，请手动填写。'},
+  {n:'长春',p:'吉林',y:0,cal:'',m:0,st:'manual',note:'暂未取得可核验的官方数据，请手动填写。'},
+  {n:'哈尔滨',p:'黑龙江',y:0,cal:'',m:0,st:'manual',note:'暂未取得可核验的官方数据，请手动填写。'},
+  {n:'石家庄',p:'河北',y:0,cal:'',m:0,st:'manual',note:'暂未取得可核验的官方数据，请手动填写。'},
+  {n:'太原',p:'山西',y:0,cal:'',m:0,st:'manual',note:'仅有结合省级口径的媒体示例，不足以代表市级口径，请手动填写。'},
+  {n:'南昌',p:'江西',y:0,cal:'',m:0,st:'manual',note:'暂未取得可核验的官方数据，请手动填写。'},
+  {n:'昆明',p:'云南',y:0,cal:'',m:0,st:'manual',note:'暂未取得可核验的官方数据，请手动填写。'},
+  {n:'贵阳',p:'贵州',y:0,cal:'',m:0,st:'manual',note:'暂未取得可核验的官方数据，请手动填写。'},
+  {n:'南宁',p:'广西',y:0,cal:'',m:0,st:'manual',note:'暂未取得可核验的官方数据，请手动填写。'},
+  {n:'海口',p:'海南',y:0,cal:'',m:0,st:'manual',note:'需区分省直与海口市口径，请手动填写。'},
+  {n:'兰州',p:'甘肃',y:0,cal:'',m:0,st:'manual',note:'暂未取得可核验的官方数据，请手动填写。'},
+  {n:'呼和浩特',p:'内蒙古',y:0,cal:'',m:0,st:'manual',note:'暂未取得可核验的官方数据，请手动填写。'},
+  {n:'乌鲁木齐',p:'新疆',y:0,cal:'',m:0,st:'manual',note:'注意自治区与兵团统计边界，请手动填写。'},
+  {n:'拉萨',p:'西藏',y:0,cal:'',m:0,st:'manual',note:'小样本统计，需取得自治区或市级官方文件，请手动填写。'},
+  {n:'西宁',p:'青海',y:0,cal:'',m:0,st:'manual',note:'暂未取得可核验的官方数据，请手动填写。'},
+  {n:'银川',p:'宁夏',y:0,cal:'',m:0,st:'manual',note:'暂未取得可核验的官方数据，请手动填写。'},
+  {n:'其他城市',p:'',y:0,cal:'',m:0,st:'manual',note:'请手动填写当地上年度职工月平均工资的三倍数额。'}
+];
+
+const ST_LABEL = {
+  confirmed:{t:'已交叉印证',c:'var(--ok)'},
+  published:{t:'统计已发布·待确认适用',c:'var(--warn)'},
+  ss:{t:'社保参数·谨慎使用',c:'var(--danger)'},
+  manual:{t:'需手动填写',c:'var(--sub)'}
+};
+
+/* =====================================================================
+   法律依据
+   ===================================================================== */
+const LAWS = [
+  {
+    art:'第47条', key:true,
+    title:'经济补偿标准 · 三倍封顶与 12 年封顶',
+    quote:'经济补偿按劳动者在本单位工作的年限，每满一年支付一个月工资的标准向劳动者支付。六个月以上不满一年的，按一年计算；不满六个月的，向劳动者支付半个月工资的经济补偿。<br><br>劳动者月工资高于用人单位所在直辖市、设区的市级人民政府公布的本地区上年度职工月平均工资三倍的，向其支付经济补偿的标准按职工月平均工资三倍的数额支付，向其支付经济补偿的年限最高不超过十二年。<br><br>本条所称月工资是指劳动者在劳动合同解除或者终止前十二个月的平均工资。',
+    plain:'这是整个计算的核心。<b>三个要点</b>：① 满 6 个月不满 1 年按 1 年算，不满 6 个月算半个月；② 只有月工资超过当地社平三倍的人，才会被「双封顶」（基数封顶 + 年限封顶 12 年）；③ 月工资指的是前 12 个月平均，不是基本工资，也不是最后一个月的工资。'
+  },
+  {
+    art:'第40条', key:true,
+    title:'无过失性辞退 · 代通知金「+1」的来源',
+    quote:'有下列情形之一的，用人单位提前三十日以书面形式通知劳动者本人或者额外支付劳动者一个月工资后，可以解除劳动合同：<br>（一）劳动者患病或者非因工负伤，在规定的医疗期满后不能从事原工作，也不能从事由用人单位另行安排的工作的；<br>（二）劳动者不能胜任工作，经过培训或者调整工作岗位，仍不能胜任工作的；<br>（三）劳动合同订立时所依据的客观情况发生重大变化，致使劳动合同无法履行，经用人单位与劳动者协商，未能就变更劳动合同内容达成协议的。',
+    plain:'只有这三种情形才会产生「+1」，而且<b>代通知金和提前 30 天书面通知是二选一</b>：公司提前 30 天通知了，就只给 N；没通知，才给 N+1。若公司不属于这三种情形（比如协商一致解除、经济性裁员），即便没提前通知也不产生代通知金。'
+  },
+  {
+    art:'第46条', key:false,
+    title:'应当支付经济补偿的七种情形',
+    quote:'有下列情形之一的，用人单位应当向劳动者支付经济补偿：<br>（一）劳动者依照本法第三十八条规定解除劳动合同的；<br>（二）用人单位依照本法第三十六条规定向劳动者提出解除劳动合同并与劳动者协商一致解除劳动合同的；<br>（三）用人单位依照本法第四十条规定解除劳动合同的；<br>（四）用人单位依照本法第四十一条第一款规定解除劳动合同的；<br>（五）除用人单位维持或者提高劳动合同约定条件续订劳动合同，劳动者不同意续订的情形外，依照本法第四十四条第一项规定终止固定期限劳动合同的；<br>（六）依照本法第四十四条第四项、第五项规定终止劳动合同的；<br>（七）法律、行政法规规定的其他情形。',
+    plain:'注意第（五）项：合同到期时，如果公司<b>维持或提高</b>原条件续签而你不签，公司不用补偿；公司<b>不续签或降低条件</b>，才需要支付 N。'
+  },
+  {
+    art:'第87条', key:true,
+    title:'违法解除赔偿金 · 2N',
+    quote:'用人单位违反本法规定解除或者终止劳动合同的，应当依照本法第四十七条规定的经济补偿标准的二倍向劳动者支付赔偿金。',
+    plain:'2N 是对<b>违法解除</b>的惩罚性赔偿，前提是公司的解除行为本身不合法。<b>不存在「2N+1」</b>：赔偿金与代通知金的法律前提互不相容，不能叠加主张。'
+  },
+  {
+    art:'第48条', key:false,
+    title:'违法解除的选择权 · 继续履行或拿赔偿金',
+    quote:'用人单位违反本法规定解除或者终止劳动合同，劳动者要求继续履行劳动合同的，用人单位应当继续履行；劳动者不要求继续履行劳动合同或者劳动合同已经不能继续履行的，用人单位应当依照本法第八十七条规定支付赔偿金。',
+    plain:'选择权在劳动者手里：你可以要求<b>回去上班</b>，也可以选择<b>拿 2N 走人</b>。公司不能单方面决定「赔钱让你走」。'
+  },
+  {
+    art:'第50条', key:false,
+    title:'何时支付 · 办结工作交接时',
+    quote:'用人单位应当在解除或者终止劳动合同时出具解除或者终止劳动合同的证明，并在十五日内为劳动者办理档案和社会保险关系转移手续。<br>劳动者应当按照双方约定，办理工作交接。用人单位依照本法有关规定应当向劳动者支付经济补偿的，在办结工作交接时支付。',
+    plain:'补偿金应当在<b>办结工作交接时</b>支付，而不是「下个月发薪日」或「走完流程再说」。公司还应同时出具离职证明并在 15 日内转出社保档案。'
+  },
+  {
+    art:'第36条', key:false,
+    title:'协商一致解除',
+    quote:'用人单位与劳动者协商一致，可以解除劳动合同。',
+    plain:'这是实践中最常见的解除方式。<b>协商解除只有 N，没有 +1</b>——即便公司当天通知当天走，也不产生代通知金。但因为是协商，补偿金额可以高于 N，谈成 N+2、N+3 也完全合法。'
+  },
+  {
+    art:'第38条', key:false,
+    title:'劳动者被迫解除 · 公司有过错时你也能拿 N',
+    quote:'用人单位有下列情形之一的，劳动者可以解除劳动合同：……（二）未及时足额支付劳动报酬的；（三）未依法为劳动者缴纳社会保险费的；……用人单位以暴力、威胁或者非法限制人身自由的手段强迫劳动者劳动的，或者用人单位违章指挥、强令冒险作业危及劳动者人身安全的，劳动者可以立即解除劳动合同，不需事先告知用人单位。',
+    plain:'如果是<b>公司欠薪、未缴社保、违法调岗降薪</b>等原因逼你走，即便形式上是你主动辞职，你仍可依第 46 条第（一）项主张 N。关键是<b>辞职时要写明「因公司存在 XX 违法行为」</b>，并保留证据。'
+  },
+  {
+    art:'第39条', key:false,
+    title:'过失性辞退 · 公司无需补偿',
+    quote:'劳动者有下列情形之一的，用人单位可以解除劳动合同：（一）在试用期间被证明不符合录用条件的；（二）严重违反用人单位的规章制度的；（三）严重失职，徇私舞弊，给用人单位造成重大损害的；（四）劳动者同时与其他用人单位建立劳动关系，对完成本单位的工作任务造成严重影响，或者经用人单位提出，拒不改正的；（五）因本法第二十六条第一款第一项规定的情形致使劳动合同无效的；（六）被依法追究刑事责任的。',
+    plain:'公司以「严重违纪」辞退且成立的，<b>一分钱补偿都不用给</b>。但「严重」的认定很严格：规章制度必须合法制定并已公示告知，违纪事实要有证据。实践中大量「违纪解除」被认定为违法，最终改判 2N。'
+  },
+  {
+    art:'第41条', key:false,
+    title:'经济性裁员',
+    quote:'有下列情形之一，需要裁减人员二十人以上或者裁减不足二十人但占企业职工总数百分之十以上的，用人单位提前三十日向工会或者全体职工说明情况，听取工会或者职工的意见后，裁减人员方案经向劳动行政部门报告，可以裁减人员：（一）依照企业破产法规定进行重整的；（二）生产经营发生严重困难的；（三）企业转产、重大技术革新或者经营方式调整，经变更劳动合同后，仍需裁减人员的；（四）其他因劳动合同订立时所依据的客观经济情况发生重大变化，致使劳动合同无法履行的。',
+    plain:'经济性裁员支付 N，<b>不产生代通知金</b>。裁员有严格的程序要求（提前 30 天说明、听取工会意见、向劳动部门报告），程序违法也可能构成违法解除。'
+  },
+  {
+    art:'第42条', key:false,
+    title:'禁止解除的情形 · 特殊保护',
+    quote:'劳动者有下列情形之一的，用人单位不得依照本法第四十条、第四十一条的规定解除劳动合同：（一）从事接触职业病危害作业的劳动者未进行离岗前职业健康检查，或者疑似职业病病人在诊断或者医学观察期间的；（二）在本单位患职业病或者因工负伤并被确认丧失或者部分丧失劳动能力的；（三）患病或者非因工负伤，在规定的医疗期内的；（四）女职工在孕期、产期、哺乳期的；（五）在本单位连续工作满十五年，且距法定退休年龄不足五年的；（六）法律、行政法规规定的其他情形。',
+    plain:'如果你处在<b>医疗期、三期（孕期产期哺乳期）</b>等情形，公司不能依第 40、41 条辞退你。此时被辞退，极可能构成违法解除，可主张 <b>2N</b> 或要求恢复劳动关系。'
+  },
+  {
+    art:'条例第20条', key:true,
+    title:'代通知金的标准 · 上一个月工资',
+    quote:'用人单位依照劳动合同法第四十条的规定，选择额外支付劳动者一个月工资解除劳动合同的，其额外支付的工资应当按照该劳动者上一个月的工资标准确定。',
+    plain:'注意两个「不一样」：① 代通知金用的是<b>离职前上一个月的工资</b>，不是 12 个月平均；② 第 47 条的「三倍、12 年」封顶<b>只约束经济补偿，不约束代通知金</b>，所以高薪者的代通知金按上月实发工资算，不封顶。'
+  },
+  {
+    art:'条例第27条', key:true,
+    title:'月工资怎么算 · 应得工资与最低工资保底',
+    quote:'劳动合同法第四十七条规定的经济补偿的月工资按照劳动者应得工资计算，包括计时工资或者计件工资以及奖金、津贴和补贴等货币性收入。劳动者在劳动合同解除或者终止前12个月的平均工资低于当地最低工资标准的，按照当地最低工资标准计算。',
+    plain:'公司说「补偿只按基本工资算、年终奖不算」是<b>错的</b>。月工资是<b>税前应发</b>的全部货币性收入，包含奖金、津贴、补贴、加班费。反过来，如果你前 12 个月平均工资低于当地最低工资，则按最低工资标准兜底。'
+  },
+  {
+    art:'条例第25条', key:false,
+    title:'赔偿金与经济补偿不重复',
+    quote:'用人单位违反劳动合同法的规定解除或者终止劳动合同，依照劳动合同法第八十七条的规定支付了赔偿金的，不再支付经济补偿。赔偿金的计算年限自用工之日起计算。',
+    plain:'拿了 2N 就不能再要 N，两者不叠加。但 2N 的年限是<b>自用工之日起</b>计算，这一点与 2008 年前后的分段规则有关，老员工需特别核对。'
+  },
+  {
+    art:'财税〔2018〕164号', key:false,
+    title:'个人所得税 · 一次性补偿的免税额度',
+    quote:'个人与用人单位解除劳动关系取得一次性补偿收入（包括用人单位发放的经济补偿金、生活补助费和其他补助费用等），在当地上年职工平均工资 3 倍数额以内的部分，免征个人所得税；超过 3 倍数额的部分，不并入当年综合所得，单独适用综合所得税率表计算纳税。',
+    plain:'免税额度是<b>一次性收入总额</b>口径（＝当地上年职工年平均工资×3），与第 47 条那个「月基数×3」不是一回事，别混淆。超过免税额度部分单独计税，且可扣除个人实际缴纳的社保公积金（依财税〔2001〕157号）。'
+  }
+];
+
+/* =====================================================================
+   工具函数
+   ===================================================================== */
+const $ = id => document.getElementById(id);
+const fmt = n => n.toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmt0 = n => Math.round(n).toLocaleString('zh-CN');
+const money = n => '¥ ' + fmt(n);
+
+/* 解析 YYYY-MM-DD 为本地日期对象（避免时区导致的日期偏移） */
+function parseDate(s){
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s||'');
+  if(!m) return null;
+  const y=+m[1], mo=+m[2], d=+m[3];
+  const dt = new Date(y, mo-1, d);
+  if(dt.getFullYear()!==y || dt.getMonth()!==mo-1 || dt.getDate()!==d) return null;
+  return dt;
+}
+
+/* 计算工作年限（返回 {years:补偿月数, y:整年, m:余月, total:总月数} ） */
+function calcYears(d1, d2){
+  const a = parseDate(d1), b = parseDate(d2);
+  if(!a || !b || b < a) return null;
+  let y = b.getFullYear() - a.getFullYear();
+  let m = b.getMonth() - a.getMonth();
+  if(b.getDate() < a.getDate()) m--;
+  if(m < 0){ y--; m += 12; }
+  const total = y*12 + m;
+  // 满6个月按1年，不满6个月按0.5
+  let n = y;
+  if(m >= 6) n += 1;
+  else if(m > 0) n += 0.5;
+  return {years:n, y:y, m:m, total:total};
+}
+
+/* =====================================================================
+   情境诊断
+   ===================================================================== */
+const diagAns = {};
+function pickChip(btn){
+  const g = btn.parentElement.dataset.g;
+  btn.parentElement.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  btn.classList.add('on');
+  diagAns[g] = btn.dataset.v;
+
+  const who = diagAns.who;
+  $('qs_reason').style.display = (who==='emp') ? '' : 'none';
+  $('qs_self').style.display   = (who==='self') ? '' : 'none';
+  $('qs_expire').style.display = (who==='expire') ? '' : 'none';
+  // 只有第40条情形才需要问是否提前通知
+  $('qs_notice').style.display = (who==='emp' && diagAns.reason==='c40') ? '' : 'none';
+  renderDiag();
+}
+
+function renderDiag(){
+  const a = diagAns, box = $('diagres');
+  let res = null;
+  const who = a.who;
+
+  if(who==='self'){
+    if(a.selfwhy==='personal') res = {t:'大概率没有经济补偿', c:'var(--danger)', d:'依《劳动合同法》第 37 条，劳动者因个人原因主动辞职的，用人单位无需支付经济补偿。但若公司存在欠薪、未依法缴纳社保、违法调岗降薪等情形，你仍可依<b>第 38 条 + 第 46 条第（一）项</b>主张 N，关键是辞职通知里要写明真实原因并保留证据。', v:null};
+    else if(a.selfwhy==='fault38') res = {t:'可主张 N（被迫解除）', c:'var(--ok)', d:'公司存在欠薪、未缴社保、违法调岗等过错时，你依<b>第 38 条</b>解除合同的，依第 46 条第（一）项公司仍应支付经济补偿 N。<b>辞职信一定要写明「因公司未足额支付劳动报酬／未依法缴纳社保」等具体事由</b>，并保留工资流水、社保记录、调岗通知等证据。此类解除没有代通知金。', v:'N'};
+  }
+  else if(who==='expire'){
+    if(a.expirehow==='keep') res = {t:'没有经济补偿', c:'var(--danger)', d:'公司<b>维持或提高</b>原劳动合同约定条件续签，而你不同意续签的，依第 46 条第（五）项，公司<b>无需支付</b>经济补偿。', v:null};
+    else if(a.expirehow==='no' || a.expirehow==='lower') res = {t:'可主张 N', c:'var(--ok)', d:'公司不续签，或<b>降低</b>原条件（降薪、降职）续签而你不同意的，依第 46 条第（五）项，公司应支付经济补偿 N。合同终止不属于第 40 条情形，<b>没有代通知金</b>。', v:'N'};
+  }
+  else if(who==='emp'){
+    const r = a.reason;
+    if(r==='nego') res = {t:'可主张 N（协商解除）', c:'var(--ok)', d:'依<b>第 36 条</b>协商一致解除的，公司应支付经济补偿 N。<b>协商解除没有代通知金</b>，即便当天通知当天走也是如此。但因为金额是协商的，你可以谈高于 N 的方案（N+2、N+3 都合法），N 只是法定底线。', v:'N'};
+    else if(r==='c40'){
+      if(a.notice==='yes') res = {t:'可主张 N（已提前通知）', c:'var(--ok)', d:'属于<b>第 40 条</b>无过失性辞退，公司已提前 30 日书面通知，只需支付经济补偿 N，<b>不另付代通知金</b>。', v:'N'};
+      else if(a.notice==='no') res = {t:'可主张 N+1', c:'var(--ok)', d:'属于<b>第 40 条</b>情形且公司未提前 30 日书面通知，应支付经济补偿 N，并额外支付一个月工资作为代通知金（<b>实施条例第 20 条</b>，按上一个月工资标准，不封顶）。', v:'N1'};
+      else res = {t:'取决于是否提前 30 天通知', c:'var(--brand)', d:'属于第 40 条无过失性辞退：提前 30 日书面通知的给 N，未提前通知的给 N+1。请回答第 3 问。', v:null};
+    }
+    else if(r==='layoff') res = {t:'可主张 N（经济性裁员）', c:'var(--ok)', d:'依<b>第 41 条</b>经济性裁员的，支付经济补偿 N。裁员程序要求提前 30 日向工会或全体职工说明并报告劳动行政部门，该程序义务不产生代通知金。若<b>裁员程序违法</b>（未报告、未听取意见、裁减了第 42 条禁止裁减人员），可能构成违法解除，可主张 <b>2N</b>。', v:'N'};
+    else if(r==='fault') res = {t:'违纪成立则无补偿，不成立则 2N', c:'var(--warn)', d:'公司依<b>第 39 条</b>以「严重违纪」辞退，若违纪成立，<b>无需支付任何补偿</b>。但认定很严格：规章制度须经民主程序制定并已公示告知，违纪事实须有充分证据。若公司举证不足或制度有瑕疵，往往被认定为违法解除，你可主张 <b>2N</b> 或要求恢复劳动关系（<b>第 48 条</b>，选择权在你）。', v:'2N'};
+    else if(r==='none') res = {t:'可主张 2N（违法解除）', c:'var(--ok)', d:'公司无合法理由辞退，属于违法解除或终止劳动合同，依<b>第 87 条</b>应按经济补偿标准的二倍支付赔偿金 <b>2N</b>。依第 48 条，你也可以选择<b>要求继续履行劳动合同</b>。注意：赔偿金与代通知金不能同时主张，<b>不存在 2N+1</b>。', v:'2N'};
+  }
+
+  if(!res){
+    box.className = 'diagres';
+    box.innerHTML = '';
+    return;
+  }
+  box.className = 'diagres show';
+  box.style.background = 'var(--bg)';
+  box.style.border = '1.5px solid ' + res.c;
+  box.style.borderLeftWidth = '5px';
+  box.innerHTML = `<div class="big" style="color:${res.c}">${res.t}</div><div>${res.d}</div>`;
+  if(res.v){ setType(res.v); }
+}
+
+/* =====================================================================
+   表单联动
+   ===================================================================== */
+let useManualYears = false;
+function toggleManualYears(){
+  useManualYears = !useManualYears;
+  $('manualYearsBox').style.display = useManualYears ? '' : 'none';
+  $('myLink').textContent = useManualYears ? '→ 改回按日期自动计算' : '→ 改为手动输入年限';
+  $('d1').disabled = useManualYears; $('d2').disabled = useManualYears;
+  updateYears();
+}
+
+function updateYears(){
+  if(useManualYears){
+    const v = parseFloat($('myears').value);
+    $('yearsTxt').value = isNaN(v) ? '填写上方便自动计算' : `工作年限 ${v} 年 → 补偿系数 N = ${v} 个月工资`;
+    return;
+  }
+  const r = calcYears($('d1').value, $('d2').value);
+  if(!r){
+    $('yearsTxt').value = $('d1').value && $('d2').value ? '⚠️ 离职日期不能早于入职日期' : '填写上方便自动计算';
+    return;
+  }
+  const tail = r.m >= 6 ? `剩余 ${r.m} 个月 ≥ 6 个月，按 1 年计`
+             : r.m > 0  ? `剩余 ${r.m} 个月 < 6 个月，按半个月计`
+             : '';
+  $('yearsTxt').value = `${r.y} 年 ${r.m} 个月（共 ${r.total} 个月） → 补偿系数 N = ${r.years} 个月工资${tail?'（'+tail+'）':''}`;
+}
+
+function onCityChange(){
+  const c = CITIES.find(x=>x.n === $('city').value);
+  if(!c) return;
+  if(c.m > 0){
+    $('cap').value = (c.m*3).toFixed(2);
+    $('cap').readOnly = false;
+  } else {
+    $('cap').value = '';
+  }
+  const sl = ST_LABEL[c.st];
+  let h = `<span style="color:${sl.c};font-weight:700;">● ${sl.t}</span>`;
+  if(c.y) h += `　·　${c.y} 年度`;
+  if(c.cal) h += `　·　${c.cal}`;
+  $('cityHint').innerHTML = h + (c.note ? `<br><span style="color:var(--sub)">${c.note}</span>` : '');
+  if(c.st==='ss'){
+    $('cityHint').innerHTML += `<br><span style="color:var(--danger);font-weight:700;">⚠️ 该数值为社保缴费参数，通常不直接等同于经济补偿封顶基数，请核对当地人社口径。</span>`;
+  }
+}
+
+function setType(v){
+  document.querySelectorAll('#segType button').forEach(b=>b.classList.toggle('on', b.dataset.v===v));
+  updateTypeHint();
+}
+function updateTypeHint(){
+  const v = document.querySelector('#segType button.on').dataset.v;
+  const H = {
+    N:  '经济补偿金 = 月工资基数 × 工作年限。适用于协商解除、第 40 条已提前通知、裁员、合同终止、被迫解除等情形。',
+    N1: '经济补偿金 + 代通知金。仅在《劳动合同法》第 40 条三种情形且未提前 30 日书面通知时适用，代通知金按上一个月工资计、不封顶。',
+    '2N':'违法解除赔偿金 = 经济补偿金 × 2。依第 48 条劳动者也可选择要求继续履行合同。赔偿金与代通知金不能叠加，不存在 2N+1。'
+  };
+  $('typeHint').textContent = H[v];
+}
+
+/* =====================================================================
+   核心计算
+   ===================================================================== */
+let LAST = null;
+
+function calc(){
+  // --- 校验 ---
+  const city = $('city').value;
+  const capRaw = parseFloat($('cap').value);
+  const wage = parseFloat($('wage').value);
+  if(!city){ alert('请选择工作所在城市'); return; }
+  if(isNaN(capRaw) || capRaw <= 0){ alert('请填写当地三倍封顶基数（元/月）\n\n若所在城市未收录，可先查询当地统计局公布的「上年度职工月平均工资」，乘以 3 后手动填入。'); $('cap').focus(); return; }
+  if(isNaN(wage) || wage <= 0){ alert('请填写离职前 12 个月平均应发工资'); $('wage').focus(); return; }
+
+  let N, yDesc;
+  if(useManualYears){
+    N = parseFloat($('myears').value);
+    if(isNaN(N) || N <= 0){ alert('请填写工作年限'); return; }
+    yDesc = `手动填写 ${N} 年`;
+  } else {
+    const r = calcYears($('d1').value, $('d2').value);
+    if(!r){ alert('请正确填写入职日期与离职日期（离职日期不能早于入职日期）'); return; }
+    N = r.years;
+    yDesc = `${r.y} 年 ${r.m} 个月（共 ${r.total} 个月）`;
+  }
+
+  const type = document.querySelector('#segType button.on').dataset.v;
+  const lastWageRaw = parseFloat($('lastwage').value);
+  const lastWage = isNaN(lastWageRaw) ? wage : lastWageRaw;
+  const minWage = parseFloat($('minwage').value);
+
+  // --- 第1步：月工资基数（最低工资保底） ---
+  let base = wage, minWageHit = false;
+  if(!isNaN(minWage) && minWage > 0 && wage < minWage){ base = minWage; minWageHit = true; }
+
+  // --- 第2步：三倍封顶判断 ---
+  const cap = capRaw;
+  const capped = base > cap;
+  const finalBase = capped ? cap : base;
+
+  // --- 第3步：年限封顶（仅高收入者触发） ---
+  const yearsCapped = capped && N > 12;
+  const finalN = yearsCapped ? 12 : N;
+
+  // --- 第4步：经济补偿金 ---
+  const comp = finalBase * finalN;
+
+  // --- 第5步：代通知金（不封顶，按上月工资） ---
+  let notice = 0;
+  if(type === 'N1') notice = lastWage;
+
+  // --- 第6步：赔偿金 2N ---
+  const penalty = (type === '2N') ? comp * 2 : 0;
+  const total = (type === '2N') ? penalty : comp + notice;
+
+  // --- 个税免税额参考（一次性收入总额口径） ---
+  const taxFree = cap * 12;
+
+  LAST = {city, cap, wage, base, minWageHit, minWage, capped, finalBase, N, finalN, yearsCapped,
+          comp, notice, lastWage, penalty, total, type, yDesc, taxFree};
+  render(LAST);
+}
+
+/* =====================================================================
+   结果渲染
+   ===================================================================== */
+function render(r){
+  const typeName = {N:'N（经济补偿）', N1:'N+1（经济补偿 + 代通知金）', '2N':'2N（违法解除赔偿金）'}[r.type];
+  const typeLaw  = {N:'《劳动合同法》第 46、47 条', N1:'《劳动合同法》第 40、46、47 条 + 实施条例第 20 条', '2N':'《劳动合同法》第 48、87 条'}[r.type];
+
+  // 计算步骤
+  const steps = [];
+  steps.push({
+    t:'月工资基数：离职前 12 个月平均应发工资',
+    f: r.minWageHit
+        ? `填写 ${fmt(r.wage)} 元 < 当地最低工资 ${fmt(r.minWage)} 元<br>→ 按《实施条例》第 27 条保底为 ${fmt(r.minWage)} 元`
+        : `应发工资 ${fmt(r.wage)} 元／月<br>（含奖金、津贴、补贴、加班费等货币性收入）`,
+    v: money(r.base)
+  });
+  steps.push({
+    t:'三倍封顶校验',
+    f: r.capped
+        ? `${fmt(r.base)} 元 ＞ 当地三倍基数 ${fmt(r.cap)} 元<br>→ 触发封顶，基数按 ${fmt(r.cap)} 元计`
+        : `${fmt(r.base)} 元 ≤ 当地三倍基数 ${fmt(r.cap)} 元<br>→ 未触发，按实际工资计`,
+    v: r.capped ? '已封顶' : '未封顶',
+    hit: r.capped
+  });
+  steps.push({
+    t:'工作年限 → 补偿系数 N',
+    f: `${r.yDesc}<br>${r.yearsCapped
+        ? `原 ${r.N} 个月，因工资超三倍，年限封顶为 12 个月`
+        : `按「满 1 年 1 个月、满 6 个月按 1 年、不满 6 个月半个月」计`}`,
+    v: r.finalN + ' 个月',
+    hit: r.yearsCapped
+  });
+  steps.push({
+    t:'经济补偿金 ＝ 基数 × N',
+    f: `${fmt(r.finalBase)} 元 × ${r.finalN} 个月`,
+    v: money(r.comp)
+  });
+  if(r.type === 'N1'){
+    steps.push({
+      t:'代通知金（+1）＝ 离职前上一个月工资',
+      f: `按《实施条例》第 20 条，按上月工资 ${fmt(r.lastWage)} 元计<br>不受「三倍、12 年」封顶限制`,
+      v: money(r.notice)
+    });
+  }
+  if(r.type === '2N'){
+    steps.push({
+      t:'违法解除赔偿金 ＝ 经济补偿金 × 2',
+      f: `${money(r.comp)} × 2<br>依《劳动合同法》第 87 条；支付赔偿金后不再支付经济补偿`,
+      v: money(r.penalty)
+    });
+  }
+
+  // 可视化
+  const vmax = Math.max(r.total, r.taxFree, 1);
+  const pct = v => Math.min(100, v/vmax*100).toFixed(1);
+
+  let warnHtml = '';
+  if(r.capped){
+    warnHtml = `<div class="note amber"><b>⚠️ 你的工资已触发「双封顶」</b><br>
+      你的月工资 ${fmt(r.base)} 元超过当地三倍封顶基数 ${fmt(r.cap)} 元，因此：<br>
+      · 计算基数被压缩为 <b>${fmt(r.cap)} 元</b>（少算 ${fmt(r.base - r.cap)} 元／月）<br>
+      · 补偿年限${r.yearsCapped ? `被压缩为 <b>12 个月</b>（原 ${r.N} 个月，少算 ${r.N-12} 个月）` : `为 ${r.finalN} 个月，未超过 12 年上限`}<br>
+      这是《劳动合同法》第 47 条第 2 款的强制规定，适用于高收入劳动者。</div>`;
+  }
+  if(r.type === '2N'){
+    warnHtml += `<div class="note blue"><b>关于 2N 的两点提醒</b><br>
+      · 依<b>第 48 条</b>，你也可以选择<b>要求继续履行劳动合同</b>，不一定非要拿钱走人，选择权在你。<br>
+      · <b>不存在「2N+1」</b>：赔偿金针对违法解除，代通知金针对第 40 条的合法解除，两者法律前提不同，不能叠加。</div>`;
+  }
+  if(r.type === 'N1'){
+    warnHtml += `<div class="note blue"><b>关于 +1（代通知金）的适用条件</b><br>
+      代通知金<b>仅</b>适用于《劳动合同法》第 40 条的三种情形（医疗期满不能从事工作、经培训调岗仍不胜任、客观情况重大变化协商不成），且公司未提前 30 日书面通知。<br>
+      若属于<b>协商一致解除、经济性裁员、合同到期终止</b>，即使公司当天通知你走，也<b>没有代通知金</b>。</div>`;
+  }
+  const taxNote = r.total > r.taxFree
+    ? `<div class="note amber"><b>💰 个税提示</b><br>你的一次性补偿总额 <b>${money(r.total)}</b> 已超过当地免税额 <b>${money(r.taxFree)}</b>（＝当地上年职工月平均工资三倍 × 12，即 ${fmt(r.cap)} × 12）。<br>超出部分依<b>财税〔2018〕164 号</b>不并入当年综合所得，单独适用综合所得税率表计税，并可扣除个人实际缴纳的社保、公积金（财税〔2001〕157 号）。实际税额请以公司代扣或税务机关口径为准。</div>`
+    : `<div class="note grey"><b>💰 个税提示</b><br>你的一次性补偿总额 ${money(r.total)} 未超过当地免税额 ${money(r.taxFree)}（＝当地上年职工月平均工资三倍 × 12），依<b>财税〔2018〕164 号</b>可享受个人所得税免征。</div>`;
+
+  const html = `
+  <h2 class="sec">计算结果</h2>
+  <div class="total">
+    <div class="lab">${typeName}　·　${typeLaw}</div>
+    <div class="num">${money(r.total)}<small>元</small></div>
+    <div class="desc">${r.city}　·　工作年限 ${r.yDesc}　·　${r.capped?'已触发三倍封顶':'未触发封顶'}</div>
+    <div class="tags">
+      <span>补偿系数 N = ${r.finalN} 个月</span>
+      <span>计算基数 ${fmt(r.finalBase)} 元/月</span>
+      <span>${r.capped?'基数+年限双封顶':'按实际工资计'}</span>
+    </div>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="k">计算基数</div><div class="v">${fmt0(r.finalBase)}<small>元 / 月</small></div></div>
+    <div class="kpi ${r.capped?'hl':''}"><div class="k">补偿系数 N</div><div class="v">${r.finalN}<small>个月工资</small></div></div>
+    <div class="kpi"><div class="k">经济补偿金</div><div class="v">${fmt0(r.comp)}<small>元</small></div></div>
+    <div class="kpi ${r.type!=='N'?'hl':''}"><div class="k">${r.type==='2N'?'赔偿金 2N':(r.type==='N1'?'代通知金 +1':'代通知金')}</div><div class="v">${r.type==='2N'?fmt0(r.penalty):(r.type==='N1'?fmt0(r.notice):'—')}<small>${r.type==='2N'?'元':(r.type==='N1'?'元':'不适用')}</small></div></div>
+  </div>
+
+  <h2 class="sec" style="font-size:17px;margin-bottom:12px;">计算过程</h2>
+  <div class="steps">
+    ${steps.map((s,i)=>`<div class="step ${s.hit?'hit':''}">
+      <div class="si">${i+1}</div>
+      <div class="sc"><div class="st">${s.t}</div><div class="sf">${s.f}</div></div>
+      <div class="sv">${s.v}</div>
+    </div>`).join('')}
+    <div class="step" style="background:#F8FAFD;">
+      <div class="si" style="background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;border-right:none;">＝</div>
+      <div class="sc"><div class="st" style="font-size:15px;">${r.type==='2N'?'应得赔偿金总额':'应得补偿总额'}</div>
+        <div class="sf">${r.type==='2N' ? `${money(r.comp)} × 2` : (r.type==='N1' ? `经济补偿金 ${money(r.comp)} ＋ 代通知金 ${money(r.notice)}` : `经济补偿金 ${money(r.comp)}`)}</div></div>
+      <div class="sv" style="font-size:19px;">${money(r.total)}</div>
+    </div>
+  </div>
+
+  <h2 class="sec" style="font-size:17px;margin-bottom:12px;">金额构成可视化</h2>
+  <div class="viz">
+    <div class="vizrow">
+      <div class="vl"><b>经济补偿金</b><span>${money(r.comp)}</span></div>
+      <div class="vtrack"><i class="c1" style="width:${pct(r.comp)}%"></i></div>
+    </div>
+    ${r.type==='N1'?`<div class="vizrow">
+      <div class="vl"><b>代通知金（+1）</b><span>${money(r.notice)}</span></div>
+      <div class="vtrack"><i class="c2" style="width:${pct(r.notice)}%"></i></div>
+    </div>`:''}
+    ${r.type==='2N'?`<div class="vizrow">
+      <div class="vl"><b>赔偿金 2N 合计</b><span>${money(r.penalty)}</span></div>
+      <div class="vtrack"><i class="c2" style="width:${pct(r.penalty)}%"></i></div>
+    </div>`:''}
+    <div class="vizrow">
+      <div class="vl"><b>个税免税额参考</b><span>${money(r.taxFree)}</span></div>
+      <div class="vtrack"><i class="c3" style="width:${pct(r.taxFree)}%"></i></div>
+    </div>
+    <div class="vlegend">
+      <span><i style="background:var(--brand)"></i>经济补偿金</span>
+      ${r.type==='N1'?'<span><i style="background:var(--gold)"></i>代通知金</span>':''}
+      ${r.type==='2N'?'<span><i style="background:var(--gold)"></i>赔偿金 2N</span>':''}
+      <span><i style="background:var(--ok)"></i>个税免税额（非补偿金额）</span>
+    </div>
+  </div>
+
+  ${warnHtml}
+  ${taxNote}
+
+  <div class="btnrow noprint">
+    <button class="btn" onclick="copyResult()">📋 复制计算结果</button>
+    <button class="btn ghost" onclick="window.print()">🖨 保存 / 打印</button>
+  </div>`;
+
+  $('result').innerHTML = html;
+  $('result').style.display = 'block';
+  setTimeout(()=>{
+    document.querySelectorAll('.vtrack i').forEach(el=>{
+      const w = el.style.width; el.style.width='0';
+      void el.offsetWidth; el.style.width = w;
+    });
+  },60);
+  $('result').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* =====================================================================
+   复制 / 重置 / 法律依据渲染
+   ===================================================================== */
+function copyResult(){
+  if(!LAST){ alert('请先完成计算'); return; }
+  const r = LAST;
+  const tn = {N:'N（经济补偿）', N1:'N+1（经济补偿 + 代通知金）', '2N':'2N（违法解除赔偿金）'}[r.type];
+  const txt =
+`【离职补偿计算结果】
+城市：${r.city}
+类型：${tn}
+工作年限：${r.yDesc}
+离职前12个月平均应发工资：${fmt(r.wage)} 元/月
+当地三倍封顶基数：${fmt(r.cap)} 元/月
+是否触发封顶：${r.capped ? '是（基数' + (r.yearsCapped?'+年限':'') + '双封顶）' : '否'}
+计算基数：${fmt(r.finalBase)} 元/月
+补偿系数 N：${r.finalN} 个月
+经济补偿金：${money(r.comp)}
+${r.type==='N1' ? '代通知金（+1）：' + money(r.notice) + '（按上月工资，不封顶）\n' : ''}${r.type==='2N' ? '违法解除赔偿金：' + money(r.penalty) + '\n' : ''}
+────────────
+应得总额：${money(r.total)}
+个税免税额参考：${money(r.taxFree)}（当地上年职工月平均工资×3×12）
+────────────
+法律依据：《劳动合同法》第${r.type==='2N'?'48、87':'40、46、47'}条${r.type==='N1'?'、《劳动合同法实施条例》第20条':''}
+注：本结果为估算参考，个案请以当地仲裁机构或专业律师意见为准。`;
+  navigator.clipboard.writeText(txt).then(()=>alert('计算结果已复制到剪贴板 ✅')).catch(()=>alert('复制失败，请手动选择文本复制'));
+}
+
+function resetAll(){
+  ['cap','d1','d2','myears','wage','lastwage','minwage'].forEach(id=>{ $(id).value=''; });
+  $('yearsTxt').value = '填写上方便自动计算';
+  $('result').style.display='none'; $('result').innerHTML='';
+  Object.keys(diagAns).forEach(k=>delete diagAns[k]);
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  $('diagres').className='diagres'; $('diagres').innerHTML='';
+  $('qs_reason').style.display='none'; $('qs_self').style.display='none';
+  $('qs_expire').style.display='none'; $('qs_notice').style.display='none';
+  setType('N');
+  LAST = null;
+  onCityChange();   // 恢复默认城市对应的封顶基数
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderLaws(){
+  $('laws').innerHTML = LAWS.map((L,i)=>`
+    <details class="law" ${i===0?'open':''}>
+      <summary>
+        <span class="art ${L.key?'key':''}">${L.art}</span>
+        <span>${L.title}</span>
+        <span class="ar">▼</span>
+      </summary>
+      <div class="lawbody">
+        <div class="quote">${L.quote}</div>
+        <div class="plain"><b>通俗解读：</b>${L.plain}</div>
+      </div>
+    </details>`).join('');
+}
+
+/* =====================================================================
+   初始化
+   ===================================================================== */
+(function init(){
+  $('city').innerHTML = CITIES.map(c=>
+    `<option value="${c.n}">${c.n}${c.p&&c.p!==c.n?'（'+c.p+'）':''}${c.st==='manual'?'　·　需手动填基数':''}</option>`
+  ).join('');
+  $('city').value = '深圳';
+  onCityChange();
+  $('city').addEventListener('change', onCityChange);
+  $('d1').addEventListener('change', updateYears);
+  $('d2').addEventListener('change', updateYears);
+  $('myears').addEventListener('input', updateYears);
+  document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>pickChip(c)));
+  document.querySelectorAll('#segType button').forEach(b=>b.addEventListener('click',()=>setType(b.dataset.v)));
+  updateTypeHint();
+  renderLaws();
+
+  // 默认日期：3 年前入职，今天离职（按本地日期格式化，避免 toISOString 的时区偏移）
+  const pad = n => String(n).padStart(2,'0');
+  const ymd = d => d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+  const today = new Date();
+  const past = new Date(today.getFullYear()-3, today.getMonth(), today.getDate());
+  $('d2').value = ymd(today);
+  $('d1').value = ymd(past);
+  updateYears();
+})();
+</script>
+
+<!-- 站点访问统计（与主站其他工具页一致，纯本地统计） -->
+<script src="js/visits.js"></script>
+</body>
+</html>
