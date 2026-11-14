@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>三要素职位评估参考工具</title>
+<style>
+:root{
+  --bg:#f4f6fa; --card:#fff; --line:#e4e8f0; --line2:#eef1f6;
+  --ink:#1b2432; --sub:#6b7688; --faint:#98a2b3;
+  --brand:#2b56d6; --brand-soft:#eef3ff; --accent:#0e8a6a;
+  --warn:#a8681a; --warn-soft:#fff6e8;
+  --title:#d92b2b; --title-soft:#fff0f0;
+  --radius:14px; --shadow:0 1px 2px rgba(20,35,70,.04),0 6px 20px rgba(20,35,70,.04);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--ink);
+  font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+h1,h2,h3,p{margin:0}
+a{color:var(--brand)}
+
+/* ---------- header ---------- */
+header{
+  background:#fff;border-bottom:1px solid var(--line);
+  padding:18px 24px;display:flex;align-items:center;gap:14px;
+}
+.logo{
+  width:38px;height:38px;border-radius:10px;background:var(--brand);color:#fff;
+  display:grid;place-items:center;font-weight:700;font-size:18px;letter-spacing:-1px;flex:none;
+}
+header h1{font-size:17px;font-weight:700;letter-spacing:.2px;color:var(--title)}
+header .sub{font-size:12px;color:var(--sub);margin-top:1px}
+header .sp{flex:1}
+.ghost{
+  background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 14px;
+  font-size:13px;color:var(--sub);transition:.15s;
+}
+.ghost:hover{border-color:var(--brand);color:var(--brand);background:var(--brand-soft)}
+
+/* ---------- layout ---------- */
+.wrap{max-width:1200px;margin:0 auto;padding:22px 24px 60px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.panel + .panel,.grid + .panel,.panel + .grid{margin-top:16px}
+.ph{padding:15px 20px;border-bottom:1px solid var(--line2);display:flex;align-items:center;gap:10px}
+.ph h2{font-size:14px;font-weight:700;color:var(--title)}
+.ph .hint{font-size:12px;color:var(--faint);font-weight:400}
+
+/* ---------- setup ---------- */
+.setup{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0}
+.setup .cell{padding:16px 20px;border-right:1px solid var(--line2)}
+.setup .cell:last-child{border-right:0}
+.lab{display:block;font-size:12px;color:var(--sub);margin-bottom:7px;font-weight:500}
+.lab small{color:var(--faint);font-weight:400}
+input[type=text],select{
+  width:100%;border:1px solid var(--line);background:#fff;border-radius:8px;
+  padding:8px 10px;outline:none;transition:.15s;font-size:13px;
+}
+input[type=text]:focus,select:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' fill='none' stroke='%2398a2b3' stroke-width='1.6'/></svg>");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+.seg{display:flex;gap:4px;background:#f2f4f9;padding:3px;border-radius:9px}
+.seg button{flex:1;border:0;background:transparent;border-radius:7px;padding:6px 2px;font-size:12px;color:var(--sub);white-space:nowrap}
+.seg button.on{background:#fff;color:var(--brand);font-weight:600;box-shadow:0 1px 3px rgba(20,35,70,.12)}
+.range{display:flex;align-items:center;gap:9px}
+.range input[type=range]{flex:1;accent-color:var(--brand)}
+.range b{font-variant-numeric:tabular-nums;font-size:13px;min-width:38px;text-align:right}
+
+/* ---------- factor cards ---------- */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+.factor{display:flex;flex-direction:column;min-width:0}
+.fh{padding:16px 18px 12px;display:flex;align-items:flex-start;gap:10px}
+.fh .no{font-size:11px;color:var(--title);background:var(--title-soft);border-radius:6px;padding:2px 6px;font-weight:700;margin-top:3px}
+.fh h3{font-size:15px;font-weight:700;line-height:1.35;color:var(--title)}
+.fh h3 em{display:block;font-style:normal;font-size:11px;color:var(--faint);font-weight:400;letter-spacing:.4px;margin-top:2px}
+.fh .pts{margin-left:auto;text-align:right;white-space:nowrap}
+.fh .pts b{display:block;font-size:24px;line-height:1.1;font-variant-numeric:tabular-nums;letter-spacing:-.5px}
+.fh .pts span{font-size:10px;color:var(--faint)}
+.fdesc{padding:0 18px 12px;font-size:12px;color:var(--sub);min-height:34px}
+.fields{padding:0 18px;display:flex;flex-direction:column;gap:13px;flex:1}
+.fld label{display:block;font-size:12px;font-weight:500;margin-bottom:5px}
+.fld label i{font-style:normal;color:var(--faint);font-weight:400;font-size:11px;margin-left:4px}
+.def{font-size:11.5px;color:var(--faint);line-height:1.55;margin-top:6px;min-height:18px}
+.lookup{
+  margin:14px 18px 0;background:#f7f9fd;border:1px solid var(--line2);border-radius:9px;
+  padding:9px 11px;font-size:11.5px;color:var(--sub);display:flex;gap:6px;flex-wrap:wrap;align-items:center;
+}
+.lookup b{color:var(--ink);font-variant-numeric:tabular-nums}
+.lookup .arrow{color:var(--faint)}
+details{margin:12px 18px 18px;border-top:1px solid var(--line2);padding-top:10px}
+details summary{font-size:12px;color:var(--brand);cursor:pointer;list-style:none;user-select:none}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:"▸ ";display:inline-block;transition:.15s}
+details[open] summary::before{transform:rotate(90deg)}
+.tblwrap{overflow:auto;margin-top:10px;border:1px solid var(--line2);border-radius:8px;max-height:260px}
+table{border-collapse:collapse;font-size:11px;font-variant-numeric:tabular-nums;white-space:nowrap}
+th,td{border:1px solid var(--line2);padding:4px 6px;text-align:center;min-width:34px}
+th{background:#f7f9fd;color:var(--sub);font-weight:600;position:sticky;top:0;z-index:1}
+th.rowhead{text-align:left;position:sticky;left:0;z-index:2;background:#f7f9fd;min-width:96px}
+td.hit{background:var(--brand)!important;color:#fff!important;font-weight:700}
+td.dim{color:var(--faint)}
+
+/* ---------- result ---------- */
+.result{padding:0}
+.rgrid{display:grid;grid-template-columns:minmax(280px,.85fr) 1.15fr;gap:0}
+.rleft{padding:22px;border-right:1px solid var(--line2)}
+.rright{padding:22px}
+.totalbox{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+.totalbox strong{font-size:52px;line-height:1;font-weight:680;letter-spacing:-2px;font-variant-numeric:tabular-nums;color:var(--brand)}
+.totalbox span{font-size:12px;color:var(--faint)}
+.totalcap{font-size:12px;color:var(--sub);margin-bottom:18px}
+.formula{background:#f7f9fd;border:1px solid var(--line2);border-radius:9px;padding:12px 13px;font-size:12px;line-height:2;color:var(--sub);font-variant-numeric:tabular-nums}
+.formula b{color:var(--ink);font-weight:600}
+.formula .eq{display:block;color:var(--ink)}
+.formula .final{color:var(--brand);font-weight:650}
+.note{margin-top:14px;font-size:11.5px;color:var(--warn);background:var(--warn-soft);border-radius:8px;padding:9px 11px;line-height:1.6}
+.brow{display:flex;align-items:center;gap:10px;margin-bottom:13px;font-size:12px}
+.brow .bl{width:92px;color:var(--sub);flex:none}
+.brow .track{flex:1;height:9px;background:#eef1f6;border-radius:6px;overflow:hidden}
+.brow .track i{display:block;height:100%;border-radius:6px;background:var(--brand);transition:width .25s}
+.brow .track i.g{background:var(--accent)}
+.brow .bv{width:62px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.stack{height:14px;border-radius:7px;overflow:hidden;display:flex;background:#eef1f6;margin:6px 0 5px}
+.stack i{display:block;height:100%}
+.stack i.a{background:var(--brand)}
+.stack i.b{background:var(--accent)}
+.stacklab{display:flex;justify-content:space-between;font-size:11px;color:var(--sub)}
+.legend{display:flex;gap:16px;font-size:11px;color:var(--sub);margin-top:16px}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px}
+.actions{display:flex;gap:9px;flex-wrap:wrap;padding:16px 22px;border-top:1px solid var(--line2)}
+.btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 15px;font-size:13px;transition:.15s}
+.btn:hover{border-color:var(--brand);color:var(--brand)}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn.primary:hover{background:#2249bd;color:#fff}
+
+/* ---------- compare ---------- */
+.ctable{width:100%;border-collapse:collapse;font-size:12.5px}
+.ctable th,.ctable td{padding:10px 12px;border-bottom:1px solid var(--line2);text-align:right;white-space:nowrap}
+.ctable th{background:#fafbfd;color:var(--sub);font-weight:600;font-size:11.5px}
+.ctable th:first-child,.ctable td:first-child{text-align:left;font-weight:600}
+.ctable td.del{text-align:center;width:44px}
+.ctable .x{border:0;background:transparent;color:var(--faint);font-size:16px;line-height:1}
+.ctable .x:hover{color:#c0392b}
+.empty{padding:26px;text-align:center;color:var(--faint);font-size:12.5px}
+
+/* ---------- footer / dialog ---------- */
+footer{margin-top:20px;font-size:11.5px;color:var(--faint);line-height:1.8;padding:0 4px}
+footer b{color:var(--sub)}
+dialog{border:0;border-radius:16px;padding:0;max-width:640px;width:calc(100% - 40px);box-shadow:0 24px 70px rgba(15,25,50,.22)}
+dialog::backdrop{background:rgba(18,28,48,.42)}
+.dlg-h{padding:18px 22px;border-bottom:1px solid var(--line2);display:flex;align-items:center}
+.dlg-h h2{font-size:16px;font-weight:700;flex:1;color:var(--title)}
+.dlg-b{padding:20px 22px;max-height:66vh;overflow:auto;font-size:13px;line-height:1.8;color:var(--sub)}
+.dlg-b h3{font-size:13px;color:var(--title);margin:18px 0 6px;font-weight:700}
+.dlg-b h3:first-child{margin-top:0}
+.dlg-b p{margin:6px 0}
+.dlg-b code{background:#f2f4f9;padding:2px 6px;border-radius:5px;color:var(--ink);font-size:12px}
+.dlg-b ul{margin:6px 0;padding-left:20px}
+.dlg-f{padding:14px 22px;border-top:1px solid var(--line2);text-align:right}
+
+@media(max-width:980px){
+  .grid{grid-template-columns:1fr}
+  .rgrid{grid-template-columns:1fr}
+  .rleft{border-right:0;border-bottom:1px solid var(--line2)}
+  .setup .cell{border-right:0;border-bottom:1px solid var(--line2)}
+  .setup .cell:last-child{border-bottom:0}
+}
+@media print{
+  body{background:#fff}
+  header .ghost,.actions,details,.compare .btn,footer .noprint{display:none!important}
+  .panel{box-shadow:none;break-inside:avoid}
+  .grid{grid-template-columns:repeat(3,1fr)}
+  .wrap{padding:0}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">H</div>
+  <div>
+    <h1>三要素职位评估工具</h1>
+    <div class="sub">Guide Chart–Profile Method · 是由美国工资设计专家艾德华·海（Edward Hay）于1951年研究开发出来的，从知识技能、解决问题、应负责任3个维度进行评价，本工具参考相关理论原理进行设计。</div>
+  </div>
+  <div class="sp"></div>
+  <a href="index.html" class="ghost" style="text-decoration:none;display:inline-flex;align-items:center">← 返回主页</a>
+  <button class="ghost" id="helpBtn">方法说明</button>
+</header>
+
+<div class="wrap">
+
+  <!-- 评估设置 -->
+  <section class="panel setup">
+    <div class="cell">
+      <label class="lab" for="jobName">岗位名称</label>
+      <input type="text" id="jobName" value="人力资源经理" placeholder="请输入待评估岗位">
+    </div>
+    <div class="cell">
+      <span class="lab">职务形态 <small>决定能力 / 责任权重</small></span>
+      <div class="seg" id="shapeSeg">
+        <button data-shape="up">上山型</button>
+        <button data-shape="flat" class="on">平路型</button>
+        <button data-shape="down">下山型</button>
+        <button data-shape="custom">自定义</button>
+      </div>
+    </div>
+    <div class="cell">
+      <label class="lab" for="gamma">能力权重 γ <small>知能 + 解决问题</small></label>
+      <div class="range"><input type="range" id="gamma" min="10" max="90" step="5" value="50"><b id="gammaV">50%</b></div>
+    </div>
+    <div class="cell">
+      <label class="lab" for="beta">责任权重 β <small>应负责任</small></label>
+      <div class="range"><input type="range" id="beta" min="10" max="90" step="5" value="50"><b id="betaV">50%</b></div>
+    </div>
+    <div class="cell">
+      <label class="lab" for="mode">解决问题取分口径 <small>百分比区间</small></label>
+      <select id="mode">
+        <option value="mid">区间中值（推荐）</option>
+        <option value="low">区间下限</option>
+        <option value="high">区间上限</option>
+      </select>
+    </div>
+  </section>
+
+  <!-- 三要素 -->
+  <div class="grid">
+
+    <section class="panel factor">
+      <div class="fh">
+        <span class="no">01</span>
+        <h3>知识技能<em>KNOW-HOW · 点数</em></h3>
+        <div class="pts"><b id="khPts">—</b><span>分</span></div>
+      </div>
+      <p class="fdesc">达到可接受绩效水平所必需的专业知识、管理广度与人际技能之和。</p>
+      <div class="fields">
+        <div class="fld"><label for="khT">专业理论知识 <i>8 级</i></label><select id="khT"></select><p class="def" id="khTDef"></p></div>
+        <div class="fld"><label for="khM">管理诀窍 <i>5 级</i></label><select id="khM"></select><p class="def" id="khMDef"></p></div>
+        <div class="fld"><label for="khH">人际技能 <i>3 级</i></label><select id="khH"></select><p class="def" id="khHDef"></p></div>
+      </div>
+      <div class="lookup">查表坐标 <b id="khCoord"></b><span class="arrow">→</span><b id="khRaw"></b> 分</div>
+      <details><summary>查看知识技能指导表</summary><div class="tblwrap" id="khTable"></div></details>
+    </section>
+
+    <section class="panel factor">
+      <div class="fh">
+        <span class="no">02</span>
+        <h3>解决问题能力<em>PROBLEM SOLVING · 百分比</em></h3>
+        <div class="pts"><b id="psPct">—</b><span>%</span></div>
+      </div>
+      <p class="fdesc">岗位所需思维的相对强度，以 知识技能得分 × 百分比 计入，不单独给点数。</p>
+      <div class="fields">
+        <div class="fld"><label for="psE">思维环境 <i>8 级</i></label><select id="psE"></select><p class="def" id="psEDef"></p></div>
+        <div class="fld"><label for="psC">思维难度 <i>5 级</i></label><select id="psC"></select><p class="def" id="psCDef"></p></div>
+        <div class="fld" style="background:#f7f9fd;border-radius:9px;padding:10px 12px">
+          <label style="margin:0">本项得分 <i>= KH × 百分比</i></label>
+          <p class="def" id="psCalc" style="margin-top:4px;color:var(--sub);font-size:12px"></p>
+        </div>
+      </div>
+      <div class="lookup">查表区间 <b id="psRange"></b><span class="arrow">→</span>采用 <b id="psUsed"></b></div>
+      <details><summary>查看解决问题能力指导表（%）</summary><div class="tblwrap" id="psTable"></div></details>
+    </section>
+
+    <section class="panel factor">
+      <div class="fh">
+        <span class="no">03</span>
+        <h3>应负责任<em>ACCOUNTABILITY · 点数</em></h3>
+        <div class="pts"><b id="acPts">—</b><span>分</span></div>
+      </div>
+      <p class="fdesc">岗位行动自由度及其对最终结果的影响程度，衡量岗位的产出价值。</p>
+      <div class="fields">
+        <div class="fld"><label for="acF">行动的自由度 <i>9 级</i></label><select id="acF"></select><p class="def" id="acFDef"></p></div>
+        <div class="fld"><label for="acR">职务责任大小 <i>4 级</i></label><select id="acR"></select><p class="def" id="acRDef"></p></div>
+        <div class="fld"><label for="acI">对后果形成的作用 <i>4 级</i></label><select id="acI"></select><p class="def" id="acIDef"></p></div>
+      </div>
+      <div class="lookup">查表坐标 <b id="acCoord"></b><span class="arrow">→</span><b id="acRaw"></b> 分</div>
+      <details><summary>查看应负责任指导表</summary><div class="tblwrap" id="acTable"></div></details>
+    </section>
+
+  </div>
+
+  <!-- 结果 -->
+  <section class="panel result">
+    <div class="ph"><h2>评估结果</h2><span class="hint" id="resJob">人力资源经理</span></div>
+    <div class="rgrid">
+      <div class="rleft">
+        <div class="totalbox"><strong id="totalScore">0</strong><span>Hay Points · 相对价值分</span></div>
+        <div class="totalcap" id="totalCap">用于岗位之间的相对排序，不代表薪酬金额</div>
+        <div class="formula" id="formula"></div>
+        <div class="note" id="profileNote"></div>
+      </div>
+      <div class="rright">
+        <div class="brow"><span class="bl">知识技能 KH</span><div class="track"><i id="barKH"></i></div><span class="bv" id="valKH">0</span></div>
+        <div class="brow"><span class="bl">解决问题 PS</span><div class="track"><i id="barPS"></i></div><span class="bv" id="valPS">0</span></div>
+        <div class="brow"><span class="bl">应负责任 AC</span><div class="track"><i class="g" id="barAC"></i></div><span class="bv" id="valAC">0</span></div>
+        <div style="height:1px;background:var(--line2);margin:18px 0 16px"></div>
+        <div style="font-size:12px;color:var(--sub)">加权后贡献构成</div>
+        <div class="stack"><i class="a" id="stackA"></i><i class="b" id="stackB"></i></div>
+        <div class="stacklab"><span id="stackATxt">能力侧 0%</span><span id="stackBTxt">责任侧 0%</span></div>
+        <div class="legend">
+          <span><i style="background:var(--brand)"></i>能力侧 = KH + PS</span>
+          <span><i style="background:var(--accent)"></i>责任侧 = AC</span>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn primary" id="saveBtn">加入岗位对比</button>
+      <button class="btn" id="csvBtn">导出对比表 CSV</button>
+      <button class="btn" id="printBtn">打印 / 存为 PDF</button>
+    </div>
+  </section>
+
+  <!-- 对比 -->
+  <section class="panel compare" id="comparePanel" hidden>
+    <div class="ph"><h2>岗位价值对比</h2><span class="hint">按总分降序 · 仅在同一口径下比较</span></div>
+    <div id="compareBody"></div>
+    <div class="actions">
+      <button class="btn" id="clearBtn">清空对比</button>
+    </div>
+  </section>
+
+  <footer>
+    <b>使用说明</b>：本工具采用公开流传的H三要素指导图表（标准评分表），评估的是岗位而非任职者。先选标杆岗位并校准，由评估小组独立打分后取均值；职级与薪酬带宽需结合企业自身职级结构和市场数据标定，本工具的相关参数来源于公开流传的指导图表，结果仅供学术研究与教学交流的参考，不作为任何决策依据，不得用于其他非学术交流的用途，否则后果自负。若存在计算错误和偏差，敬请批评指正<br>
+    <b>数据与隐私</b>：页面不上传、不收集任何作答数据，加入“岗位对比”的记录仅保存在你本机浏览器中，可随时清空。
+  </footer>
+</div>
+
+<dialog id="helpDlg">
+  <div class="dlg-h"><h2>评估方法说明</h2><button class="ghost" id="closeDlg">关闭</button></div>
+  <div class="dlg-b">
+    <h3>一、基本原理</h3>
+    <p>三要素评价法把岗位的付酬因素抽象为三个具有普遍适用的因素，分别用三张标尺性指导图表量化，再综合成相对价值分：<b>知识技能（投入）→ 解决问题能力（过程）→ 应负责任（产出）</b>。点数按几何级数递增，使不同职能、不同层级的岗位可以放在一起比较。</p>
+    <h3>二、三张指导图表</h3>
+    <ul>
+      <li><b>知识技能 KH</b>：专业理论知识（8 级）× 管理诀窍（5 级）× 人际技能（3 级）→ 查表得点数。</li>
+      <li><b>解决问题能力 PS</b>：思维环境（8 级）× 思维难度（5 级）→ 查表得百分比；<code>PS = KH × 百分比</code>。它衡量岗位需要多少原创思考，不单独给点数。</li>
+      <li><b>应负责任 AC</b>：行动自由度（9 级）× 职务责任大小（4 级）× 对后果形成的作用（4 级）→ 查表得点数。作用分后勤、辅助（间接影响）与分摊、主要（直接影响）。</li>
+    </ul>
+    <h3>三、计算公式与职务形态</h3>
+    <p><code>能力侧 = KH × (1 + PS%)</code>，<code>总分 = 能力侧 × γ + AC × β</code>，且 <code>γ + β = 100%</code>。</p>
+    <p>岗位形状由能力侧与责任侧的相对重要性决定：</p>
+    <ul>
+      <li><b>上山型</b>（责任主导，如总裁、销售/生产管理者）：γ 40% / β 60%</li>
+      <li><b>平路型</b>（能力与责任并重，如会计、职能管理）：γ 50% / β 50%</li>
+      <li><b>下山型</b>（能力主导，如研发、专业技术岗）：γ 70% / β 30%</li>
+    </ul>
+    <p>企业可按自身岗位序列微调权重，本工具的自定义滑块即用于此。</p>
+    <h3>四、得分口径</h3>
+    <p>解决问题能力指导表给出的是<b>区间</b>（如 19–22%）。不同的公开资料分别取下限、中值或上限，本工具默认取区间中值，可在顶部切换，以便适配不同职位状况。</p>
+    <h3>五、评估的操作要点</h3>
+    <ul>
+      <li>评岗位、不评人：依据岗位说明书中“达到可接受绩效所必需”的要求定级。</li>
+      <li>每个下拉都附等级释义，展开卡片底部可查看完整指导表，当前查中的单元格会高亮，便于复核。</li>
+      <li>先评标杆岗位、由评估小组背靠背打分取均值，再把其余岗位安插进已有序列。</li>
+      <li>跨岗位比较时务必统一得分口径和职务形态权重。</li>
+    </ul>
+  </div>
+  <div class="dlg-f"><button class="btn primary" id="okDlg">知道了</button></div>
+</dialog>
+
+<!-- 数据：等级定义与三张指导图表 -->
+<script id="hay-data" type="application/json">
+{
+  "levels": {
+    "khT": [
+      ["A 基本的", "按明确指令完成简单、重复的操作或文书工作，无需专门训练。"],
+      ["B 初等业务的", "熟悉标准化流程与常用设备，经短期培训即可独立胜任。"],
+      ["C 中等业务的", "熟练掌握基本方法与工艺，需具备使用专业设备或系统的能力。"],
+      ["D 高等业务的", "能应用较为复杂的流程与系统，需理解一定的技术原理。"],
+      ["E 基本专门技术", "需通过正规教育或长期实践获得的专门技能，可独立处理常规专业问题。"],
+      ["F 熟练专门技术", "充分掌握某专业领域，需运用科学理论与原则并结合实践先例。"],
+      ["G 精通专门技术", "精通理论、原则与综合技术，能处理跨领域复杂问题。"],
+      ["H 权威专门技术", "在综合技术领域成为公认权威，可开创方法或引领专业方向。"]
+    ],
+    "khM": [
+      ["Ⅰ 起码的", "仅关注本岗位活动的内容与目的，不涉及对其他活动的协调。"],
+      ["Ⅱ 相关的", "需决定本部门活动方向或协调几个相关岗位/环节。"],
+      ["Ⅲ 多样的", "需决定一个大部门的方向，或协调多种不同职能的活动。"],
+      ["Ⅳ 广博的", "决定一个主要部门的方向，对组织规划与运作有战略性影响。"],
+      ["Ⅴ 全面的", "对组织整体进行全面管理与统筹。"]
+    ],
+    "khH": [
+      ["1 基本的", "基本礼节与日常沟通，主要是获取或提供信息。"],
+      ["2 重要的", "需理解并影响他人、促成理解或行动，对达成目标很重要。"],
+      ["3 关键的", "需使他人理解并接受有难度或争议的行动方案，技巧是岗位成败关键。"]
+    ],
+    "psE": [
+      ["1 高度常规性的", "有简单规则和非常详细的说明，几乎无需判断。"],
+      ["2 常规性的", "已有既定常规和固定说明，按先例即可处理。"],
+      ["3 半常规性的", "有可变化的步骤与先例，需做有限选择。"],
+      ["4 标准化的", "存在多元程序与专业化标准，需选择合适方法。"],
+      ["5 明确规定的", "在仔细限定的政策与原则内思考，需自行组织路径。"],
+      ["6 广泛规定的", "在宽泛目标下依据原则与先例找方案，约束较少。"],
+      ["7 一般规定的", "仅有一般性政策指引，需自己界定问题与路径。"],
+      ["8 抽象规定的", "问题本身模糊或全新，需在抽象框架下定义问题与创造方法。"]
+    ],
+    "psC": [
+      ["1 重复性的", "情形完全相同，照搬既定答案即可。"],
+      ["2 模式化的", "情形相似，套用已有模式或稍作调整。"],
+      ["3 中间型的", "需辨析差异、选择或组合已有方法。"],
+      ["4 适应性的", "需改造既有方案以适应新情境，有一定创造性。"],
+      ["5 无先例的", "无先例可循，需提出全新概念、理论或方案。"]
+    ],
+    "acF": [
+      ["1 有规定的", "每一步都有明确规定与密切监督，几乎无选择余地。"],
+      ["2 受控制的", "按详细规程与密切检查行事，仅有极小取舍空间。"],
+      ["3 标准化的", "按标准化程序与规程工作，例外需请示。"],
+      ["4 一般性规范的", "在既定政策与惯例内自主安排工作，定期复盘结果。"],
+      ["5 有指导的", "依据上级给出的目标与方向自主决定实施方法。"],
+      ["6 方向性指导的", "在组织方针下自主制定本领域计划与方案。"],
+      ["7 广泛性指引的", "仅受组织总体战略约束，可自主设定中长期方向。"],
+      ["8 战略性指引的", "受董事会/股东层面战略指引，主导组织关键决策。"],
+      ["9 一般性无指引的", "基本无上级指引，对组织整体结果负最终责任。"]
+    ],
+    "acR": [
+      ["微小", "影响范围限于本岗位或极小单元，财务/业务量级很小。"],
+      ["少量", "影响一个小团队或局部业务，量级有限且可控。"],
+      ["中量", "影响一个部门或一条业务线，量级中等。"],
+      ["大量", "影响整个组织或主要业务板块，量级重大。"]
+    ],
+    "acI": [
+      ["后勤（间接）", "提供服务与信息支持，通过他人对结果产生间接作用。"],
+      ["辅助（间接）", "提供建议、咨询或分析，对结果有重要但非决定性的间接作用。"],
+      ["分摊（直接）", "与他人共同对结果负责，本人作用可直接辨认但需分担。"],
+      ["主要（直接）", "对最终结果起决定性作用，承担主要责任。"]
+    ]
+  },
+  "khTable": [
+    [57,66,76,76,87,100,100,115,132,132,152,175,175,200,230],
+    [76,87,100,100,115,132,132,152,175,175,200,230,230,264,304],
+    [100,115,132,132,152,175,175,200,230,230,264,304,304,350,400],
+    [132,152,175,175,200,230,230,264,304,304,350,400,400,460,528],
+    [175,200,230,230,264,304,304,350,400,400,460,528,528,608,700],
+    [230,264,304,304,350,400,400,460,528,528,608,700,700,800,920],
+    [304,350,400,400,460,528,528,608,700,700,800,920,920,1056,1216],
+    [400,460,528,528,608,700,700,800,920,920,1056,1216,1216,1400,1600]
+  ],
+  "psTable": [
+    [[10,12],[14,16],[19,22],[25,29],[33,38]],
+    [[12,14],[16,19],[22,25],[29,33],[38,43]],
+    [[14,16],[19,22],[25,29],[33,38],[43,50]],
+    [[16,19],[22,25],[29,33],[38,43],[50,57]],
+    [[19,22],[25,29],[33,38],[43,50],[57,66]],
+    [[22,25],[29,33],[38,43],[50,57],[66,76]],
+    [[25,29],[33,38],[43,50],[57,66],[76,87]],
+    [[29,33],[38,43],[50,57],[66,76],[87,100]]
+  ],
+  "acTable": [
+    [12,16,22,29,16,22,29,38,22,29,38,50,29,38,50,66],
+    [19,25,33,43,25,33,43,57,33,43,57,76,43,57,76,100],
+    [29,38,50,66,38,50,66,87,50,66,87,115,66,87,115,152],
+    [43,57,76,100,57,76,100,132,76,100,132,175,100,132,175,230],
+    [66,87,115,152,87,115,152,200,115,152,200,264,152,200,264,350],
+    [100,132,175,230,132,175,230,304,175,230,304,400,230,304,400,528],
+    [152,200,264,350,200,264,350,460,264,350,460,608,350,460,608,800],
+    [230,304,400,528,304,400,528,700,400,528,700,920,528,700,920,1216],
+    [350,460,608,800,460,608,800,1056,608,800,1056,1400,800,1056,1400,1840]
+  ],
+  "shapes": {
+    "up":     {"name":"上山型","gamma":40,"beta":60,"desc":"责任主导，如总裁、销售与生产管理者"},
+    "flat":   {"name":"平路型","gamma":50,"beta":50,"desc":"能力与责任并重，如会计、职能管理岗"},
+    "down":   {"name":"下山型","gamma":70,"beta":30,"desc":"能力主导，如研发与专业技术岗"},
+    "custom": {"name":"自定义","gamma":50,"beta":50,"desc":"按企业岗位序列自行设定权重"}
+  }
+}
+</script>
+
+<script>
+(function(){
+  "use strict";
+  const D = JSON.parse(document.getElementById('hay-data').textContent);
+  const $ = id => document.getElementById(id);
+  const L = D.levels;
+  const SHAPES = D.shapes;
+
+  /* ---------- 初始化下拉 ---------- */
+  function fillSelect(id, arr){
+    const el = $(id);
+    el.innerHTML = arr.map((x,i)=>`<option value="${i}">${x[0]}</option>`).join('');
+  }
+  [['khT','khT'],['khM','khM'],['khH','khH'],['psE','psE'],['psC','psC'],
+   ['acF','acF'],['acR','acR'],['acI','acI']].forEach(([id,key])=>fillSelect(id,L[key]));
+
+  // 默认值：一个典型中层专业/管理岗
+  const DEFAULTS = {khT:4, khM:2, khH:1, psE:5, psC:2, acF:4, acR:1, acI:2};
+  Object.keys(DEFAULTS).forEach(k=>$(k).value = DEFAULTS[k]);
+
+  /* ---------- 渲染指导表（可复核） ---------- */
+  function renderTables(){
+    // KH：8 行 × 15 列
+    let h = '<table><thead><tr><th class="rowhead">专业理论 \\ 管理诀窍</th>';
+    for(let m=0;m<5;m++) h += `<th colspan="3">${L.khM[m][0]}</th>`;
+    h += '</tr><tr><th class="rowhead">人际技能 →</th>';
+    for(let m=0;m<5;m++) for(let r=0;r<3;r++) h += `<th>${L.khH[r][0].split(' ')[0]}</th>`;
+    h += '</tr></thead><tbody>';
+    for(let t=0;t<8;t++){
+      h += `<tr><th class="rowhead">${L.khT[t][0]}</th>`;
+      for(let c=0;c<15;c++) h += `<td id="kh-${t}-${c}">${D.khTable[t][c]}</td>`;
+      h += '</tr>';
+    }
+    $('khTable').innerHTML = h + '</tbody></table>';
+
+    // PS：8 行 × 5 列
+    h = '<table><thead><tr><th class="rowhead">思维环境 \\ 思维难度</th>';
+    for(let c=0;c<5;c++) h += `<th>${L.psC[c][0]}</th>`;
+    h += '</tr></thead><tbody>';
+    for(let e=0;e<8;e++){
+      h += `<tr><th class="rowhead">${L.psE[e][0]}</th>`;
+      for(let c=0;c<5;c++){
+        const [lo,hi] = D.psTable[e][c];
+        h += `<td id="ps-${e}-${c}">${lo}–${hi}</td>`;
+      }
+      h += '</tr>';
+    }
+    $('psTable').innerHTML = h + '</tbody></table>';
+
+    // AC：9 行 × 16 列
+    h = '<table><thead><tr><th class="rowhead">自由度 \\ 责任大小</th>';
+    for(let r=0;r<4;r++) h += `<th colspan="4">${L.acR[r][0]}</th>`;
+    h += '</tr><tr><th class="rowhead">对后果的作用 →</th>';
+    for(let r=0;r<4;r++) for(let i=0;i<4;i++) h += `<th>${L.acI[i][0].replace(/（.*?）/,'')}</th>`;
+    h += '</tr></thead><tbody>';
+    for(let f=0;f<9;f++){
+      h += `<tr><th class="rowhead">${L.acF[f][0]}</th>`;
+      for(let c=0;c<16;c++) h += `<td id="ac-${f}-${c}">${D.acTable[f][c]}</td>`;
+      h += '</tr>';
+    }
+    $('acTable').innerHTML = h + '</tbody></table>';
+  }
+  renderTables();
+
+  /* ---------- 计算 ---------- */
+  let shape = 'flat';
+  let list = [];
+  try{ list = JSON.parse(localStorage.getItem('hayCompare')||'[]'); }catch(e){ list = []; }
+
+  function setShape(s, sync){
+    shape = s;
+    document.querySelectorAll('#shapeSeg button').forEach(b=>b.classList.toggle('on', b.dataset.shape===s));
+    if(sync !== false){
+      const w = SHAPES[s];
+      $('gamma').value = w.gamma; $('beta').value = w.beta;
+    }
+    render();
+  }
+
+  function compute(){
+    const t=+$('khT').value, m=+$('khM').value, hr=+$('khH').value;
+    const e=+$('psE').value, c=+$('psC').value;
+    const f=+$('acF').value, r=+$('acR').value, i=+$('acI').value;
+    const mode = $('mode').value;
+    const g = +$('gamma').value/100, b = +$('beta').value/100;
+
+    const KH = D.khTable[t][m*3+hr];
+    const [lo,hi] = D.psTable[e][c];
+    const pct = mode==='low' ? lo : mode==='high' ? hi : (lo+hi)/2;
+    const PS = KH * pct/100;
+    const AC = D.acTable[f][r*4+i];
+    const ability = KH + PS;
+    const partA = ability * g, partB = AC * b;
+    const total = partA + partB;
+
+    return {t,m,hr,e,c,f,r,i,mode,g,b,KH,lo,hi,pct,PS,AC,ability,partA,partB,total,
+            khIdx:m*3+hr, acIdx:r*4+i};
+  }
+
+  const n = x => (Math.round(x*10)/10).toLocaleString('zh-CN');
+  const int = x => Math.round(x).toLocaleString('zh-CN');
+
+  function render(){
+    const v = compute();
+    // 等级释义
+    $('khTDef').textContent = L.khT[v.t][1];
+    $('khMDef').textContent = L.khM[v.m][1];
+    $('khHDef').textContent = L.khH[v.hr][1];
+    $('psEDef').textContent = L.psE[v.e][1];
+    $('psCDef').textContent = L.psC[v.c][1];
+    $('acFDef').textContent = L.acF[v.f][1];
+    $('acRDef').textContent = L.acR[v.r][1];
+    $('acIDef').textContent = L.acI[v.i][1];
+
+    // 卡片分数与查表坐标
+    $('khPts').textContent = int(v.KH);
+    $('psPct').textContent = n(v.pct);
+    $('acPts').textContent = int(v.AC);
+    $('khCoord').textContent = `${L.khT[v.t][0].split(' ')[0]} · ${L.khM[v.m][0].split(' ')[0]} · ${L.khH[v.hr][0].split(' ')[0]}`;
+    $('khRaw').textContent = int(v.KH);
+    $('acCoord').textContent = `${L.acF[v.f][0].split(' ')[0]} · ${L.acR[v.r][0]} · ${L.acI[v.i][0].replace(/（.*?）/,'')}`;
+    $('acRaw').textContent = int(v.AC);
+    $('psRange').textContent = `${v.lo}–${v.hi}%`;
+    $('psUsed').textContent = `${n(v.pct)}%`;
+    $('psCalc').textContent = `${int(v.KH)} × ${n(v.pct)}% = ${n(v.PS)} 分`;
+    $('gammaV').textContent = Math.round(v.g*100)+'%';
+    $('betaV').textContent = Math.round(v.b*100)+'%';
+    $('resJob').textContent = ($('jobName').value||'未命名岗位').trim();
+
+    // 高亮查中单元格
+    document.querySelectorAll('td.hit').forEach(td=>td.classList.remove('hit'));
+    [['kh',v.t,v.khIdx],['ps',v.e,v.c],['ac',v.f,v.acIdx]].forEach(([p,a,b2])=>{
+      const td = $(`${p}-${a}-${b2}`); if(td) td.classList.add('hit');
+    });
+
+    // 结果
+    $('totalScore').textContent = int(v.total);
+    $('formula').innerHTML =
+      `<span class="eq">能力侧 = KH × (1 + PS%) = ${int(v.KH)} × (1 + ${n(v.pct)}%) = <b>${n(v.ability)}</b></span>`+
+      `<span class="eq">应负责任 AC = <b>${int(v.AC)}</b>　（${SHAPES[shape].name}：γ ${Math.round(v.g*100)}% / β ${Math.round(v.b*100)}%）</span>`+
+      `<span class="eq">总分 = ${n(v.ability)} × ${Math.round(v.g*100)}% + ${int(v.AC)} × ${Math.round(v.b*100)}%</span>`+
+      `<span class="eq final">= ${n(v.partA)} + ${n(v.partB)} ≈ ${int(v.total)} 分</span>`;
+
+    const ratio = v.total ? (v.partA/v.total*100) : 0;
+    $('stackA').style.width = ratio+'%';
+    $('stackB').style.width = (100-ratio)+'%';
+    $('stackATxt').textContent = `能力侧 ${n(ratio)}%`;
+    $('stackBTxt').textContent = `责任侧 ${n(100-ratio)}%`;
+
+    const mx = Math.max(v.KH, v.PS, v.AC, 1);
+    $('barKH').style.width = (v.KH/mx*100)+'%';
+    $('barPS').style.width = (v.PS/mx*100)+'%';
+    $('barAC').style.width = (v.AC/mx*100)+'%';
+    $('valKH').textContent = int(v.KH);
+    $('valPS').textContent = n(v.PS);
+    $('valAC').textContent = int(v.AC);
+
+    // 形态复核提示
+    const raw = v.ability/(v.ability+v.AC)*100;
+    let msg = `当前按 ${SHAPES[shape].name} 加权（${SHAPES[shape].desc}）。未加权前能力侧占 ${n(raw)}%、责任侧占 ${n(100-raw)}%。`;
+    if(shape!=='custom' && Math.abs(raw-50)>18){
+      msg += ` 两者差距较大，建议复核：若岗位确实以结果责任为主，可改选上山型；若以专业判断为主，可改选下山型。`;
+    } else {
+      msg += ` 形态判定与得分结构基本吻合，可直接用于岗位间相对排序。`;
+    }
+    $('profileNote').textContent = msg;
+  }
+
+  /* ---------- 对比 ---------- */
+  function renderCompare(){
+    const p = $('comparePanel');
+    if(!list.length){ p.hidden = true; return; }
+    p.hidden = false;
+    const rows = [...list].sort((a,b)=>b.total-a.total).map((x,idx)=>
+      `<tr><td>${escapeHtml(x.name)}</td><td>${int(x.total)}</td><td>${int(x.KH)}</td>`+
+      `<td>${n(x.pct)}%</td><td>${n(x.PS)}</td><td>${int(x.AC)}</td>`+
+      `<td>${escapeHtml(x.shapeName)}</td><td>${x.gamma}/${x.beta}</td>`+
+      `<td>${escapeHtml(x.mode)}</td>`+
+      `<td class="del"><button class="x" data-i="${x._id}" title="移除">×</button></td></tr>`
+    ).join('');
+    $('compareBody').innerHTML =
+      `<table class="ctable"><thead><tr><th>岗位</th><th>总分</th><th>KH</th><th>PS%</th><th>PS 分</th>`+
+      `<th>AC</th><th>形态</th><th>γ/β</th><th>口径</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+    $('compareBody').querySelectorAll('.x').forEach(btn=>btn.onclick = ()=>{
+      const id = +btn.dataset.i;
+      list = list.filter(x=>x._id!==id);
+      persist(); renderCompare();
+    });
+  }
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function persist(){ try{ localStorage.setItem('hayCompare', JSON.stringify(list)); }catch(e){} }
+
+  $('saveBtn').onclick = ()=>{
+    const v = compute();
+    list.push({
+      _id: Date.now()+Math.floor(Math.random()*1000),
+      name: ($('jobName').value||'未命名岗位').trim(),
+      total: v.total, KH:v.KH, pct:v.pct, PS:v.PS, AC:v.AC,
+      shapeName: SHAPES[shape].name, gamma:Math.round(v.g*100), beta:Math.round(v.b*100),
+      mode: {low:'下限',mid:'中值',high:'上限'}[v.mode]
+    });
+    persist(); renderCompare();
+    $('saveBtn').textContent = '已加入 ✓';
+    setTimeout(()=>$('saveBtn').textContent='加入岗位对比', 1200);
+  };
+  $('clearBtn').onclick = ()=>{ list=[]; persist(); renderCompare(); };
+  $('csvBtn').onclick = ()=>{
+    if(!list.length){ alert('请先点击 加入岗位对比 添加岗位。'); return; }
+    const head = ['岗位','总分','KH','PS%','PS分','AC','形态','能力权重γ','责任权重β','取分口径'];
+    const lines = [head.join(',')].concat([...list].sort((a,b)=>b.total-a.total).map(x=>
+      [x.name,Math.round(x.total),x.KH,x.pct,Math.round(x.PS*10)/10,x.AC,x.shapeName,x.gamma+'%',x.beta+'%',x.mode]
+        .map(s=>`"${String(s).replace(/"/g,'""')}"`).join(',')
+    ));
+    const blob = new Blob(['\uFEFF'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = '三要素职位评估对比表.csv'; a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  };
+  $('printBtn').onclick = ()=>window.print();
+
+  /* ---------- 事件 ---------- */
+  document.querySelectorAll('select, input[type=text]').forEach(el=>el.addEventListener('input', render));
+  document.querySelectorAll('#shapeSeg button').forEach(b=>b.onclick = ()=>setShape(b.dataset.shape, b.dataset.shape!=='custom'));
+  $('gamma').addEventListener('input', ()=>{
+    $('beta').value = 100 - (+$('gamma').value);
+    shape = 'custom';
+    document.querySelectorAll('#shapeSeg button').forEach(b=>b.classList.toggle('on', b.dataset.shape==='custom'));
+    render();
+  });
+  $('beta').addEventListener('input', ()=>{
+    $('gamma').value = 100 - (+$('beta').value);
+    shape = 'custom';
+    document.querySelectorAll('#shapeSeg button').forEach(b=>b.classList.toggle('on', b.dataset.shape==='custom'));
+    render();
+  });
+  const dlg = $('helpDlg');
+  $('helpBtn').onclick = ()=>dlg.showModal();
+  $('closeDlg').onclick = $('okDlg').onclick = ()=>dlg.close();
+  dlg.addEventListener('click', e=>{ if(e.target===dlg) dlg.close(); });
+
+  render(); renderCompare();
+})();
+</script>
+</body>
+</html>
