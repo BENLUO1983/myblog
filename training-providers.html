@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="国内外知名企业培训与人才发展服务商介绍榜单。">
+<title>企业培训与人才发展服务商榜单</title>
+<style>
+:root{
+  --ink:#16233D; --ink2:#3D4B63; --muted:#6B7A93;
+  --blue:#2F6DB5; --cyan:#2E9C9C; --gold:#B08136;
+  --paper:#F5F8FC; --card:#FFFFFF; --line:#DDE5EF;
+  --green:#1F7A55; --amber:#B26A12; --rose:#B03A48;
+  --shadow:0 2px 10px rgba(22,35,61,.06); --shadow2:0 8px 28px rgba(22,35,61,.12);
+  --radius:14px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  line-height:1.65; -webkit-font-smoothing:antialiased;
+}
+a{color:var(--blue); text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:1240px; margin:0 auto; padding:0 22px}
+
+/* ---------- header ---------- */
+.hero{
+  background:linear-gradient(135deg,#142542 0%,#1C3559 48%,#20526E 100%);
+  color:#fff; padding:44px 0 34px; position:relative; overflow:hidden;
+}
+.hero::after{
+  content:""; position:absolute; right:-120px; top:-160px; width:520px; height:520px;
+  background:radial-gradient(circle,rgba(76,175,190,.28),transparent 65%); pointer-events:none;
+}
+.hero .kicker{font-size:12px; letter-spacing:.22em; color:#8FC4D6; text-transform:uppercase; margin:0 0 10px}
+.hero h1{font-size:clamp(25px,3.6vw,38px); margin:0 0 10px; letter-spacing:.5px; font-weight:700}
+.hero .sub{font-size:15px; color:#C9D9EA; margin:0 0 22px; max-width:920px}
+.hero .meta{display:flex; flex-wrap:wrap; gap:10px; position:relative; z-index:1}
+.hero .meta span{
+  background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.18);
+  padding:6px 13px; border-radius:999px; font-size:12.5px; color:#E4EEF8;
+}
+.backlink{display:inline-flex; align-items:center; gap:6px; color:#A9CFE2; font-size:13px; margin-bottom:16px; position:relative; z-index:1}
+.backlink:hover{color:#fff; text-decoration:none}
+
+/* ---------- toolbar ---------- */
+.toolbar{
+  position:sticky; top:0; z-index:20; background:rgba(245,248,252,.94);
+  backdrop-filter:blur(9px); border-bottom:1px solid var(--line); padding:12px 0;
+}
+.toolbar .inner{display:flex; flex-wrap:wrap; gap:9px; align-items:center}
+.tabs{display:flex; gap:4px; background:#E9EFF7; padding:4px; border-radius:10px}
+.tab{
+  border:0; background:transparent; color:var(--ink2); cursor:pointer;
+  padding:7px 15px; border-radius:7px; font-size:13.5px; font-family:inherit; white-space:nowrap;
+}
+.tab.on{background:#fff; color:var(--blue); font-weight:700; box-shadow:var(--shadow)}
+select, .search{
+  border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:9px;
+  padding:8px 11px; font-size:13px; font-family:inherit; outline:none;
+}
+select:focus, .search:focus{border-color:var(--blue); box-shadow:0 0 0 3px rgba(47,109,181,.12)}
+.search{min-width:190px; flex:1; max-width:290px}
+.btn{
+  border:1px solid var(--line); background:#fff; color:var(--ink2); cursor:pointer;
+  padding:8px 13px; border-radius:9px; font-size:13px; font-family:inherit; white-space:nowrap;
+}
+.btn:hover{border-color:var(--blue); color:var(--blue)}
+.btn.primary{background:var(--blue); color:#fff; border-color:var(--blue)}
+.btn.primary:hover{background:#255C9C; color:#fff}
+.count{margin-left:auto; font-size:12.5px; color:var(--muted); white-space:nowrap}
+
+/* ---------- section ---------- */
+section{padding:28px 0 6px}
+.sec-head{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:6px}
+.sec-head h2{font-size:20px; margin:0; letter-spacing:.4px}
+.sec-head .hint{font-size:13px; color:var(--muted)}
+.rule{height:2px; background:linear-gradient(90deg,var(--blue),transparent); width:64px; margin:8px 0 18px; border-radius:2px}
+
+/* ---------- cards ---------- */
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(348px,1fr)); gap:16px}
+.card{
+  background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:18px 18px 16px; display:flex; flex-direction:column;
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.card:hover{transform:translateY(-3px); box-shadow:var(--shadow2)}
+.card .top{display:flex; gap:13px; align-items:flex-start}
+.brandmark{
+  position:relative; flex:0 0 76px; width:76px; height:76px; border-radius:12px;
+  background:#F2F7FC; border:1px solid #DDE7F2;
+  background:color-mix(in srgb,var(--brand) 10%,#fff); border-color:color-mix(in srgb,var(--brand) 26%,#fff);
+  display:grid; place-items:center; overflow:hidden;
+}
+.brandmark .fallback{
+  font-size:22px; font-weight:800; color:var(--brand); letter-spacing:-.5px; text-align:center; line-height:1.1;
+}
+.brandmark img{
+  position:absolute; inset:6px; width:calc(100% - 12px); height:calc(100% - 12px);
+  object-fit:contain; background:#fff; border-radius:6px;
+}
+.card .id{flex:1; min-width:0}
+.rankline{display:flex; align-items:center; gap:8px; margin-bottom:4px; flex-wrap:wrap}
+.rank{
+  display:inline-grid; place-items:center; width:24px; height:24px; border-radius:7px;
+  background:var(--ink); color:#fff; font-size:12.5px; font-weight:700;
+}
+.rank.intl{background:var(--cyan)}
+.region{font-size:11px; color:var(--muted); border:1px solid var(--line); padding:1px 7px; border-radius:999px}
+.card h3{font-size:17.5px; margin:0 0 2px; line-height:1.35}
+.name-link{color:var(--ink); text-decoration:none; border-bottom:1px dashed transparent; transition:color .15s,border-color .15s}
+.name-link:hover{color:var(--blue); text-decoration:none; border-bottom-color:var(--blue)}
+.name-link .ext{font-size:12px; color:#9BAAC0; margin-left:3px; font-weight:400; vertical-align:1px}
+.name-link:hover .ext{color:var(--blue)}
+.card .en{font-size:12px; color:var(--muted); margin:0 0 8px; word-break:break-word}
+.facts{display:grid; grid-template-columns:auto 1fr; gap:3px 10px; font-size:12.8px; color:var(--ink2)}
+.facts dt{color:var(--muted); white-space:nowrap}
+.facts dd{margin:0}
+.chips{display:flex; flex-wrap:wrap; gap:5px; margin:13px 0 10px}
+.chip{font-size:11.5px; padding:3px 9px; border-radius:999px; background:#EEF4FB; color:#2A5A96; border:1px solid #DBE8F6}
+.feature{font-size:13.3px; color:var(--ink2); margin:0 0 12px}
+.scale{
+  background:#F7FAFE; border:1px solid #E6EEF8; border-radius:10px; padding:10px 12px; margin-bottom:12px;
+}
+.scale .lab{font-size:11px; letter-spacing:.1em; color:var(--muted); text-transform:uppercase; margin-bottom:6px}
+.scale ul{margin:0; padding:0; list-style:none; display:grid; gap:4px}
+.scale li{
+  font-size:12.6px; display:grid; grid-template-columns:minmax(76px,40%) minmax(0,1fr);
+  gap:10px; align-items:start; border-bottom:1px dotted #DCE6F2; padding-bottom:5px;
+}
+.scale li:last-child{border-bottom:0; padding-bottom:0}
+.scale li b{color:var(--blue); font-weight:700; text-align:right; overflow-wrap:anywhere; line-height:1.45}
+.scale li > span{color:var(--ink2); text-align:left; overflow-wrap:anywhere; line-height:1.45}
+.scale li .mini{display:block; font-weight:400; color:var(--muted); font-size:11px; margin-top:2px; line-height:1.4}
+details.history{border-top:1px solid var(--line); padding-top:10px; margin-top:auto}
+details.history summary{cursor:pointer; font-size:13px; font-weight:600; color:var(--blue); list-style:none; display:flex; align-items:center; gap:7px}
+details.history summary::-webkit-details-marker{display:none}
+details.history summary::before{content:"▸"; transition:transform .2s; display:inline-block}
+details.history[open] summary::before{transform:rotate(90deg)}
+.timeline{list-style:none; margin:11px 0 2px; padding:0 0 0 14px; border-left:2px solid #DCE6F2}
+.timeline li{position:relative; padding:0 0 10px 12px; font-size:12.6px; color:var(--ink2)}
+.timeline li::before{content:""; position:absolute; left:-20px; top:7px; width:7px; height:7px; border-radius:50%; background:var(--blue); border:2px solid #fff}
+.timeline li b{color:var(--ink); margin-right:6px}
+
+/* ---------- table ---------- */
+.tablewrap{background:#fff; border:1px solid var(--line); border-radius:var(--radius); overflow:auto; box-shadow:var(--shadow)}
+table{border-collapse:collapse; width:100%; font-size:12.8px; min-width:900px}
+th,td{padding:11px 13px; text-align:left; border-bottom:1px solid #EDF1F7; vertical-align:top}
+th{background:#EEF4FB; color:var(--ink); font-weight:700; position:sticky; top:0; white-space:nowrap; font-size:12px}
+tbody tr:hover{background:#FAFCFF}
+td b{font-weight:700}
+.mini{color:var(--muted); font-size:11.5px}
+
+/* ---------- 延伸名录（默认折叠） ---------- */
+.extra-fold{background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:14px 18px; box-shadow:var(--shadow)}
+.extra-fold summary{cursor:pointer; font-size:14px; font-weight:600; color:var(--ink2); list-style:none; display:flex; align-items:center; gap:8px}
+.extra-fold summary::-webkit-details-marker{display:none}
+.extra-fold summary::before{content:"▸"; color:var(--blue); transition:transform .2s; display:inline-block}
+.extra-fold[open] summary::before{transform:rotate(90deg)}
+.extra-fold .hint{font-size:12px; color:var(--muted); font-weight:400}
+.extra-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:10px; margin-top:14px}
+.extra-item{border:1px solid var(--line); border-radius:9px; padding:10px 12px; background:#FAFCFF}
+.extra-item b{font-size:13.2px; display:block}
+.extra-item span{font-size:12px; color:var(--muted)}
+footer{padding:26px 0 36px; color:var(--muted); font-size:12.3px; text-align:center}
+
+@media (max-width:720px){
+  .hero{padding:32px 0 26px}
+  .grid{grid-template-columns:1fr}
+  .count{margin-left:0; width:100%}
+  .toolbar .inner{gap:7px}
+  .search{max-width:none; flex-basis:100%}
+}
+@media print{
+  body{background:#fff}
+  .toolbar,.backlink,.btn,.extra-fold{display:none!important}
+  .hero{background:#142542!important; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+  .card{break-inside:avoid; box-shadow:none; border-color:#C9D4E3}
+  details.history{display:block}
+  .grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- 部署说明（不显示在页面上）
+     1. 本文件与 index.html 放在同一目录，由「阅读资料 → 行业资料」的入口卡片链接。
+     2. 企业标志读取 assets/logos/ 下的 7 张 PNG；若目录缺失会自动回退为品牌色文字徽标，页面不会破图。
+     3. 更换标志：把新 PNG 放进 assets/logos/，并在下方 PROVIDERS 数据里修改对应 logo 字段。
+     4. 点击企业名称跳转的官网集中维护在 WEBSITES 常量中，key 须与 name 一致。
+-->
+
+<header class="hero">
+  <div class="wrap">
+    <a class="backlink" href="./index.html">← 返回 BEN 的个人主页</a>
+    <p class="kicker">培训市场状况一点通</p>
+    <h1>企业培训与人才发展服务商榜单</h1>
+    <p class="sub">国内外20家代表性企业培训服务机构，可点击名称直达官网。</p>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="wrap inner">
+    <div class="tabs" id="tabs">
+      <button class="tab on" data-group="cn">国内榜</button>
+      <button class="tab" data-group="intl">国际榜</button>
+      <button class="tab" data-group="all">全部 20 家</button>
+    </div>
+    <select id="typeSel" aria-label="按培训类型筛选"><option value="">全部培训类型</option></select>
+    <input class="search" id="q" type="search" placeholder="搜索企业 / 总部 / 特色关键词…">
+    <button class="btn" id="viewBtn">切换表格视图</button>
+    <span class="count" id="count"></span>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <section id="listSection">
+    <div class="sec-head"><h2 id="secTitle">国内机构 · 推荐序</h2><span class="hint" id="secHint">以培训 / 企业学习为主业的本土服务商，含综合人力资源集团的培训板块</span></div>
+    <div class="rule"></div>
+    <div class="grid" id="grid"></div>
+    <div class="tablewrap" id="tablewrap" hidden></div>
+    <p id="empty" hidden style="color:var(--muted);font-size:14px;padding:24px 0">没有匹配的机构，试试清空筛选条件。</p>
+  </section>
+
+  <section id="extra">
+    <details class="extra-fold">
+      <summary>其他常见企业培训服务机构 <span class="hint">（点击展开）</span></summary>
+      <div class="extra-grid" id="extraGrid"></div>
+    </details>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  BEN 的个人主页 · 教学资料栏目 ｜ 内容供课程教学与学术交流使用，点击企业名称可访问机构官网
+</footer>
+
+<script>
+/* =========================================================
+   数据区：改这里就能维护榜单。
+   字段：rank 推荐序 / group 分组 / name 中文名 / en 英文名 / hq 总部
+        founded 成立时间 / logo 本地 logo 路径（可空）/ mark 文字徽标
+        brand 品牌色 / types 培训类型 / feature 特色一句话
+        scale 规模数据 [[指标, 数值, 口径]] / history 发展沿革 [[年份, 事件]]
+   WEBSITES：点击企业名称时跳转的机构官网，key 与 name 一致。
+   ========================================================= */
+const WEBSITES = {
+ '时代光华':'https://www.21tb.com/',
+ '行动教育':'https://www.xdjy100.com/',
+ '绚星（原云学堂）':'https://www.radnova.com/',
+ '平安知鸟':'https://www.zhi-niao.com/',
+ '前程无忧培训':'https://tr.51job.com/default_train.php',
+ '竞越顾问':'http://www.first-priority.com.cn/',
+ '凯洛格':'https://www.keylogic.com.cn/',
+ '肯耐珂萨':'https://www.knx.com.cn/',
+ '酷学院':'https://www.coolcollege.cn/',
+ '万宝盛华大中华':'https://www.manpowergrc.com/',
+ '光辉国际':'https://www.kornferry.com/',
+ '富兰克林柯维':'https://www.franklincovey.com/',
+ '企顾司':'https://www.cegos.com.cn/',
+ '智睿咨询':'https://www.ddiworld.cn/',
+ 'LHH':'https://www.lhh.com/',
+ '卡内基训练':'https://www.dalecarnegie.com/',
+ 'GP Strategies':'https://www.gpstrategies.com/',
+ 'Cornerstone OnDemand':'https://www.cornerstoneondemand.com/',
+ 'Skillsoft':'https://www.skillsoft.com/',
+ 'BTS Group':'https://www.bts.com/'
+};
+function siteOf(p){ return WEBSITES[p.name] || p.source; }
+
+const PROVIDERS = [
+/* ---------------- 国内 ---------------- */
+{
+ rank:1, group:'cn', name:'时代光华', en:'Times Bright CreSuccess · 21tb',
+ hq:'上海 · 北京（双总部）', founded:'2000 年（品牌） / 2004 年（上海运营主体）',
+ logo:'assets/logos/shidai-guanghua.png', mark:'时', brand:'#C8102E',
+ types:['数字化学习平台','企业内训','版权课程','混合式学习运营'],
+ feature:'国内 E-Learning 先行者，「平台＋内容＋运营」一站式数智化学习；以近万门自有版权课程与全国服务网点见长。',
+ scale:[['企业客户','24,929+','来源：企业网站'],['在线学习用户','2,229 万+','来源：企业网站'],['自有版权课程','9,952+','来源：企业网站'],['服务网络','全国 32 城分支 · 近千人团队','来源：企业网站'],['经营节点','2019 年营收回款破 2 亿元','官网历程']],
+ evidence:'official', fame:'2026 CNPP / 买购「企业培训十大品牌」上榜；被多份资料称为中国企业在线学习首批实践者',
+ history:[
+  ['2000','品牌创立，启动管理培训教材业务与卫星远程培训，提出「互联网 E-Learning 商学院」'],
+  ['2004','上海时代光华教育发展有限公司成立，推出国内领先的 SaaS 模式 ELP1.0，全国启动 E-Learning 业务'],
+  ['2006—2008','E-Learning V3.0 商业运营，组建专业服务团队，向组织网络学习方案服务商转型'],
+  ['2012—2017','云架构 PaaS 平台 ELP4.0、混合式学习 1.0、ELP5.0 与移动端 APP 相继上线，从「管理」转向「运营」'],
+  ['2019','营收回款突破 2 亿元，服务企业客户超过 10,000 家'],
+  ['2023—2025','产品体系全面拥抱生成式 AI 与企业知识库，AIBox 接入大模型，定位「企业数智化学习服务商」']
+ ], source:'https://www.21tb.com/about.html'
+},
+{
+ rank:2, group:'cn', name:'行动教育', en:'Action Education · 605098.SH',
+ hq:'上海（虹桥商务区）', founded:'2006 年（工商登记）／品牌自述起于 2001 年',
+ logo:'assets/logos/action-education.png', mark:'行', brand:'#1B3A7A',
+ types:['实效管理培训','企业家公开课','企业内训','OMO 数字化商学院','管理咨询'],
+ feature:'A 股主板上市的管理教育机构，以「实效」与咨询式落地为卖点，公开课＋内训＋数字化商学院高度产品化。',
+ scale:[['2025 营业收入','8.112 亿元','审计年报'],['其中管理培训收入','6.790 亿元','审计年报'],['归母净利润','3.199 亿元','审计年报'],['市值 / 分支','约 64.8 亿元 / 26 家分支','公开资料']],
+ evidence:'audit', fame:'上交所 605098；年报由安永出具标准无保留意见，是本榜中财务透明度最高的本土机构',
+ history:[
+  ['2001','品牌自述开始服务企业家与管理者，累计服务口径自此起算'],
+  ['2006','上海行动教育科技股份有限公司成立，落地实效管理培训业务'],
+  ['2010—2016','南京、长沙、武汉、郑州、昆明、济南、西安、江西等地分支机构陆续设立，形成全国交付网络'],
+  ['上市后','登陆上交所主板（605098），形成公开课、企业内训、OMO 数字化商学院与管理咨询组合'],
+  ['2025','审计营收 8.112 亿元、管理培训 6.790 亿元；取得软件著作权 245 项、作品著作权 117 项']
+ ], source:'https://www.cnfin.com/announ/detail/index.html?dannoun=lcdetail&id=829515354309'
+},
+{
+ rank:3, group:'cn', name:'绚星（原云学堂）', en:'RADNOVA · Yxt.com (YXT)',
+ hq:'北京', founded:'前身「云学堂」；2024 年纳斯达克上市（精确创立年份未获权威披露）',
+ logo:'assets/logos/radnova.png', mark:'绚', brand:'#5B4FE9',
+ types:['数字化企业学习 SaaS','内容解决方案','学习运营服务'],
+ feature:'本土企业学习 SaaS 代表，订阅式交付为主；近年在 AI 做课、智能推荐与存量客户 AI 渗透上迭代较快。',
+ scale:[['2025 营收','3.40 亿元','媒体转述·未经审计'],['订阅式培训方案收入','3.17 亿元（约 94%）','媒体转述·未经审计'],['AI 产品覆盖','逾 30% 存量客户','媒体转述'],['经调整净亏损','1.47 亿元','媒体转述']],
+ evidence:'media', fame:'2024 年以 YXT 登陆纳斯达克；2026 年多份「企业培训十大品牌」榜单列首位',
+ history:[
+  ['早期','以「云学堂」品牌运营，从企业在线学习平台切入，形成软件 SaaS＋内容＋运营三大业务'],
+  ['2024','于纳斯达克上市（YXT），成为本土企业学习 SaaS 的公开市场样本'],
+  ['2024—2025','品牌升级为「绚星 / RADNOVA」，强化 AI 与企业智能化学习定位'],
+  ['2025','营收 3.40 亿元，核心订阅式解决方案收入 3.17 亿元；AI 产品覆盖逾 30% 存量客户']
+ ], source:'https://finance.sina.com.cn/roll/2026-04-16/doc-inhurihs3205903.shtml'
+},
+{
+ rank:4, group:'cn', name:'平安知鸟', en:'Ping An Zhiniao · 深圳平安通信科技有限公司',
+ hq:'深圳（中国平安集团旗下）', founded:'由集团内部培训体系产品化；2019 年 AskBob 上线为可核验节点',
+ logo:'assets/logos/pingan-zhiniao.png', mark:'知', brand:'#FF6A00',
+ types:['智能化企业培训平台','AI 陪练 / AI 做课','内容生态（知鸟优课）','政企人才培养'],
+ feature:'把平安集团百万级员工培训经验产品化，强项是金融、零售、医疗等行业实战场景与 AI 陪练、智能监考。',
+ scale:[['累计服务政企','超 2,000 家','官方转述·截至 2025 年末'],['注册用户','超 8,100 万','官方转述'],['平台应用人次','超 26 亿','官方转述'],['行业覆盖','金融 / 零售 / 医疗 / 能源等十余行业','官方转述']],
+ evidence:'official', fame:'2026 年多份企业培训品牌榜单稳居前二；平安集团品牌背书带来极高公众认知',
+ history:[
+  ['起步','依托平安集团大规模员工培训场景，沉淀智能陪练、AI 监学监考、AskBob 学习助理等能力'],
+  ['2019','基于 NLP 技术的智能助手 AskBob 上线'],
+  ['2023','生成式 AI 与企业知识库结合，构建知鸟 AI 智能体，发布 AI 陪练 / AI 导师 / AI 做课等 AIGC 应用'],
+  ['2025','发布 AIGC 人才培养解决方案并整合 DeepSeek；转型「咨询＋平台＋内容＋运营」一体化']
+ ], source:'https://baike.baidu.com/item/知鸟/19448026'
+},
+{
+ rank:5, group:'cn', name:'前程无忧培训', en:'51job Training & Assessment',
+ hq:'上海（前锦网络信息技术（上海）有限公司）', founded:'依托 51job 平台；培训板块设立年份未单独披露',
+ logo:'', mark:'51', brand:'#E60012',
+ types:['企业内训','公开课','人才测评','在线学习','国际认证辅导'],
+ feature:'本土招聘巨头旗下的培训测评板块，特色是把 ATD、Blanchard 等国际课程与认证体系引进并本地化。',
+ scale:[['业务地位','51job 三大板块之一（招聘猎头 / 培训测评 / 人事外包）','权威媒体'],['产品体系','国际认证 · 专业技能 · 企业出海 · 全球峰会','权威媒体'],['培训板块营收','未单独披露','—']],
+ evidence:'media', fame:'获 ATD「十周年战略合作伙伴奖」；2026 企业培训十大品牌上榜',
+ history:[
+  ['起步','前程无忧以招聘平台起家，逐步把培训测评拓展为独立主营业务板块'],
+  ['合作引进','与 ATD、Blanchard 等机构建立合作，引进国际品牌课程并做本地化交付'],
+  ['体系成型','形成内训、公开课、体验式培训、人才测评、在线学习的全链路，贯穿需求诊断至效果追踪'],
+  ['近年','联合 ATD 推出四维产品体系（APTD / CPTD 辅导、证书课程、企业出海、海外峰会）并获十周年战略合作伙伴奖']
+ ], source:'https://www.jfdaily.com.cn/staticsg/res/html/web/newsDetail.html?id=1158363'
+},
+{
+ rank:6, group:'cn', name:'竞越顾问', en:'Jingyue Consulting',
+ hq:'深圳（上海设分公司）', founded:'1996 年',
+ logo:'', mark:'竞', brand:'#8A1F2C',
+ types:['中高层管理干部培训（MDP）','领导力 / 销售 / 服务内训','训后行为转化'],
+ feature:'中国最早成立的管理培训公司之一，以自主研发品牌课程、讲师培养体系与「训后行为转化」著称。',
+ scale:[['累计服务客户','约 56,000 家','企业资料自述'],['长期服务客户','超 9,000 家','企业资料自述'],['年交付课程','约 4,500 天','企业资料自述'],['年培训学员','逾 100,000 人','企业资料自述']],
+ evidence:'official', fame:'业内长期列为老牌面授培训机构代表，与行动教育、凯洛格并称本土咨询式培训三例',
+ history:[
+  ['1996','深圳市竞越企业顾问有限公司成立，是中国最早创立的管理培训公司之一'],
+  ['2000','设立上海分公司，形成华南＋华东交付网络'],
+  ['2000s','建立自主研发品牌课程与讲师培养体系，覆盖领导力、销售、服务等领域'],
+  ['近年','把「培训后行为转化」作为课程设计核心，强调工具方法与在岗落地']
+ ], source:'https://www.qibook.com/company-wiki-s/shenzhenshijingyueqiyeguwenyouxiangongsi-f58f2cc6.html'
+},
+{
+ rank:7, group:'cn', name:'凯洛格', en:'KeyLogic',
+ hq:'北京', founded:'2004 年',
+ logo:'', mark:'K', brand:'#1F6F5C',
+ types:['人才咨询','企业大学咨询','领导力梯队','人才盘点与评鉴','在线学习'],
+ feature:'从单课培训走向「人才咨询＋面授＋在线学习」一体化，擅长战略解码到培养项目的全链条设计。',
+ scale:[['服务客户','行业文章称 5,000+ 家','行业文章·未经审计'],['营收 / 员工','未公开','—'],['自有平台','思酷 SaaS 学习平台','公开介绍']],
+ evidence:'ranking', fame:'与行动教育、竞越并列为本土一体化人才培养代表；推出《战略罗盘》《人才战略》等方法论',
+ history:[
+  ['2004','北京凯洛格管理咨询有限公司成立，聚焦企业战略执行与人才发展'],
+  ['发展期','从面授培训扩展到人才咨询、企业大学咨询、领导力与人才盘点，形成咨询式链路'],
+  ['产品化','推出《战略罗盘》《人才战略》等方法论，并孵化思酷等在线学习产品'],
+  ['近年','行业文章称其发布组织能力跃迁模型，并持续强调「学习地图—盘点—培养—效果跟进」闭环']
+ ], source:'https://nfxhlt.com/news/61621.html'
+},
+{
+ rank:8, group:'cn', name:'肯耐珂萨', en:'KNX',
+ hq:'上海', founded:'官网称「18 年专注企业培训」（按页面口径约 2000 年代中后期）',
+ logo:'', mark:'KNX', brand:'#2B5F9E',
+ types:['数智化学习云','企业内训','人才测评','组织能力诊断','培训采购服务'],
+ feature:'把测评数据、学习云平台与国际内容代理组合起来，附设组织能力健康度（OCI）等诊断工具。',
+ scale:[['名师资源','1,100+','来源：企业网站'],['课程体系','8 大体系 · 700+ 门课程','来源：企业网站'],['营收 / 员工','未公开','—']],
+ evidence:'official', fame:'本土「测评＋学习云」组合型服务商代表，代理 CrossKnowledge（Wiley）等国际内容',
+ history:[
+  ['起步','以人力资源咨询与人才测评业务切入企业人才发展领域'],
+  ['平台化','推出「学习云」数智化学习发展平台，形成「平台＋内容＋服务」一体化交付'],
+  ['内容扩充','引入 CrossKnowledge 等国际领导力内容，并建设 K 米预付费培训采购服务'],
+  ['近年','把岗位胜任力建模、测评数据与学习分析打通，强调可量化的组织能力诊断']
+ ], source:'https://www.knx.com.cn/product/mlearning/'
+},
+{
+ rank:9, group:'cn', name:'酷学院', en:'Cool College · 酷渲（北京）科技有限公司',
+ hq:'北京', founded:'2017 年',
+ logo:'', mark:'酷', brand:'#F26B21',
+ types:['企业培训 SaaS','移动学习','在线考试','新员工培训'],
+ feature:'轻量化「平台＋内容＋运营」一体化，适合中小企业与连锁门店的新员工培训、考试与任务派发。',
+ scale:[['营收 / 客户数','未公开','—'],['品牌地位','2026 企业培训十大品牌上榜','第三方榜单']],
+ evidence:'ranking', fame:'2017 年后成长较快的移动学习平台，多份 2026 年企业培训品牌榜单位列前十',
+ history:[
+  ['2017','酷渲科技自主研发企业培训与人才发展平台「酷学院」上线'],
+  ['发展期','形成「平台＋内容＋运营」一体化方案，覆盖线上培训、新员工培训、在线考试与企业内训'],
+  ['近年','持续强化移动端与低管理员工作量的产品定位，服务连锁与成长型企业']
+ ], source:'https://m.maigoo.com/shida/list_9877.html'
+},
+{
+ rank:10, group:'cn', name:'万宝盛华大中华', en:'ManpowerGroup Greater China · 2180.HK',
+ hq:'上海', founded:'1997 年（注册于香港与台湾）；2019 年港交所上市',
+ logo:'', mark:'M', brand:'#E2231A',
+ types:['培训发展（综合人服板块）','技能提升','职业转型','招聘与灵活用工'],
+ feature:'培训是人力资源全解决方案的一环，优势在跨国网络＋本土城市覆盖，可与招聘、用工、RPO 打包采购。',
+ scale:[['服务网络','触达 290+ 城市','企业资料'],['服务企业','逾 20,000 家','企业资料'],['集团覆盖','70+ 国家和地区','企业资料'],['培训板块营收','未单独披露','—']],
+ evidence:'listed', fame:'2019 年港交所上市；集团为全球人力资源解决方案领导者，获「亚太人力资源领军企业」',
+ history:[
+  ['1997','进入大中华市场，在香港与台湾注册，随后把总部设于上海'],
+  ['2000s','业务网络扩展至北京、广州、深圳等 20 余座城市'],
+  ['2015','与中信产业基金建立战略联盟'],
+  ['2019','成功登陆港交所，形成灵活用工、人才寻猎、RPO、管理咨询及培训发展并列的解决方案体系']
+ ], source:'https://www.qibook.com/company-wiki-s/wanbaoshenghuarenliziyuanzhongguoyouxiangongsi-7d3114cd.html'
+},
+
+/* ---------------- 国际 ---------------- */
+{
+ rank:1, group:'intl', name:'光辉国际', en:'Korn Ferry · NYSE:KFY',
+ hq:'美国 · 加州洛杉矶', founded:'1969 年',
+ logo:'assets/logos/kornferry.png', mark:'KF', brand:'#006B54',
+ types:['组织与人才咨询','领导力发展','测评与继任','高管寻访','薪酬与组织设计'],
+ feature:'把战略、运营与人才同步设计的全球组织咨询公司；测评数据资产与继任体系是其培训业务的护城河。',
+ scale:[['FY2026 营收','29.39 亿美元','上市公司披露'],['全球布局','50+ 国 · 120+ 办公室','上市公司披露'],['员工','8,965 人（含 8,000+ 顾问）','上市公司披露']],
+ evidence:'listed', fame:'NYSE:KFY；1969 年创立、1999 年上市，长期位列全球组织与人才咨询第一梯队',
+ history:[
+  ['1969','Lester Korn 与 Richard Ferry 在洛杉矶创立，以高管寻访起家'],
+  ['1978','进入香港市场，开启亚洲业务布局'],
+  ['1999','于纽约证券交易所上市（KFY）'],
+  ['2000s','收购 Lominger 等测评与领导力发展机构，把服务从寻访延伸至测评、继任与领导力发展'],
+  ['合并 Hay Group 后','形成组织咨询、测评、继任、薪酬与发展全链条；FY2026 营收达 29.39 亿美元']
+ ], source:'https://ir.kornferry.com/'
+},
+{
+ rank:2, group:'intl', name:'富兰克林柯维', en:'FranklinCovey · NYSE:FC',
+ hq:'美国 · 犹他州盐湖城', founded:'1983 年（Franklin Institute）／1997 年合并更名',
+ logo:'assets/logos/franklincovey.png', mark:'FC', brand:'#0072B2',
+ types:['领导力发展','个人与组织效能','执行四纪律 4DX','教练与订阅内容'],
+ feature:'方法论 IP 型标杆：《高效能人士的七个习惯》被转化为可跨组织复制的培训、教练与许可交付体系。',
+ scale:[['服务国家','150+','来源：企业网站'],['年度客户项目','15,000+','来源：企业网站'],['行业沉淀','35+ 年','来源：企业网站'],['大客户合作','《财富》500 强中 80%+','2012 央视报道·旧资料']],
+ evidence:'official', fame:'全球综合领导力培训榜单常年前列；《七个习惯》是企业管理培训最广泛认知的内容 IP 之一',
+ history:[
+  ['1981','Hyrum W. Smith 以居家业务形式开办管理研讨班'],
+  ['1983—1984','Franklin Institute 正式成立，推出 Franklin Day Planner'],
+  ['1992','以 Franklin Quest Co. 上市'],
+  ['1997','以约 1.6 亿美元并购 Stephen Covey 于 1980 年创立的 Covey Leadership Center，更名 FranklinCovey'],
+  ['1999 以后','剥离非核心资产，聚焦领导力与效能方法论 IP、认证讲师网络与订阅式内容（All Access）']
+ ], source:'https://www.franklincovey.com/'
+},
+{
+ rank:3, group:'intl', name:'企顾司', en:'CEGOS',
+ hq:'法国 · 巴黎', founded:'1926 年',
+ logo:'', mark:'C', brand:'#E4002B',
+ types:['综合管理培训','领导力发展','混合式 / 数字学习','企业内训与咨询'],
+ feature:'全球最资深的管理培训机构之一，强在体系化课程、跨国一致交付与本地化适配（含中国市场）。',
+ scale:[['交付覆盖','50+ 国家','第三方编辑榜单'],['在华服务','数千家企业 · 覆盖 28 省份','2009 年报道·旧资料'],['集团近年营收','未公开','—']],
+ evidence:'legacy', fame:'1926 年创立，被企业培训行业榜单列为「全球混合式 L&D」代表与最老牌 L&D 机构之一',
+ history:[
+  ['1926','于巴黎成立，逐步形成欧洲管理培训工业化路径'],
+  ['1997','进入中国，在上海设立机构，服务汽车、工业、通信等行业客户'],
+  ['2000s','把面授、咨询与数字学习结合，扩展为跨国混合式学习交付网络'],
+  ['近年','以 50+ 国家交付能力服务跨国企业；集团层面财务透明度较低']
+ ], source:'https://finance.sina.com.cn/leadership/mroll/20090413/14406096449.shtml'
+},
+{
+ rank:4, group:'intl', name:'智睿咨询', en:'DDI · Development Dimensions International',
+ hq:'美国 · 宾州匹兹堡', founded:'1970 年',
+ logo:'assets/logos/ddi.png', mark:'DDI', brand:'#E09A18',
+ types:['领导力测评','领导者遴选','领导力发展','继任管理','评鉴中心'],
+ feature:'工业与组织心理学「科学派」代表，把评鉴中心、行为面试与发展体系串成选—育—继任闭环。',
+ scale:[['专业人员','1,100+','来源：企业网站'],['办公室','26 国 · 42 间','来源：企业网站'],['语言 / 认证讲师','21 种语言 / 20,000+ 认证讲师','来源：企业网站'],['测评使用','90+ 国家；87% 客户为《财富》500 强','来源：企业网站']],
+ evidence:'official', fame:'1970 年由 Byham 与 Bray 创立，被公认为把评鉴中心引入商业领域的开创者；《全球领导力展望》具学术影响力',
+ history:[
+  ['1956','联合创始人 Douglas W. Bray 主持研究，率先把评鉴中心用于工商业界并开展 20 年追踪验证'],
+  ['1970','William C. Byham 与 Douglas W. Bray 创立 DDI，正式将评鉴中心引入商业领域'],
+  ['1973—1974','推出互动式管理系列®（首个行为模式转变领导力课程）与目标选才®（行为面试系统）'],
+  ['1999','启动《全球领导力展望》调研，成为大规模领导力研究品牌'],
+  ['2010 / 2014','先后创建中基层与中高管线上评鉴中心；近年探索 VR 软技能与沉浸式测评']
+ ], source:'http://ddiworld.cn/about/honor'
+},
+{
+ rank:5, group:'intl', name:'LHH', en:'Lee Hecht Harrison · The Adecco Group',
+ hq:'美国 · 佛罗里达州杰克逊维尔（Adecco 集团旗下）', founded:'1967 年',
+ logo:'', mark:'LHH', brand:'#D6006E',
+ types:['领导力发展与教练','技能提升 / 再培训','职业转型与内部流动','招聘解决方案'],
+ feature:'覆盖全人才生命周期的服务商：把招聘、领导力教练、技能重塑与裁员转型打通，EZRA 数字化教练是其特色。',
+ scale:[['覆盖国家','60–66 国（不同来源口径不一）','官网 / 行业资料'],['认证教练与顾问','2,500+（另有 8,000+/12,000+ 专业人员口径）','口径有差异'],['年度服务人数','约 500,000 人 / 15,000 家组织','行业资料']],
+ evidence:'official', fame:'全球职业转型（outplacement）市场领导者；Adecco 集团旗下人才解决方案主品牌',
+ history:[
+  ['1967','Robert Lee 与 Robert Hecht 在纽约曼哈顿创立精品 HR 事务所'],
+  ['1982','Steve Harrison 加入后推动 outplacement 业务，正式更名 Lee Hecht Harrison'],
+  ['1988','被 Adia Services 收购；1996 年 Adia 与 ECCO 合并组建 Adecco Group'],
+  ['2020','统一简化品牌为 LHH，整合招聘、领导力发展、技能提升与职业转型'],
+  ['2022—2024','澳洲 Spring Professional 并入招聘线；推出 LHH Career Canvas 数字工具']
+ ], source:'https://www.lhh.com/'
+},
+{
+ rank:6, group:'intl', name:'卡内基训练', en:'Dale Carnegie Training',
+ hq:'美国 · 纽约州 Melville', founded:'1912 年',
+ logo:'', mark:'DC', brand:'#C8102E',
+ types:['沟通与人际技能','领导力','销售能力','公开班与企业内训'],
+ feature:'百年软技能品牌，以授权 / 加盟式全球交付网络实现规模化，适合大规模一线与中层通用能力训练。',
+ scale:[['成立年限','逾 110 年','公开历史'],['交付网络','全球授权交付（具体营收未公开）','第三方榜单']],
+ evidence:'ranking', fame:'1912 年创立；2026 年国际企业培训编辑榜单列为综合领导者与「规模化软技能」代表',
+ history:[
+  ['1912','Dale Carnegie 在纽约开办公开演讲与人际关系课程'],
+  ['1936','《人性的弱点》出版，课程体系随书籍影响力迅速扩散'],
+  ['20 世纪中后期','建立全球授权 / 加盟交付网络，形成统一课程＋本地讲师的模式'],
+  ['近年','产品线扩展至领导力、销售、客户服务与数字化学习，仍以软技能规模化见长']
+ ], source:'https://trytami.com/blog/best-corporate-training-companies'
+},
+{
+ rank:7, group:'intl', name:'GP Strategies', en:'GP Strategies',
+ hq:'美国 · 马里兰州 Columbia', founded:'1966 年',
+ logo:'', mark:'GP', brand:'#1F4E9C',
+ types:['定制化企业培训','托管式学习外包','技术与合规培训','绩效支持'],
+ feature:'「managed learning」代表：可整体承接企业学习职能的运营、课程开发、讲师管理与效果度量。',
+ scale:[['业务定位','大型企业托管式学习服务','第三方榜单'],['营收 / 员工','本轮未取得可核验数字','—']],
+ evidence:'ranking', fame:'1966 年成立；2026 年国际企业培训榜单列为「企业托管学习」综合领导者',
+ history:[
+  ['1966','公司成立，早期面向制造、能源与政府客户提供技术培训与绩效支持'],
+  ['1980s—2000s','逐步扩展为定制化课程开发、讲师交付与培训运营管理一体化服务'],
+  ['2010s','强化托管式学习（outsourced / managed learning）模式，可整体外包企业学习职能'],
+  ['近年','被行业榜单列为大型企业跨区域课程目录运营的代表供应商']
+ ], source:'https://trytami.com/blog/best-corporate-training-companies'
+},
+{
+ rank:8, group:'intl', name:'Cornerstone OnDemand', en:'Cornerstone OnDemand, Inc.',
+ hq:'美国 · 加州圣莫尼卡', founded:'1999 年（初名 CyberU）',
+ logo:'', mark:'C', brand:'#6B3FA0',
+ types:['LMS / LXP','技能图谱与技能智能','绩效与继任','内容订阅','合规学习'],
+ feature:'通过一连串并购整合出最完整的学习与人才套件，近年转向「workforce readiness / 技能智能」平台。',
+ scale:[['客户覆盖','180+ 国家','来源：企业网站'],['大客户','《财富》100 中约 50%','来源：企业网站'],['使用强度','平台每 3 秒产生一次课程学习','来源：企业网站'],['营收','约 7.409 亿美元（维基口径，年份未标明）','公开资料']],
+ evidence:'official', fame:'1999 年以在线企业培训起步；2011 年纳斯达克上市、2021 年被 Clearlake 以约 52 亿美元私有化',
+ history:[
+  ['1999','以 CyberU 之名成立，定位在线企业培训（LMS）'],
+  ['2011','于纳斯达克上市（CSOD）'],
+  ['2018—2020','收购 Grovo；2020 年以约 14 亿美元收购 LMS 竞争对手 Saba'],
+  ['2021','被 Clearlake Capital 以约 52 亿美元私有化'],
+  ['2022—2024','先后收购 EdCast、SumTotal、TaleSpin、SkyHive，补齐 LXP、XR 学习与技能智能']
+ ], source:'https://www.cornerstoneondemand.com/'
+},
+{
+ rank:9, group:'intl', name:'Skillsoft', en:'Skillsoft Corp. · Nasdaq:SKIL',
+ hq:'美国 · 新罕布什尔州 Nashua', founded:'1998 年',
+ logo:'', mark:'S', brand:'#00A3E0',
+ types:['领导力 / 合规 / 技术技能内容库','Percipio 学习平台','AI 情境演练（CAISY™）'],
+ feature:'课程内容库＋技能管理平台双轮，合规与 IT 技能覆盖深；近年以 AI 做课与情境模拟重塑交付。',
+ scale:[['最近季度营收','9,824.8 万美元（2026 披露，不可简单年化）','上市披露'],['大客户渗透','《财富》1000 中 60% 使用其管理技能','来源：企业网站'],['课程形态','Percipio 平台 + Codecademy 等品牌','官网']],
+ evidence:'listed', fame:'1998 年成立、2002 年与 SmartForce 合并后成为最大 e-learning 供应商之一；2021 年经 SPAC 重返公开市场',
+ history:[
+  ['1998','成立，聚焦企业数字化学习内容与学习管理系统'],
+  ['2002','与 SmartForce 合并，成为全球规模领先的 e-learning 供应商之一'],
+  ['2014','收购 SumTotal，扩展人才管理套件'],
+  ['2020—2021','完成破产重整，经 SPAC（Churchill Capital Corp II）重新上市；同期收购 Global Knowledge、Pluma、Codecademy'],
+  ['2022 以后','把 SumTotal 出售给 Cornerstone，聚焦 Percipio 平台与内容；推出 CAISY™ AI 情境演练']
+ ], source:'https://www.skillsoft.com'
+},
+{
+ rank:10, group:'intl', name:'BTS Group', en:'BTS Group AB · Nasdaq Stockholm:BTS B',
+ hq:'瑞典 · 斯德哥尔摩', founded:'1986 年',
+ logo:'', mark:'BTS', brand:'#E8442E',
+ types:['商业模拟 / 体验式学习','战略执行','领导力发展','人才测评','规模化数字教练'],
+ feature:'「先练后讲」的体验派：用镜像客户损益表与市场动态的商业模拟，让管理团队在无风险环境里试决策。',
+ scale:[['FY2025 净销售额','27 亿瑞典克朗（约 2.55 亿美元）','上市披露'],['EBITA 率','10.2%','上市披露'],['人员 / 办公室','1,200+ 人 · 38 个办公室 · 六大洲','来源：企业网站'],['大客户','60 家《财富》100 企业','来源：企业网站']],
+ evidence:'listed', fame:'1986 年在斯德哥尔摩创立、2001 年上市；商业模拟与战略执行学习领域的开创性公司',
+ history:[
+  ['1986','Henrik Ekelund 创立 Business Training Systems，以定制商业模拟替代讲授式高管培训'],
+  ['1990s','在北欧扩张并打磨跨文化交付的模拟方法论，工业与电信企业成为早期客户'],
+  ['2001','于纳斯达克斯德哥尔摩上市（BTS B），同年进入美国市场'],
+  ['2005—2015','收购 SMG、RLC、Advantage Performance、Wizer、Fenestra、AVO Vision，补测评与数字学习能力'],
+  ['2022—2025','Jessica Skon 接任 CEO；2025 年收购 Sounding Board（规模化教练）与 Nexo，FY2025 净销售额 27 亿瑞典克朗']
+ ], source:'https://bts.com/about/bts-timeline'
+}
+];
+
+const EXTRA = [
+ ['中智集团 CIIC','央企 · 人才开发与智力开发纳入人力资源全产业链'],
+ ['上海外服 FSG','1984 年 · 培训为人事代理 / 派遣 / 薪酬体系的配套'],
+ ['外企德科 FESCO Adecco','中外合资人服 · 培训与人才发展配套板块'],
+ ['魔学院','摩博科技 · 移动端企业学习与考试'],
+ ['知学云','深圳 · 组织学习云与政企培训'],
+ ['腾讯乐享','腾讯 · 企业内部社区化学习与知识管理'],
+ ['量见云课堂','量子教育 · 管理课程与企业学习'],
+ ['三节课','数字化技能与业务课程'],
+ ['UMU','AI 学习平台与 AI 陪练'],
+ ['中人网','2002 年 · HR 社群起家的学习服务平台'],
+ ['百年基业','2004 年 · 行动学习与引导技术'],
+ ['北大纵横','1996 年 · 咨询背景延伸的培训板块'],
+ ['华师经纪','2011 年 · 职业讲师经纪与课程产品'],
+ ['众行行动学习研究院','1999 年 · 行动学习与项目管理认证'],
+ ['Wilson Learning','50+ 国家、30+ 语言 · 销售与领导力'],
+ ['CrossKnowledge','Wiley 旗下 · 数字化领导力与混合学习'],
+ ['The Ken Blanchard Companies','情境领导® 方法论 IP'],
+ ['American Management Association','1923 年 · 公开招生管理研讨'],
+ ['Centre for Creative Leadership (CCL)','领导力研究与高管发展'],
+ ['Hemsley Fraser / Impact International','欧洲体验式与领导力培训机构'],
+ ['Richardson','销售赋能与销售培训'],
+ ['Docebo / Degreed','生成式 AI LMS 与技能型 LXP'],
+ ['LinkedIn Learning / Udemy Business','通用职业课程库的企业版'],
+ ['Harvard Business School EE','2024 年高管教育收入 2.53 亿美元（含 EMBA 等）'],
+ ['中欧国际工商学院 EE','1994 年 · 累计培训逾 27 万名高管'],
+ ['SHRM / ATD','HR 专业认证与人才发展标准生态（非培训公司）'],
+ ['Adecco / Randstad / ManpowerGroup','全球综合人服集团，培训为人才解决方案一环']
+];
+
+/* ---------------- 渲染 ---------------- */
+const $ = s => document.querySelector(s);
+let state = { group:'cn', type:'', q:'', view:'card' };
+
+function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function brandmark(p){
+  const img = p.logo ? `<img src="${esc(p.logo)}" alt="${esc(p.name)} 官方标识" onerror="this.remove()">` : '';
+  return `<div class="brandmark" style="--brand:${esc(p.brand)}"><span class="fallback">${esc(p.mark)}</span>${img}</div>`;
+}
+
+function cardHTML(p){
+  const chips = p.types.map(t=>`<span class="chip">${esc(t)}</span>`).join('');
+  const scaleItems = p.scale.map(([k,v,note])=>`<li><span>${esc(k)}</span><b>${esc(v)}<span class="mini"> · ${esc(note)}</span></b></li>`).join('');
+  const timeline = p.history.map(([y,t])=>`<li><b>${esc(y)}</b>${esc(t)}</li>`).join('');
+  const link = `<a class="name-link" href="${esc(siteOf(p))}" target="_blank" rel="noopener noreferrer" title="访问 ${esc(p.name)} 官网">${esc(p.name)}<span class="ext">↗</span></a>`;
+  return `<article class="card">
+    <div class="top">
+      ${brandmark(p)}
+      <div class="id">
+        <div class="rankline"><span class="rank ${p.group==='intl'?'intl':''}">${p.rank}</span><span class="region">${p.group==='cn'?'中国本土':'国际机构'}</span></div>
+        <h3>${link}</h3>
+        <p class="en">${esc(p.en)}</p>
+        <dl class="facts"><dt>总部</dt><dd>${esc(p.hq)}</dd><dt>成立时间</dt><dd>${esc(p.founded)}</dd></dl>
+      </div>
+    </div>
+    <div class="chips">${chips}</div>
+    <p class="feature">${esc(p.feature)}</p>
+    <div class="scale"><div class="lab">规模数据</div><ul>${scaleItems}</ul></div>
+    <details class="history"><summary>发展沿革</summary><ul class="timeline">${timeline}</ul></details>
+  </article>`;
+}
+
+function tableHTML(list){
+  const rows = list.map(p=>`<tr>
+    <td><b>${p.rank}</b></td>
+    <td><a class="name-link" href="${esc(siteOf(p))}" target="_blank" rel="noopener noreferrer"><b>${esc(p.name)}</b><span class="ext">↗</span></a><br><span class="mini">${esc(p.en)}</span></td>
+    <td>${esc(p.hq)}</td><td>${esc(p.founded)}</td>
+    <td>${p.types.map(esc).join('、')}</td>
+    <td>${p.scale.slice(0,2).map(([k,v])=>`${esc(k)} <b>${esc(v)}</b>`).join('<br>')}</td>
+  </tr>`).join('');
+  return `<table><thead><tr><th>序</th><th>企业（点击访问官网）</th><th>总部</th><th>成立时间</th><th>培训类型</th><th>规模数据（摘）</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function filtered(){
+  let list = PROVIDERS.filter(p=>{
+    if(state.group!=='all' && p.group!==state.group) return false;
+    if(state.type && !p.types.some(t=>t.includes(state.type))) return false;
+    if(state.q){
+      const hay = [p.name,p.en,p.hq,p.founded,p.feature,p.fame,p.types.join(''),p.scale.map(x=>x.join('')).join('')].join(' ').toLowerCase();
+      if(!hay.includes(state.q.toLowerCase())) return false;
+    }
+    return true;
+  });
+  list.sort((a,b)=>(a.group===b.group?0:(a.group==='cn'?-1:1)) || a.rank-b.rank);
+  return list;
+}
+
+function render(){
+  const list = filtered();
+  const isIntl = state.group==='intl';
+  $('#secTitle').textContent = state.group==='all' ? '全部 20 家 · 国内在前、国际在后' : (isIntl?'国际机构 · 推荐序':'国内机构 · 推荐序');
+  $('#secHint').textContent = state.group==='all'
+    ? '国内榜与国际榜各自独立编号，点击名称可访问官网'
+    : (isIntl
+      ? '全球人才与领导力咨询、培训内容 IP、数字学习平台与综合人服集团'
+      : '以培训 / 企业学习为主业的本土服务商，含综合人力资源集团的培训板块');
+  $('#grid').innerHTML = list.map(cardHTML).join('');
+  $('#tablewrap').innerHTML = tableHTML(list);
+  $('#grid').hidden = state.view!=='card';
+  $('#tablewrap').hidden = state.view!=='table';
+  $('#empty').hidden = list.length>0;
+  $('#count').textContent = `当前显示 ${list.length} / 20 家`;
+}
+
+/* ---------------- 交互 ---------------- */
+$('#tabs').addEventListener('click', e=>{
+  const b = e.target.closest('.tab'); if(!b) return;
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on', x===b));
+  state.group = b.dataset.group; render();
+});
+
+const allTypes = [...new Set(PROVIDERS.flatMap(p=>p.types))].sort((a,b)=>a.localeCompare(b,'zh-CN'));
+allTypes.forEach(t=>{
+  const o=document.createElement('option'); o.value=t; o.textContent=t; $('#typeSel').appendChild(o);
+});
+$('#typeSel').addEventListener('change', e=>{ state.type=e.target.value; render(); });
+$('#q').addEventListener('input', e=>{ state.q=e.target.value.trim(); render(); });
+$('#viewBtn').addEventListener('click', ()=>{
+  state.view = state.view==='card'?'table':'card';
+  $('#viewBtn').textContent = state.view==='card'?'切换表格视图':'切换卡片视图';
+  render();
+});
+
+$('#extraGrid').innerHTML = EXTRA.map(([n,d])=>`<div class="extra-item"><b>${esc(n)}</b><span>${esc(d)}</span></div>`).join('');
+
+/* 打印时自动展开发展沿革，打印结束恢复原状态 */
+let openBeforePrint = [];
+window.addEventListener('beforeprint', ()=>{
+  const ds=[...document.querySelectorAll('details.history')];
+  openBeforePrint = ds.map(d=>d.open);
+  ds.forEach(d=>d.open=true);
+});
+window.addEventListener('afterprint', ()=>{
+  [...document.querySelectorAll('details.history')].forEach((d,i)=>d.open=openBeforePrint[i]??false);
+});
+
+render();
+</script>
+</body>
+</html>
